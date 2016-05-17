@@ -28,9 +28,9 @@ import cn.bmob.v3.listener.SaveListener;
  * Created by Administrator on 2016/5/16.
  */
 public class OperationBmobDataUtil {
-    public static final int NUMBERS_PER_PAGE = 15;
+    public static final int NUMBERS_PER_PAGE = 2;
     private static int pageNum;
-    private List<QiangItem> mListItems = new ArrayList<QiangItem>();
+   // private List<QiangItem> mListItems = new ArrayList<QiangItem>();
 
     private Context mContext;
 
@@ -56,24 +56,25 @@ public class OperationBmobDataUtil {
         ImageLoaderUtil.getInstance().initData(context);
     }
 
-
-    public List<QiangItem> getListItem(){
+/*
+   public List<QiangItem> getListItem(){
         return  mListItems;
-    }
+    }*/
 
     /**
      *  上拉刷新 拉取数据
      * @param refresHandle
+     * @param mListItems
      */
-    public  List<QiangItem> loadQiangData(final Handler refresHandle ){
-        pageNum++;
-        mListItems.clear();
+    public void loadQiangData(final Handler refresHandle, final List<QiangItem> mListItems){
+
+       // this.mListItems.clear();
         BmobQuery<QiangItem> query = new BmobQuery<QiangItem>();
         query.order("-createdAt");
         query.setLimit(NUMBERS_PER_PAGE);
         BmobDate date = new BmobDate(new Date(System.currentTimeMillis()));
         query.addWhereLessThan("createdAt", date);
-        query.setSkip(NUMBERS_PER_PAGE*(pageNum));
+        query.setSkip(NUMBERS_PER_PAGE*(pageNum++));
         query.include("author");
         query.findObjects(mContext, new FindListener<QiangItem>() {
 
@@ -90,28 +91,30 @@ public class OperationBmobDataUtil {
                 // TODO 自动生成的方法存根
                 User user = null;
                 if(list.size()!=0&&list.get(list.size()-1)!=null){
-                    Log.i("loadQiangData","ppppp+++" +pageNum );
+
+                   // OperationBmobDataUtil.this.mListItems.addAll(list);
                     mListItems.addAll(list);
                     refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
                 }else{
                     pageNum--;
-                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotChange);
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotOld);
 
                 }
             }
 
         });
 
-        return mListItems;
+     //   return this.mListItems;
     }
 
     /**
      *  下拉刷新 拉取数据
      * @param refresHandle
+     * @param mListItems
      */
-    public  List<QiangItem> refreshQiangData(final Handler refresHandle ,final String oldTime){
+    public void refreshQiangData(final Handler refresHandle, final String oldTime, final List<QiangItem> mListItems){
 
-        mListItems.clear();
+
         BmobQuery<QiangItem> query = new BmobQuery<QiangItem>();
         query.order("-createdAt");
         query.setLimit(NUMBERS_PER_PAGE);
@@ -131,18 +134,30 @@ public class OperationBmobDataUtil {
                 // TODO 自动生成的方法存根
                 User user = null;
                 if(list.size()!=0&&list.get(list.size()-1)!=null){
-                 //   list.get(0).getCreatedAt().
-                    mListItems.addAll(list);
-                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
+
+                    if( list.get(0).getCreatedAt().equals(oldTime)) {
+               /*         refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotNew);
+                    }else{
+                        mListItems.clear();
+                        pageNum = 0;
+                        mListItems.addAll(list);
+                        refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
+                    }*/
+
+                        mListItems.clear();
+                        pageNum = 0;
+                        mListItems.addAll(list);
+                        refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
+                    }
+
                 }else{
-                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotChange);
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotNew);
 
                 }
             }
 
         });
 
-        return mListItems;
     }
 
     public void sendGoodData(final Handler finishandle,final String commitContent, ArrayList<String> sourcepathlist,final Goods goods){

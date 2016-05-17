@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +80,7 @@ public class QiangFragment  extends Fragment implements SwipeRefreshLayout.OnRef
         qiang_listview.setAdapter(mQiangListAdapter);
          if(mListItems.size() == 0){
 
-             mListItems = mOperationBmobDataUtil.loadQiangData(refresHandle);
+             mOperationBmobDataUtil.loadQiangData(refresHandle,mListItems);
 
 
         }
@@ -93,28 +92,27 @@ public class QiangFragment  extends Fragment implements SwipeRefreshLayout.OnRef
         qiang_refresh.setRefreshing(true);
 
        // mListItems = mOperationBmobDataUtil.loadQiangData(refresHandle);
-
-        (new Handler()).postDelayed(new Runnable() {
+        mOperationBmobDataUtil.refreshQiangData(refresHandle,mListItems.get(0).getCreatedAt(),mListItems);
+/*        (new Handler()).postDelayed(new Runnable() {
 
             @Override
             public void run() {
                 //3秒后停止刷新
                 qiang_refresh.setRefreshing(false);
                 int num = (int)(Math.random() * 100 + 1);
-             /*   Snackbar.make(qiang_refresh, "Replace with your own action", Snackbar.LENGTH_LONG)
+             *//*   Snackbar.make(qiang_refresh, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setActionTextColor(getResources().getColor(R.color.colorPrimaryDark))
-                        .setAction("Action", null).show();*/
+                        .setAction("Action", null).show();*//*
 
-                Toast.makeText(getActivity(),"num",Toast.LENGTH_LONG).show();
+             //   Toast.makeText(getActivity(),"num",Toast.LENGTH_LONG).show();
             }
-        }, 3000);
+        }, 3000);*/
     }
 
     @Override
     public void onSwipeLoading() {
-        Toast.makeText(getActivity(),"ooo",Toast.LENGTH_LONG).show();
-        mListItems.clear();
-        mListItems =  mOperationBmobDataUtil.loadQiangData(refresHandle);
+
+        mOperationBmobDataUtil.loadQiangData(refresHandle, mListItems);
     }
     /**
      * 更新刷新 数据
@@ -122,21 +120,26 @@ public class QiangFragment  extends Fragment implements SwipeRefreshLayout.OnRef
     private Handler refresHandle = new Handler() {
         public void handleMessage(Message msg) {
 
-            if(msg.what == ConfigConstantUtil.loadingSuccess){
-                Toast.makeText(getActivity(),"hhhhh",Toast.LENGTH_LONG).show();
-                mQiangListAdapter.addAll(mListItems);
-                mQiangListAdapter.notifyDataSetChanged();
+            switch (msg.what){
 
-            }else if(msg.what == ConfigConstantUtil.loadingNotChange){
-                Toast.makeText(getActivity(),"数据到底啦！！！",Toast.LENGTH_LONG).show();
-            }else{
-
-                Toast.makeText(getActivity(),"网络异常，请检查网络！",Toast.LENGTH_LONG).show();
-                /*
-                SnackbarUtil.LongSnackbar(qiang_refresh,"网络异常，请检查网络！",
-                        getResources().getColor(R.color.colorAccent),
-                        getResources().getColor(R.color.colorPrimaryDark));*/
+                case ConfigConstantUtil.loadingNotNew :
+                    qiang_refresh.setRefreshing(false);
+                    Toast.makeText(getActivity(),"数据已经最新！！！",Toast.LENGTH_LONG).show();
+                    break;
+                case ConfigConstantUtil.loadingSuccess :
+                    qiang_refresh.setRefreshing(false);
+                   // mQiangListAdapter.addAll(mListItems);
+                    mQiangListAdapter.notifyDataSetChanged();
+                    break;
+                case ConfigConstantUtil.loadingNotOld :
+                    Toast.makeText(getActivity(),"数据到底啦！！！",Toast.LENGTH_LONG).show();
+                    break;
+                case ConfigConstantUtil.loadingFault :
+                    Toast.makeText(getActivity(),"网络异常，请检查网络！",Toast.LENGTH_LONG).show();
+                    break;
             }
+
+            mSwipeRefreshFooterLoading.setLoading(false);
         }
     };
 

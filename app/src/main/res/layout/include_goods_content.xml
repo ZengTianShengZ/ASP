@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:padding="5dp" >
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:padding="5dp"
+            android:text="商品"
+            android:textColor="#000000"
+            android:textSize="15sp" />
+
+        <View
+
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#bbbbbb" />
+
+        <TextView
+            android:id="@+id/goods_content_goodsTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="内容区域.."/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:padding="5dp" >
+
+        <TextView
+
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:padding="5dp"
+            android:text="分类"
+            android:textColor="#000000"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#bbbbbb" />
+
+        <TextView
+            android:id="@+id/goods_content_sortTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="内容区域.."/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:padding="5dp" >
+
+        <TextView
+
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:padding="5dp"
+            android:text="描述"
+            android:textColor="#000000"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#bbbbbb" />
+
+        <TextView
+            android:id="@+id/goods_content_descTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="内容区域.."/>
+
+    </LinearLayout>
+
+</LinearLayout>

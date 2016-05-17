@@ -17,8 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import asp.com.asp.R;
+import asp.com.asp.adapter.QiangDgListAdapter;
 import asp.com.asp.adapter.QiangListAdapter;
 import asp.com.asp.domain.QiangItem;
+import asp.com.asp.domain.QiangItemDg;
 import asp.com.asp.utils.ConfigConstantUtil;
 import asp.com.asp.utils.OperationBmobDataUtil;
 import asp.com.asp.utils.SwipeRefreshFooterLoading;
@@ -35,8 +37,8 @@ public class QiangFragment2  extends Fragment  implements SwipeRefreshLayout.OnR
     private ListView qiang_listview;
     private View mRootview;
 
-    private List<QiangItem> mListItems =  new ArrayList<QiangItem>();
-    private QiangListAdapter mQiangListAdapter;
+    private List<QiangItemDg> mListItems =  new ArrayList<QiangItemDg>();
+    private QiangDgListAdapter mQiangDgListAdapter;
 
     private OperationBmobDataUtil mOperationBmobDataUtil;
 
@@ -71,11 +73,11 @@ public class QiangFragment2  extends Fragment  implements SwipeRefreshLayout.OnR
 
         mOperationBmobDataUtil = mOperationBmobDataUtil.getInstance();
         mOperationBmobDataUtil.initData(getActivity());
-        mQiangListAdapter = new QiangListAdapter(getActivity(),mListItems);
-        qiang_listview.setAdapter(mQiangListAdapter);
+        mQiangDgListAdapter = new QiangDgListAdapter(getActivity(),mListItems);
+        qiang_listview.setAdapter(mQiangDgListAdapter);
         if(mListItems.size() == 0){
 
-            mOperationBmobDataUtil.loadQiangData(refresHandleDg,mListItems);
+            mOperationBmobDataUtil.loadDgQiangData(refresHandleDg,mListItems);
 
 
         }
@@ -84,12 +86,12 @@ public class QiangFragment2  extends Fragment  implements SwipeRefreshLayout.OnR
     public void onRefresh() {
 
         qiang_refresh.setRefreshing(true);
-        mOperationBmobDataUtil.refreshQiangData(refresHandleDg,mListItems.get(0).getCreatedAt(),mListItems);
+        mOperationBmobDataUtil.refreshDgQiangData(refresHandleDg,mListItems.get(0).getCreatedAt(),mListItems);
     }
 
     @Override
     public void onSwipeLoading() {
-        mOperationBmobDataUtil.loadQiangData(refresHandleDg, mListItems);
+        mOperationBmobDataUtil.loadDgQiangData(refresHandleDg, mListItems);
     }
 
     /**
@@ -106,7 +108,7 @@ public class QiangFragment2  extends Fragment  implements SwipeRefreshLayout.OnR
                     break;
                 case ConfigConstantUtil.loadingSuccess :
                     qiang_refresh.setRefreshing(false);
-                    mQiangListAdapter.notifyDataSetChanged();
+                    mQiangDgListAdapter.notifyDataSetChanged();
                     break;
                 case ConfigConstantUtil.loadingNotOld :
                     Toast.makeText(getActivity(),"数据到底啦！！！",Toast.LENGTH_LONG).show();

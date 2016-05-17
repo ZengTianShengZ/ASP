@@ -1,6 +1,7 @@
 package asp.com.asp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +15,16 @@ import java.util.List;
 import asp.com.appbase.adapter.BaseListAdapter;
 import asp.com.appbase.adapter.ViewHolder;
 import asp.com.asp.R;
+import asp.com.asp.activity.GoodsDetailActivity;
+import asp.com.asp.activity.GoodsDetailActivity_;
 import asp.com.asp.domain.QiangItem;
+import asp.com.asp.domain.QiangItemDg;
 import asp.com.asp.view.innerGridView;
 
 /**
  * Created by Administrator on 2016/5/13.
  */
-public class QiangListAdapter extends BaseListAdapter<QiangItem> {
+public class QiangListAdapter extends BaseListAdapter<QiangItem>  {
 
     private final int TYPE_RECOMMEND_SELLSE = 1;
     private final int TYPE_SEND_TXT = 1;
@@ -86,6 +90,18 @@ public class QiangListAdapter extends BaseListAdapter<QiangItem> {
             qiang_gridView.setAdapter(mQiangItemGridViewAdapter);
         }
 
+        convertView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO 自动生成的方法存根
+                Intent intent = new Intent(mContext,GoodsDetailActivity_.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("itemQiang", item);
+                mContext.startActivity(intent);
+
+            }
+        });
         return  convertView;
     }
     /**
@@ -104,5 +120,6 @@ public class QiangListAdapter extends BaseListAdapter<QiangItem> {
     public int getViewTypeCount() {
         return 2;
     }
+
 
 }

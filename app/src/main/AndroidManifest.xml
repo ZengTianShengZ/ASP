@@ -40,6 +40,9 @@
         <activity android:name=".activity.EditQiangActivity_"
               >
         </activity>
+        <activity android:name=".activity.GoodsDetailActivity_"
+            >
+        </activity>
     </application>
 
 </manifest>

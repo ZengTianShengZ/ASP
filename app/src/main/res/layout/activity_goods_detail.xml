@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#dfdfdf"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/common_top_bar"
+        />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:background="#eae8e8"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/goods_detail_vp"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                />
+            <include layout="@layout/include_item_infor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
+
+            <include layout="@layout/include_goods_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
+
+            <ListView
+                android:layout_marginTop="5dp"
+                android:id="@+id/goods_detail_listview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                >
+            </ListView>
+
+        </LinearLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+</LinearLayout>

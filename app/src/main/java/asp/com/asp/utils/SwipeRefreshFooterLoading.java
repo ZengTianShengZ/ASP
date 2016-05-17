@@ -62,17 +62,19 @@ public class SwipeRefreshFooterLoading  {
                     case MotionEvent.ACTION_MOVE:
                         // 移动
                         mLastY = (int) event.getRawY();
+                        // 抬起
+                        if (canLoad()) {
+                            Log.i("MotionEvent", ".....llooo");
+                            Toast.makeText(mContext,"hhhhhhh    "+(mYDown - mLastY),Toast.LENGTH_SHORT).show();
+
+                            loadData();
+                        }
+
                         break;
 
                     case MotionEvent.ACTION_UP:
 
-                        // 抬起
-                        if (canLoad()) {
-                            Log.i("MotionEvent", ".....llooo");
-                            Toast.makeText(mContext,"hhhhhhh    "+(mYDown - mLastY),Toast.LENGTH_LONG).show();
 
-                            loadData();
-                        }
                         break;
                 }
                 return false;

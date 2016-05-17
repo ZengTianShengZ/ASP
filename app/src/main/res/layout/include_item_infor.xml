@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:id="@+id/ll_flag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+
+        android:layout_marginLeft="10dp">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/item_qiang_logo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            fresco:actualImageScaleType="focusCrop"
+            fresco:placeholderImage="@mipmap/ic_logo"
+            fresco:placeholderImageScaleType="fitCenter"
+            fresco:progressBarImage="@mipmap/ic_logo"
+            fresco:progressBarImageScaleType="centerInside"
+            fresco:progressBarAutoRotateInterval="5000"
+            fresco:failureImage="@mipmap/ic_logo"
+            fresco:failureImageScaleType="centerInside"
+            fresco:retryImage="@mipmap/ic_logo"
+            fresco:retryImageScaleType="centerCrop"
+            fresco:fadeDuration="5000"
+            fresco:backgroundImage="@android:color/holo_orange_light"
+            fresco:roundAsCircle="true"
+
+            />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/item_qiang_nameTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/ll_flag"
+        android:layout_marginLeft="20dp"
+        android:text="曾田生"
+        android:textSize="9pt"
+        />
+
+    <TextView
+        android:id="@+id/item_qiang_time_Tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/item_qiang_nameTv"
+        android:layout_toRightOf="@+id/ll_flag"
+        android:layout_marginLeft="20dp"
+        android:text="今天 18：31 上海"
+        android:textSize="7pt"
+        />
+
+    <TextView
+        android:id="@+id/item_qiang_comment_Tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+
+        android:text="评论 123 "
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:textSize="9pt"
+        />
+</RelativeLayout>

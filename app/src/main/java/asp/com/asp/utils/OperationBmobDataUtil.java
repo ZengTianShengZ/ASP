@@ -16,6 +16,7 @@ import java.util.List;
 
 import asp.com.asp.domain.Goods;
 import asp.com.asp.domain.QiangItem;
+import asp.com.asp.domain.QiangItemDg;
 import asp.com.asp.domain.User;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -62,7 +63,7 @@ public class OperationBmobDataUtil {
     }*/
 
     /**
-     *  上拉刷新 拉取数据
+     *  上拉刷新 拉取 二手墙数据
      * @param refresHandle
      * @param mListItems
      */
@@ -104,11 +105,10 @@ public class OperationBmobDataUtil {
 
         });
 
-     //   return this.mListItems;
     }
 
     /**
-     *  下拉刷新 拉取数据
+     *  下拉刷新 二手墙数据
      * @param refresHandle
      * @param mListItems
      */
@@ -159,6 +159,106 @@ public class OperationBmobDataUtil {
         });
 
     }
+
+
+    /**
+     *  上拉刷新 拉取 代购墙数据
+     * @param refresHandle
+     * @param mListItems
+     */
+    public void loadDgQiangData(final Handler refresHandle, final List<QiangItemDg> mListItems){
+
+        // this.mListItems.clear();
+        BmobQuery<QiangItemDg> query = new BmobQuery<QiangItemDg>();
+        query.order("-createdAt");
+        query.setLimit(NUMBERS_PER_PAGE);
+        BmobDate date = new BmobDate(new Date(System.currentTimeMillis()));
+        query.addWhereLessThan("createdAt", date);
+        query.setSkip(NUMBERS_PER_PAGE*(pageNum++));
+        query.include("author");
+        query.findObjects(mContext, new FindListener<QiangItemDg>() {
+
+            @Override
+            public void onError(int arg0, String arg1) {
+                // TODO 自动生成的方法存根
+                pageNum--;
+
+                refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingFault);
+            }
+
+            @Override
+            public void onSuccess(List<QiangItemDg> list) {
+                // TODO 自动生成的方法存根
+                User user = null;
+                if(list.size()!=0&&list.get(list.size()-1)!=null){
+
+                    // OperationBmobDataUtil.this.mListItems.addAll(list);
+                    mListItems.addAll(list);
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
+                }else{
+                    pageNum--;
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotOld);
+
+                }
+            }
+
+        });
+
+    }
+
+    /**
+     *  下拉刷新 代购墙数据
+     * @param refresHandle
+     * @param mListItems
+     */
+    public void refreshDgQiangData(final Handler refresHandle, final String oldTime, final List<QiangItemDg> mListItems){
+
+
+        BmobQuery<QiangItemDg> query = new BmobQuery<QiangItemDg>();
+        query.order("-createdAt");
+        query.setLimit(NUMBERS_PER_PAGE);
+        BmobDate date = new BmobDate(new Date(System.currentTimeMillis()));
+        query.addWhereLessThan("createdAt", date);
+        query.setSkip(NUMBERS_PER_PAGE);
+        query.include("author");
+        query.findObjects(mContext, new FindListener<QiangItemDg>() {
+
+            @Override
+            public void onError(int arg0, String arg1) {
+                refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingFault);
+            }
+
+            @Override
+            public void onSuccess(List<QiangItemDg> list) {
+                // TODO 自动生成的方法存根
+                User user = null;
+                if(list.size()!=0&&list.get(list.size()-1)!=null){
+
+                    if( list.get(0).getCreatedAt().equals(oldTime)) {
+               /*         refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotNew);
+                    }else{
+                        mListItems.clear();
+                        pageNum = 0;
+                        mListItems.addAll(list);
+                        refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
+                    }*/
+
+                        mListItems.clear();
+                        pageNum = 0;
+                        mListItems.addAll(list);
+                        refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
+                    }
+
+                }else{
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotNew);
+
+                }
+            }
+
+        });
+
+    }
+
 
     public void sendGoodData(final Handler finishandle,final String commitContent, ArrayList<String> sourcepathlist,final Goods goods){
         String[] targeturls=null;

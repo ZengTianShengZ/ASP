@@ -32,6 +32,7 @@ dependencies {
     compile 'com.android.support:support-v4:23.2.0'
     compile files('libs/Bmob_Push_V0.6beta_20150408.jar')
     compile files('libs/BmobSDK_V3.4.5_1111.jar')
+    compile 'com.facebook.fresco:fresco:0.10.0'
 }
 
 apt {

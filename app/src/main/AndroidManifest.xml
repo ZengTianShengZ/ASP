@@ -14,7 +14,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!--允许读取手机状态 用于创建BmobInstallation-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
+    <!--在sdcard中创建/删除文件的权限 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"></uses-permission>
     <application
         android:name=".AspApplications"
         android:allowBackup="true"
@@ -31,6 +32,13 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".activity.ShowImageActivity"
+
+            />
+        <activity android:name=".activity.EditQiangActivity_"
+              >
         </activity>
     </application>
 

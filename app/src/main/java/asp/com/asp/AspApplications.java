@@ -2,6 +2,11 @@ package asp.com.asp;
 
 import android.app.Application;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.drawable.ScalingUtils;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
+
 import cn.bmob.push.config.Constant;
 import cn.bmob.v3.Bmob;
 
@@ -16,8 +21,19 @@ public class AspApplications extends Application {
         // TODO 自动生成的方法存根
 
         Bmob.initialize(getApplicationContext(),BMOB_APP_ID);
-
+        Fresco.initialize(this);
         super.onCreate();
+
+    }
+
+    public void initFresco(){
+//        GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(getResources());
+//        GenericDraweeHierarchy hierarchy = builder
+//                .setActualImageScaleType(ScalingUtils.ScaleType.FIT_CENTER)
+//                .setPlaceholderImage(getResources().getDrawable(R.drawable.image1), ScalingUtils.ScaleType.FIT_CENTER)
+//                .setFailureImage(getResources().getDrawable(R.drawable.image1), ScalingUtils.ScaleType.FIT_CENTER)
+//                .build();
+//        mSimpleDraweeView.setHierarchy(hierarchy);
 
     }
 }

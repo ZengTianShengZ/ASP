@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/colorOverall"
+    android:layout_height="@dimen/height_top_bar" >
+
+    <ImageView
+        android:id="@+id/common_top_bar_back_btn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:src="@mipmap/back_btn"/>
+
+    <TextView
+        android:id="@+id/common_top_bar_center_titleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:text="编辑商品"
+        android:textSize="9pt"/>
+
+    <TextView
+        android:id="@+id/common_top_bar_right_titleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:text="完成"
+        android:textSize="8pt"/>
+</RelativeLayout>

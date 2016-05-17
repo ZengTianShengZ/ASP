@@ -1,5 +1,6 @@
 package asp.com.asp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -19,12 +20,15 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 import asp.com.appbase.view.BottomTagView;
+import asp.com.asp.activity.EditQiangActivity;
+import asp.com.asp.activity.EditQiangActivity_;
 import asp.com.asp.fragment.HomeFragment;
 import asp.com.asp.fragment.HomeFragment_;
 import asp.com.asp.fragment.MeFragment;
 import asp.com.asp.fragment.MeFragment_;
 import asp.com.asp.fragment.NewsFragment;
 import asp.com.asp.fragment.NewsFragment_;
+import asp.com.asp.view.SnackbarUtil;
 import cn.bmob.v3.Bmob;
 
 /**
@@ -114,6 +118,8 @@ public class MainActivity extends FragmentActivity
 
         } else if (id == R.id.nav_manage) {
 
+            Intent intent = new Intent(this,EditQiangActivity_.class);
+            startActivity(intent);
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

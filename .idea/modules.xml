@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/ASP.iml" filepath="$PROJECT_DIR$/ASP.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/appbase/appbase.iml" filepath="$PROJECT_DIR$/appbase/appbase.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dialoglibrary/dialoglibrary_.iml" filepath="$PROJECT_DIR$/dialoglibrary/dialoglibrary_.iml" />
     </modules>
   </component>
 </project>

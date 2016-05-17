@@ -37,6 +37,8 @@ public class QiangItem extends BmobObject implements Serializable{
 	private BmobRelation comments;
 	
 	private Goods goods;
+	private int messageType;
+
 	
 	public Goods getGoods() {
 		return this.goods;
@@ -196,6 +198,15 @@ public class QiangItem extends BmobObject implements Serializable{
 	public void setComments(BmobRelation comments) {
 		this.comments = comments;
 	}
+
+	public int getMessageType() {
+		return messageType;
+	}
+
+	public void setMessageType(int messageType) {
+		this.messageType = messageType;
+	}
+
 	@Override
 	public String toString() {
 		return "QiangItem [author=" + this.author + ", content="
@@ -205,7 +216,8 @@ public class QiangItem extends BmobObject implements Serializable{
 				+ this.share + ", comment=" + this.comment
 				+ ", isPass=" + this.isPass + ", myFav="
 				+ this.focus + ", myLove=" + this.myLove
-				+ ", comments=" + this.comments + "]";
+				+ ", comments=" + this.comments + ", messageType=" + this.messageType
+				+ "]";
 	}
 	
 	

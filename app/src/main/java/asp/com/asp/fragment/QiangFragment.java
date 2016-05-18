@@ -5,11 +5,16 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.handmark.pulltorefresh.library.extras.SoundPullEventListener;
 
 import org.androidannotations.annotations.EFragment;
 
@@ -27,9 +32,9 @@ import asp.com.asp.utils.SwipeRefreshFooterLoading;
  * Created by Administrator on 2016/5/12.
  */
 @EFragment
-public class QiangFragment  extends Fragment implements SwipeRefreshLayout.OnRefreshListener,SwipeRefreshFooterLoading.OnSwipeLoadListener {
+public class QiangFragment  extends Fragment  {
 
-    private SwipeRefreshLayout qiang_refresh;
+    private PullToRefreshListView mPullRefreshListView;
 
     private ListView qiang_listview;
     private View mRootview;
@@ -39,7 +44,6 @@ public class QiangFragment  extends Fragment implements SwipeRefreshLayout.OnRef
 
     private OperationBmobDataUtil mOperationBmobDataUtil;
 
-    private SwipeRefreshFooterLoading mSwipeRefreshFooterLoading;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,10 +51,12 @@ public class QiangFragment  extends Fragment implements SwipeRefreshLayout.OnRef
         initView();
         initData();
 
+        initEvent();
 
 
         return mRootview;
     }
+
 
 
     public static QiangFragment newInstance(int position) {
@@ -63,13 +69,10 @@ public class QiangFragment  extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
     private void initView() {
-        qiang_refresh = (SwipeRefreshLayout) mRootview.findViewById(R.id.qiang_refresh);
-        qiang_refresh.setOnRefreshListener(this);
+        mPullRefreshListView = (PullToRefreshListView)mRootview. findViewById(R.id.qiang_pull_refresh_list);
+        qiang_listview = mPullRefreshListView.getRefreshableView();
+        mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
 
-        qiang_listview = (ListView) mRootview.findViewById(R.id.qiang_listview);
-
-        mSwipeRefreshFooterLoading = new SwipeRefreshFooterLoading(getActivity(),qiang_listview);
-        mSwipeRefreshFooterLoading.setOnLoadListener(this);
     }
 
     private void initData() {
@@ -86,34 +89,22 @@ public class QiangFragment  extends Fragment implements SwipeRefreshLayout.OnRef
         }
     }
 
-    @Override
-    public void onRefresh() {
-
-        qiang_refresh.setRefreshing(true);
-
-       // mListItems = mOperationBmobDataUtil.loadQiangData(refresHandle);
-        mOperationBmobDataUtil.refreshQiangData(refresHandle,mListItems.get(0).getCreatedAt(),mListItems);
-/*        (new Handler()).postDelayed(new Runnable() {
+    private void initEvent() {
+        mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                Log.i("refreshQiangData", "0000");
+                mOperationBmobDataUtil.refreshQiangData(refresHandle, mListItems.get(0).getCreatedAt(), mListItems);
+            }
 
             @Override
-            public void run() {
-                //3秒后停止刷新
-                qiang_refresh.setRefreshing(false);
-                int num = (int)(Math.random() * 100 + 1);
-             *//*   Snackbar.make(qiang_refresh, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setActionTextColor(getResources().getColor(R.color.colorPrimaryDark))
-                        .setAction("Action", null).show();*//*
-
-             //   Toast.makeText(getActivity(),"num",Toast.LENGTH_LONG).show();
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                mOperationBmobDataUtil.loadQiangData(refresHandle, mListItems);
             }
-        }, 3000);*/
+        });
+
     }
 
-    @Override
-    public void onSwipeLoading() {
-
-        mOperationBmobDataUtil.loadQiangData(refresHandle, mListItems);
-    }
     /**
      * 更新刷新 数据
      */
@@ -123,12 +114,11 @@ public class QiangFragment  extends Fragment implements SwipeRefreshLayout.OnRef
             switch (msg.what){
 
                 case ConfigConstantUtil.loadingNotNew :
-                    qiang_refresh.setRefreshing(false);
+
                     Toast.makeText(getActivity(),"数据已经最新！！！",Toast.LENGTH_LONG).show();
                     break;
                 case ConfigConstantUtil.loadingSuccess :
-                    qiang_refresh.setRefreshing(false);
-                   // mQiangListAdapter.addAll(mListItems);
+
                     mQiangListAdapter.notifyDataSetChanged();
                     break;
                 case ConfigConstantUtil.loadingNotOld :
@@ -137,9 +127,10 @@ public class QiangFragment  extends Fragment implements SwipeRefreshLayout.OnRef
                 case ConfigConstantUtil.loadingFault :
                     Toast.makeText(getActivity(),"网络异常，请检查网络！",Toast.LENGTH_LONG).show();
                     break;
-            }
 
-            mSwipeRefreshFooterLoading.setLoading(false);
+            }
+            mPullRefreshListView.onRefreshComplete();
+
         }
     };
 

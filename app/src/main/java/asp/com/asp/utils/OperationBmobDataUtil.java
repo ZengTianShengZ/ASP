@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import asp.com.asp.domain.Comment;
 import asp.com.asp.domain.Goods;
 import asp.com.asp.domain.QiangItem;
 import asp.com.asp.domain.QiangItemDg;
@@ -31,6 +32,7 @@ import cn.bmob.v3.listener.SaveListener;
 public class OperationBmobDataUtil {
     public static final int NUMBERS_PER_PAGE = 2;
     private static int pageNum;
+    private static int chatPageNum;
    // private List<QiangItem> mListItems = new ArrayList<QiangItem>();
 
     private Context mContext;
@@ -53,7 +55,7 @@ public class OperationBmobDataUtil {
     }
 
     public  void initData(Context context) {
-        mContext = context ;
+        mContext = context.getApplicationContext();
         ImageLoaderUtil.getInstance().initData(context);
     }
 
@@ -113,8 +115,7 @@ public class OperationBmobDataUtil {
      * @param mListItems
      */
     public void refreshQiangData(final Handler refresHandle, final String oldTime, final List<QiangItem> mListItems){
-
-
+        Log.i("refreshQiangData","1111");
         BmobQuery<QiangItem> query = new BmobQuery<QiangItem>();
         query.order("-createdAt");
         query.setLimit(NUMBERS_PER_PAGE);
@@ -127,6 +128,7 @@ public class OperationBmobDataUtil {
             @Override
             public void onError(int arg0, String arg1) {
                 refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingFault);
+                Log.i("refreshQiangData", "222");
             }
 
             @Override
@@ -134,25 +136,15 @@ public class OperationBmobDataUtil {
                 // TODO 自动生成的方法存根
                 User user = null;
                 if(list.size()!=0&&list.get(list.size()-1)!=null){
-
-                    if( list.get(0).getCreatedAt().equals(oldTime)) {
-               /*         refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotNew);
-                    }else{
-                        mListItems.clear();
-                        pageNum = 0;
-                        mListItems.addAll(list);
-                        refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
-                    }*/
-
-                        mListItems.clear();
-                        pageNum = 0;
-                        mListItems.addAll(list);
-                        refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
-                    }
+                    mListItems.clear();
+                    pageNum = 0;
+                    mListItems.addAll(list);
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
+                    Log.i("refreshQiangData", "333");
 
                 }else{
                     refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotNew);
-
+                    Log.i("refreshQiangData", "444");
                 }
             }
 
@@ -274,20 +266,20 @@ public class OperationBmobDataUtil {
         BmobProFile.getInstance(mContext).uploadBatch(targeturls, new UploadBatchListener() {
 
             @Override
-            public void onSuccess(boolean isFinish,String[] fileNames,String[] urls,BmobFile[] files) {
+            public void onSuccess(boolean isFinish, String[] fileNames, String[] urls, BmobFile[] files) {
                 // isFinish ：批量上传是否完成
                 // fileNames：文件名数组
                 // urls        : url：文件地址数组
                 // files     : BmobFile文件数组，`V3.4.1版本`开始提供，用于兼容新旧文件服务。
                 //注：若上传的是图片，url(s)并不能直接在浏览器查看（会出现404错误），需要经过`URL签名`得到真正的可访问的URL地址,当然，`V3.4.1`版本可直接从BmobFile中获得可访问的文件地址。
 
-                if(isFinish) {
-                    publishWithoutFigure(finishandle,commitContent,files,goods);
+                if (isFinish) {
+                    publishWithoutFigure(finishandle, commitContent, files, goods);
                 }
             }
 
             @Override
-            public void onProgress(int curIndex, int curPercent, int total,int totalPercent) {
+            public void onProgress(int curIndex, int curPercent, int total, int totalPercent) {
                 // curIndex    :表示当前第几个文件正在上传
                 // curPercent  :表示当前上传文件的进度值（百分比）
                 // total       :表示总的上传文件数
@@ -297,7 +289,7 @@ public class OperationBmobDataUtil {
 
             @Override
             public void onError(int statuscode, String errormsg) {
-                Log.i("uploadBatch","eee111  "+errormsg);
+                Log.i("uploadBatch", "eee111  " + errormsg);
                 finishandle.sendEmptyMessage(ConfigConstantUtil.sendFault);
             }
         });
@@ -326,7 +318,7 @@ public class OperationBmobDataUtil {
         qiangitem.setPass(true);
         qiangitem.setFocus(false);
 
-        goods.save(mContext,new SaveListener() {
+        goods.save(mContext, new SaveListener() {
             @Override
             public void onSuccess() {
                 // TODO 自动生成的方法存根
@@ -338,6 +330,7 @@ public class OperationBmobDataUtil {
                     public void onSuccess() {
                         finishandle.sendEmptyMessage(ConfigConstantUtil.sendSuccess);
                     }
+
                     @Override
                     public void onFailure(int arg0, String arg1) {
                         finishandle.sendEmptyMessage(ConfigConstantUtil.sendFault);
@@ -345,11 +338,47 @@ public class OperationBmobDataUtil {
                     }
                 });
             }
+
             @Override
             public void onFailure(int arg0, String arg1) {
                 finishandle.sendEmptyMessage(ConfigConstantUtil.sendFault);
             }
         });
 
+    }
+
+    /**
+     * 评论 记录
+     */
+    public void loadCommentData(final Handler chatHandle, final List<Comment> commentDatalist,QiangItem item) {
+
+        BmobQuery<Comment> query = new BmobQuery<Comment>();
+        query.addWhereEqualTo("qiang", item);
+        query.include("user");
+        query.order("-createdAt");
+        query.setLimit(NUMBERS_PER_PAGE);
+        query.setSkip(NUMBERS_PER_PAGE * (chatPageNum++));
+        query.findObjects(mContext, new FindListener<Comment>() {
+
+            @Override
+            public void onSuccess(List<Comment> data) {
+                // TODO Auto-generated method stub
+                if (data.size() != 0 && data.get(data.size() - 1) != null) {
+
+                        commentDatalist.addAll(data);
+                    chatHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
+
+                } else {
+                    chatHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotOld);
+                    chatPageNum--;
+                }
+            }
+
+            @Override
+            public void onError(int arg0, String arg1) {
+                chatHandle.sendEmptyMessage(ConfigConstantUtil.loadingFault);
+                chatPageNum--;
+            }
+        });
     }
 }

@@ -9,21 +9,60 @@
     <include layout="@layout/common_top_bar"
         />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:background="#eae8e8"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <com.handmark.pulltorefresh.library.PullToRefreshScrollView
+        xmlns:ptr="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/goods_detail_pull_refresh_scrollview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        ptr:ptrAnimationStyle="flip"
+        ptr:ptrMode="both" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/goods_detail_vp"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/textview_bg"
+                    android:layout_alignBottom="@id/goods_detail_vp"
+                    android:layout_alignParentRight="true"
+                    >
+                    <TextView
+                        android:id="@+id/goods_detail_imgNumTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="10pt"
+                        android:text="0"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10pt"
+                        android:text="/"/>
+                    <TextView
+                        android:id="@+id/goods_detail_totalImgNumTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="10pt"
+                        android:text="0"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
             <include layout="@layout/include_item_infor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,7 +84,8 @@
 
         </LinearLayout>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+    </com.handmark.pulltorefresh.library.PullToRefreshScrollView>
+
 
 
 </LinearLayout>

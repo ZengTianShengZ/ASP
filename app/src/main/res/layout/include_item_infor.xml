@@ -9,8 +9,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-
-        android:layout_marginLeft="10dp">
+        android:padding="10dp"
+         >
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/item_qiang_logo"
@@ -38,7 +38,7 @@
         android:id="@+id/item_qiang_nameTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:layout_toRightOf="@+id/ll_flag"
         android:layout_marginLeft="20dp"
         android:text="曾田生"
@@ -56,15 +56,34 @@
         android:textSize="7pt"
         />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:orientation="vertical"
+        >
+
+
+    <TextView
+        android:id="@+id/item_qiang_delect_Tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/textview_bg"
+        android:padding="2dp"
+        android:drawableLeft="@mipmap/ic_delect"
+        android:text="删除 "
+        android:textSize="9pt"
+        android:visibility="gone"
+        />
     <TextView
         android:id="@+id/item_qiang_comment_Tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-
+        android:layout_below="@+id/item_qiang_delect_Tv"
         android:text="评论 123 "
-        android:layout_centerVertical="true"
-        android:layout_marginRight="15dp"
         android:textSize="9pt"
         />
+    </LinearLayout>
 </RelativeLayout>

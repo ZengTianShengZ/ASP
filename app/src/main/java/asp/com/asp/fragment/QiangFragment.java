@@ -1,5 +1,7 @@
 package asp.com.asp.fragment;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import asp.com.asp.R;
+import asp.com.asp.activity.GoodsDetailActivity_;
 import asp.com.asp.adapter.QiangListAdapter;
 import asp.com.asp.domain.QiangItem;
 import asp.com.asp.utils.ConfigConstantUtil;
@@ -44,10 +48,13 @@ public class QiangFragment  extends Fragment  {
 
     private OperationBmobDataUtil mOperationBmobDataUtil;
 
-
+    private Context mContext;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootview = inflater.inflate(R.layout.fragment_qiang, container, false);
+
+        mContext = getActivity();
+
         initView();
         initData();
 

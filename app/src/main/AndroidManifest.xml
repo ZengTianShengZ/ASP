@@ -16,6 +16,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!--在sdcard中创建/删除文件的权限 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"></uses-permission>
+
+
     <application
         android:name=".AspApplications"
         android:allowBackup="true"
@@ -41,6 +43,12 @@
               >
         </activity>
         <activity android:name=".activity.GoodsDetailActivity_"
+            >
+        </activity>
+        <activity android:name=".weibo.WBAuthActivity_"
+            >
+        </activity>
+        <activity android:name=".activity.PersonalQiangActivity_"
             >
         </activity>
     </application>

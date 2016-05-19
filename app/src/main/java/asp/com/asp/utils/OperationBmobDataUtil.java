@@ -33,6 +33,8 @@ public class OperationBmobDataUtil {
     public static final int NUMBERS_PER_PAGE = 2;
     private static int pageNum;
     private static int chatPageNum;
+    private static int dgPageNum;
+    private static int personQiangPageNum;
    // private List<QiangItem> mListItems = new ArrayList<QiangItem>();
 
     private Context mContext;
@@ -166,14 +168,14 @@ public class OperationBmobDataUtil {
         query.setLimit(NUMBERS_PER_PAGE);
         BmobDate date = new BmobDate(new Date(System.currentTimeMillis()));
         query.addWhereLessThan("createdAt", date);
-        query.setSkip(NUMBERS_PER_PAGE*(pageNum++));
+        query.setSkip(NUMBERS_PER_PAGE*(dgPageNum++));
         query.include("author");
         query.findObjects(mContext, new FindListener<QiangItemDg>() {
 
             @Override
             public void onError(int arg0, String arg1) {
-                // TODO 自动生成的方法存根
-                pageNum--;
+                Log.i("onError","onError+++"+arg1);
+                dgPageNum--;
 
                 refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingFault);
             }
@@ -188,7 +190,7 @@ public class OperationBmobDataUtil {
                     mListItems.addAll(list);
                     refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
                 }else{
-                    pageNum--;
+                    dgPageNum--;
                     refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotOld);
 
                 }
@@ -226,20 +228,10 @@ public class OperationBmobDataUtil {
                 User user = null;
                 if(list.size()!=0&&list.get(list.size()-1)!=null){
 
-                    if( list.get(0).getCreatedAt().equals(oldTime)) {
-               /*         refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotNew);
-                    }else{
-                        mListItems.clear();
-                        pageNum = 0;
-                        mListItems.addAll(list);
-                        refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
-                    }*/
-
-                        mListItems.clear();
-                        pageNum = 0;
-                        mListItems.addAll(list);
-                        refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
-                    }
+                    mListItems.clear();
+                    dgPageNum = 0;
+                    mListItems.addAll(list);
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
 
                 }else{
                     refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotNew);
@@ -252,6 +244,13 @@ public class OperationBmobDataUtil {
     }
 
 
+    /**
+     *  发布商品
+     * @param finishandle
+     * @param commitContent
+     * @param sourcepathlist
+     * @param goods
+     */
     public void sendGoodData(final Handler finishandle,final String commitContent, ArrayList<String> sourcepathlist,final Goods goods){
         String[] targeturls=null;
         targeturls = new String[sourcepathlist.size()];
@@ -380,5 +379,82 @@ public class OperationBmobDataUtil {
                 chatPageNum--;
             }
         });
+    }
+
+    /**
+     * 上拉加载  加载用户 发布过的信息
+     * @param refresHandle
+     * @param mListItems
+     */
+    public void loadPersonData(final Handler refresHandle, User mUser,final List<QiangItem> mListItems) {
+
+        //筛选 用户信息、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、//
+        BmobQuery<QiangItem> query = new BmobQuery<QiangItem>();
+        query.setLimit(NUMBERS_PER_PAGE); // 限制 15条 消息
+        query.setSkip(NUMBERS_PER_PAGE* (personQiangPageNum++));
+        query.order("-createdAt");
+        query.include("author");
+        query.addWhereEqualTo("author", mUser);
+        query.findObjects(mContext, new FindListener<QiangItem>() {
+
+            @Override
+            public void onSuccess(List<QiangItem> list) {
+                // TODO 自动生成的方法存根
+                User user = null;
+                if(list.size()!=0&&list.get(list.size()-1)!=null){
+
+                    mListItems.addAll(list);
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
+                }else{
+                    personQiangPageNum--;
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotOld);
+
+                }
+            }
+            @Override
+            public void onError(int arg0, String arg1) {
+                personQiangPageNum--;
+                refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingFault);
+            }
+        });
+
+    }
+    /**
+     * 下拉加载  加载用户 发布过的信息
+     * @param refresHandle
+     * @param mListItems
+     */
+    public void refreshPersonData(final Handler refresHandle, User mUser,final List<QiangItem> mListItems) {
+
+        //筛选 用户信息、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、//
+        BmobQuery<QiangItem> query = new BmobQuery<QiangItem>();
+        query.setLimit(NUMBERS_PER_PAGE); // 限制 15条 消息
+        query.setSkip(NUMBERS_PER_PAGE);
+        query.order("-createdAt");
+        query.include("author");
+        query.addWhereEqualTo("author", mUser);
+        query.findObjects(mContext, new FindListener<QiangItem>() {
+
+            @Override
+            public void onSuccess(List<QiangItem> list) {
+                if(list.size()!=0&&list.get(list.size()-1)!=null){
+
+                    mListItems.clear();
+                    personQiangPageNum = 0;
+                    mListItems.addAll(list);
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
+
+                }else{
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotNew);
+
+                }
+            }
+            @Override
+            public void onError(int arg0, String arg1) {
+
+                refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingFault);
+            }
+        });
+
     }
 }

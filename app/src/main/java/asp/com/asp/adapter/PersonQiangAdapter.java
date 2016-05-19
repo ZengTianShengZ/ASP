@@ -1,7 +1,6 @@
 package asp.com.asp.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,25 +14,17 @@ import java.util.List;
 import asp.com.appbase.adapter.BaseListAdapter;
 import asp.com.appbase.adapter.ViewHolder;
 import asp.com.asp.R;
-import asp.com.asp.activity.GoodsDetailActivity;
-import asp.com.asp.activity.GoodsDetailActivity_;
-import asp.com.asp.activity.PersonalQiangActivity_;
 import asp.com.asp.domain.QiangItem;
-import asp.com.asp.domain.QiangItemDg;
-import asp.com.asp.utils.ConfigConstantUtil;
 import asp.com.asp.view.innerGridView;
 
 /**
- * Created by Administrator on 2016/5/13.
+ * Created by Administrator on 2016/5/19.
  */
-public class QiangListAdapter extends BaseListAdapter<QiangItem>  {
-
-    private final int TYPE_RECOMMEND_SELLSE = 1;
-    private final int TYPE_SEND_TXT = 1;
+public class PersonQiangAdapter extends BaseListAdapter<QiangItem> {
 
     private QiangItemGridViewAdapter mQiangItemGridViewAdapter;
 
-    public QiangListAdapter(Context context, List<QiangItem> list) {
+    public PersonQiangAdapter(Context context, List<QiangItem> list) {
         super(context, list);
     }
 
@@ -41,10 +32,11 @@ public class QiangListAdapter extends BaseListAdapter<QiangItem>  {
     public View bindView(int position, View convertView, ViewGroup parent) {
         final QiangItem item = list.get(position);
         if (convertView == null) {
-           // convertView = createViewByType(position);
+            // convertView = createViewByType(position);
             convertView = mInflater.inflate(R.layout.item_qiang, null);
         }
-       SimpleDraweeView qiang_logo = ViewHolder.get(convertView, R.id.item_qiang_logo);
+
+        SimpleDraweeView qiang_logo = ViewHolder.get(convertView, R.id.item_qiang_logo);
 
         TextView nameTv = ViewHolder.get(convertView, R.id.item_qiang_nameTv);
         TextView time_Tv = ViewHolder.get(convertView, R.id.item_qiang_time_Tv);
@@ -92,45 +84,7 @@ public class QiangListAdapter extends BaseListAdapter<QiangItem>  {
             qiang_gridView.setAdapter(mQiangItemGridViewAdapter);
         }
 
-        convertView.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                // TODO 自动生成的方法存根
-                Intent intent = new Intent(mContext,GoodsDetailActivity_.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("itemQiang", item);
-                mContext.startActivity(intent);
-
-            }
-        });
-        qiang_logo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext,PersonalQiangActivity_.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(ConfigConstantUtil.intentDtat_Author, item.getAuthor());
-                mContext.startActivity(intent);
-            }
-        });
-        return  convertView;
+        return convertView;
     }
-    /**
-     * 返回发送或是接收 的 布局
-     * @param position
-     * @return View
-     */
-    private View createViewByType(int position) {
-
-        return list.get(position).getMessageType() == TYPE_RECOMMEND_SELLSE ?
-                mInflater.inflate(R.layout.item_qiang, null)
-                :
-                mInflater.inflate(R.layout.item_qiang, null);
-    }
-    @Override
-    public int getViewTypeCount() {
-        return 2;
-    }
-
-
 }

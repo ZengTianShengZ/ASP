@@ -78,11 +78,10 @@ public class EditQiangActivity extends Activity {
     EditText sailer_phone_edit;
 
     private ProgressDialog mProgressDialog;
-    private DialogUtils dlgViewResetPassword;
+    private DialogUtils dlg_view;
+    private AlertDialog dlg_back_alert;
+
     private ZssMyAdapter zssMyAadapter;
-
-    private AlertDialog resetPasswordDialog;
-
 
     private static final int REQUEST_CODE_ALBUM = 1;
     private static final int REQUEST_CODE_CAMERA = 2;
@@ -255,18 +254,18 @@ public class EditQiangActivity extends Activity {
     };
 
     private void backDialogCreat(){
-        dlgViewResetPassword = new DialogUtils.Builder().titleStr("确定推出编辑")
+        dlg_view = new DialogUtils.Builder().titleStr("确定推出编辑")
                 .leftBtnStr("取消").rightBtnStr("确定").setEditVisible(View.GONE).build();
-        resetPasswordDialog = new AlertDialog.Builder(EditQiangActivity.this).setView(dlgViewResetPassword.getDialogView(this)).show();
+        dlg_back_alert = new AlertDialog.Builder(EditQiangActivity.this).setView(dlg_view.getDialogView(this)).show();
 
-        dlgViewResetPassword.leftButtonClickListener(new DialogUtils.DialogLeftButtonClick(){
+        dlg_view.leftButtonClickListener(new DialogUtils.DialogLeftButtonClick(){
 
             @Override
             public void dialogLeftButtonClickListener() {
-                resetPasswordDialog.dismiss();
+                dlg_back_alert.dismiss();
             }
         });
-        dlgViewResetPassword.rightButtonClickListener(new DialogUtils.DialogRightButtonClick(){
+        dlg_view.rightButtonClickListener(new DialogUtils.DialogRightButtonClick(){
 
             @Override
             public void dialogRightButtonClickListener(String editStr) {

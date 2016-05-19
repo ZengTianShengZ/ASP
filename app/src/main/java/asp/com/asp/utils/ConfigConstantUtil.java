@@ -12,4 +12,6 @@ public class ConfigConstantUtil {
 
     public static final int sendSuccess = 114;
     public static final int sendFault = 115;
+
+    public static final String intentDtat_Author = "intentDtat_Author";
 }

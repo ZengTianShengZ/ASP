@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
+import android.view.View;
 import android.view.Window;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -19,6 +21,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshScrollView;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
@@ -32,7 +35,9 @@ import asp.com.asp.domain.Comment;
 import asp.com.asp.domain.Goods;
 import asp.com.asp.domain.QiangItem;
 import asp.com.asp.utils.ConfigConstantUtil;
+import asp.com.asp.utils.DialogUtils;
 import asp.com.asp.utils.OperationBmobDataUtil;
+import asp.com.asp.view.SnackbarUtil;
 
 /**
  * Created by Administrator on 2016/5/17.
@@ -56,11 +61,18 @@ public class GoodsDetailActivity extends Activity  {
     TextView goodsTv;
     @ViewById(R.id.goods_content_sortTv)
     TextView sortTv;
+    @ViewById(R.id.goods_detail_priceTv)
+    TextView priceTv;
     @ViewById(R.id.goods_detail_vp)
     ViewPager img_Viewpager;
 
+
     @ViewById(R.id.goods_content_descTv)
     TextView descTv;
+    @ViewById(R.id.goods_detail_pinlunBtn)
+    TextView pinlunBtn;
+    @ViewById(R.id.goods_detail_callPhoneBtn)
+    TextView callPhoneBtn;
 
     @ViewById(R.id.goods_detail_totalImgNumTv)
     TextView totalImgNumTv;
@@ -69,11 +81,16 @@ public class GoodsDetailActivity extends Activity  {
     @ViewById(R.id.goods_detail_listview)
     ListView chatistview;
 
+    private DialogUtils dlg_view;
+    private AlertDialog dlg_Comment_alert;
+
     private CommentAdapter mCommentAdapter;
     private QiangItem item;
     private Context mContext;
     private List<Comment> commentDatalist = new ArrayList<Comment>();
     private OperationBmobDataUtil mOperationBmobDataUtil;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +124,7 @@ public class GoodsDetailActivity extends Activity  {
         Goods goods = item.getGoods();
         goodsTv.setText(goods.getName()+"");
         sortTv.setText(goods.getCategory()+"");
+        priceTv.setText("价格："+goods.getPrice()+"");
 
         if (null == item.getContentfigureurl()) {
             return;
@@ -176,7 +194,31 @@ public class GoodsDetailActivity extends Activity  {
             }
         });
     }
+    @Click(R.id.goods_detail_pinlunBtn)
+    void pinlunBtnClick(final View clickedView){
 
+        dlg_view = new DialogUtils.Builder().titleStr("评论")
+                .leftBtnStr("取消").rightBtnStr("确定").build();
+        dlg_Comment_alert = new AlertDialog.Builder(GoodsDetailActivity.this).setView(dlg_view.getDialogView(this)).show();
+
+        dlg_view.leftButtonClickListener(new DialogUtils.DialogLeftButtonClick(){
+
+            @Override
+            public void dialogLeftButtonClickListener() {
+                dlg_Comment_alert.dismiss();
+            }
+        });
+        dlg_view.rightButtonClickListener(new DialogUtils.DialogRightButtonClick(){
+
+            @Override
+            public void dialogRightButtonClickListener(String editStr) {
+                dlg_Comment_alert.dismiss();
+                SnackbarUtil.LongSnackbar(clickedView,"评论成功",
+                        getResources().getColor(R.color.colorWhite),
+                        getResources().getColor(R.color.colorPrimaryDark)).show();
+            }
+        } );
+    }
     /**
      * 更新刷新 数据
      */

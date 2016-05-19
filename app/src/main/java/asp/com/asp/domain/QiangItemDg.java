@@ -13,7 +13,7 @@ import cn.bmob.v3.datatype.BmobRelation;
  *
  */
 public class QiangItemDg extends BmobObject implements Serializable{
-	private static final long serialVersionUID = -6280656428527540320L;
+	//private static final long serialVersionUID = -6280656428527540320L;
 	
 	private User author;
 	private String content;

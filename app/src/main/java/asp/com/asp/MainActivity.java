@@ -3,33 +3,24 @@ package asp.com.asp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 import asp.com.appbase.view.BottomTagView;
-import asp.com.asp.activity.EditQiangActivity;
 import asp.com.asp.activity.EditQiangActivity_;
-import asp.com.asp.fragment.HomeFragment;
 import asp.com.asp.fragment.HomeFragment_;
-import asp.com.asp.fragment.MeFragment;
 import asp.com.asp.fragment.MeFragment_;
-import asp.com.asp.fragment.NewsFragment;
 import asp.com.asp.fragment.NewsFragment_;
-import asp.com.asp.view.SnackbarUtil;
-import cn.bmob.v3.Bmob;
+import asp.com.asp.weibo.WBAuthActivity_;
 
 /**
  * Created by Administrator on 2016/5/11.
@@ -111,11 +102,13 @@ public class MainActivity extends FragmentActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            Intent intent = new Intent(this,WBAuthActivity_.class);
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
-
+            Intent intent = new Intent(this,WBAuthActivity_.class);
+            startActivity(intent);
         } else if (id == R.id.nav_manage) {
 
             Intent intent = new Intent(this,EditQiangActivity_.class);

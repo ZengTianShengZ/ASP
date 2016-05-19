@@ -122,17 +122,18 @@ public class QiangFragment2  extends Fragment  {
 
                 case ConfigConstantUtil.loadingNotNew :
 
-                    Toast.makeText(getActivity(),"数据已经最新！！！",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"数据已经最新22！！！",Toast.LENGTH_LONG).show();
                     break;
                 case ConfigConstantUtil.loadingSuccess :
 
                     mQiangDgListAdapter.notifyDataSetChanged();
                     break;
                 case ConfigConstantUtil.loadingNotOld :
-                    Toast.makeText(getActivity(),"数据到底啦！！！",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"数据到底啦22！！！",Toast.LENGTH_LONG).show();
                     break;
                 case ConfigConstantUtil.loadingFault :
-                    Toast.makeText(getActivity(),"网络异常，请检查网络！",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"网络异常，请检查网络22！",Toast.LENGTH_LONG).show();
+                 // onError+++object not found for QiangItemDg.
                     break;
             }
             mPullRefreshListView.onRefreshComplete();

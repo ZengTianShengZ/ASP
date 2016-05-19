@@ -37,7 +37,7 @@ public class PersonQiangAdapter extends BaseListAdapter<QiangItem> {
         }
 
         SimpleDraweeView qiang_logo = ViewHolder.get(convertView, R.id.item_qiang_logo);
-
+        qiang_logo.setVisibility(View.GONE);
         TextView nameTv = ViewHolder.get(convertView, R.id.item_qiang_nameTv);
         TextView time_Tv = ViewHolder.get(convertView, R.id.item_qiang_time_Tv);
         TextView comment_Tv = ViewHolder.get(convertView, R.id.item_qiang_comment_Tv);
@@ -45,11 +45,13 @@ public class PersonQiangAdapter extends BaseListAdapter<QiangItem> {
 
         innerGridView qiang_gridView = ViewHolder.get(convertView, R.id.item_qiang_gridView);
 
-        String Imageurl = null;
+   /* personal 墙 adapter  不需要显示头像
+      String Imageurl = null;
         if (item.getAuthor().getAvatar()!=null) {
             Imageurl = item.getAuthor().getAvatar().getFileUrl(mContext);
             qiang_logo.setImageURI(Uri.parse(Imageurl));
-        }
+        }*/
+
         if(item.getAuthor().getNickname() != null){
             nameTv.setText(item.getAuthor().getNickname()+"");
         }

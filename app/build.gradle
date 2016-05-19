@@ -35,6 +35,7 @@ dependencies {
     compile 'com.facebook.fresco:fresco:0.10.0'
     compile project(':pullrefreshlibrary')
     compile files('libs/weiboSDKCore_3.1.4.jar')
+
 }
 
 apt {

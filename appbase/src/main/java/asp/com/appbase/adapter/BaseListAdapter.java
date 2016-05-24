@@ -25,6 +25,8 @@ import android.widget.Toast;
 @SuppressLint("UseSparseArrays")
 public abstract class BaseListAdapter<T> extends BaseAdapter {
 
+
+
 	public List<T> list ;
 
 	public Context mContext;

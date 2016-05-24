@@ -80,7 +80,7 @@ public class AccessTokenKeeper {
         Log.i("mAccessToken",""+pref.getString(KEY_UID, ""));
         Log.i("mAccessToken",""+pref.getString(KEY_ACCESS_TOKEN, ""));
         Log.i("mAccessToken",""+pref.getString(KEY_REFRESH_TOKEN, ""));
-        Log.i("mAccessToken",""+pref.getString(KEY_EXPIRES_IN, ""));
+       // Log.i("mAccessToken",""+pref.getString(KEY_EXPIRES_IN, ""));
 
         return token;
     }

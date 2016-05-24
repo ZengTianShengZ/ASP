@@ -7,10 +7,19 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import asp.com.appbase.R;
 
 /**
  *  RecyclerView.Adapter  基类
@@ -22,6 +31,11 @@ import android.view.ViewGroup;
  */
 
 public abstract class BaseRecycleViewAdapter<T> extends RecyclerView.Adapter<RecycleViewHolder> {
+
+	//正常条目
+	private static final int TYPE_NORMAL_ITEM = 0;
+	//加载条目
+	private static final int TYPE_LOADING_ITEM = 1;
 
 	protected Context mContext;
 	protected int mLayoutId;
@@ -39,32 +53,57 @@ public abstract class BaseRecycleViewAdapter<T> extends RecyclerView.Adapter<Rec
 
 	@Override
 	public int getItemCount() {
-		return mDatas.size();
+		return mDatas.size() == 0 ? 0 : mDatas.size() + 1;
 	}
-
 	@Override
 	public long getItemId(int position) {
 		return position;
+	}
+	@Override
+	public int getItemViewType(int position) {
+		if (position + 1 == getItemCount()) {
+			return TYPE_LOADING_ITEM;
+		} else {
+			return TYPE_NORMAL_ITEM;
+		}
 	}
 
 	@Override
 	public void onBindViewHolder(final RecycleViewHolder holder, final int position) {
 		holder.updatePosition(position);
-		convert(holder, mDatas.get(position), holder.getPosition());
+		if(position + 1 == getItemCount()){
+			TextView lodingTv = holder.getView(R.id.tv_loading);
+			lodingTv.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if(mOnLoadingListener!=null){
+						mOnLoadingListener.loading(holder.getView(R.id.progress_loading));
+					}
+				}
+			});
+		}else {
+			convert(holder, mDatas.get(position), holder.getPosition());
+		}
 	}
 
 	@Override
 	public RecycleViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-		final RecycleViewHolder viewHolder = RecycleViewHolder.get(mContext, parent, mLayoutId);
 
-		return viewHolder;
+		if(viewType == TYPE_NORMAL_ITEM){
+			final RecycleViewHolder viewHolder = RecycleViewHolder.get(mContext, parent, mLayoutId);
+			return viewHolder;
+		}else{
+			final RecycleViewHolder loadingViewHolder = RecycleViewHolder.get(mContext, parent, R.layout.loading_layout);
+			return loadingViewHolder;
+		}
+
 	}
 
 	public abstract void convert(RecycleViewHolder holder, T t, int holderPosition);
 
 	/**
 	 * 移除选中 的 item
-	 * @param
+	 *
 	 */
 	public void removeSelectPosition( Map<Integer,Integer> map) {
 
@@ -139,4 +178,24 @@ public abstract class BaseRecycleViewAdapter<T> extends RecyclerView.Adapter<Rec
 	public void myNotifyData(){
 		notifyDataSetChanged();
 	}
+
+
+	private OnLoadingListener mOnLoadingListener;
+
+	/**
+	 * 加载更多接口
+	 */
+	public interface OnLoadingListener {
+		void loading(View progress_loading);
+	}
+
+	/**
+	 * 设置监听接口
+	 *
+	 * @param onLoadingListener onLoadingListener
+	 */
+	public void setOnLoadingListener(OnLoadingListener onLoadingListener) {
+		mOnLoadingListener = onLoadingListener;
+	}
+
 }

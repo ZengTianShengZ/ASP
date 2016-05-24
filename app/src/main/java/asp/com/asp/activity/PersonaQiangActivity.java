@@ -14,11 +14,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -33,10 +31,8 @@ import asp.com.asp.fragment.PersonalQiangFragment;
 import asp.com.asp.utils.BlurUtil;
 import asp.com.asp.utils.ConfigConstantUtil;
 
+public class PersonaQiangActivity extends AppCompatActivity {
 
-public class PersonaQiangActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
-
-    private SwipeRefreshLayout  mSwipeRefreshLayout;
     private LinearLayout head_layout;
     private TabLayout toolbar_tab;
     private ViewPager main_vp_container;
@@ -77,8 +73,6 @@ public class PersonaQiangActivity extends AppCompatActivity implements SwipeRefr
             }
         });
 
-        mSwipeRefreshLayout  = (SwipeRefreshLayout) findViewById(R.id.prisonal_qiang_RefreshLayout);
-
         head_layout = (LinearLayout) findViewById(R.id.head_layout);
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.sh_big_bg);
         head_layout.setBackgroundDrawable(new BitmapDrawable(BlurUtil.fastblur(this, bitmap, 180)));
@@ -115,29 +109,19 @@ public class PersonaQiangActivity extends AppCompatActivity implements SwipeRefr
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (verticalOffset <= -head_layout.getHeight() / 2) {
                     mCollapsingToolbarLayout.setTitle(mUser.getNickname()+"");
-                    mSwipeRefreshLayout.setRefreshing(false);
+
                 } else {
                     mCollapsingToolbarLayout.setTitle(" ");
                 }
+                // SwipeRefreshLayout和CoordinatorLayout 冲突
+            /*    if (verticalOffset >= 0) {
+                    mSwipeRefreshLayout.setEnabled(true);
+                } else {
+                    mSwipeRefreshLayout.setEnabled(false);
+                }*/
             }
         });
 
- /*       main_vp_container.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });*/
         final TabLayout.TabLayoutOnPageChangeListener listener =
                 new TabLayout.TabLayoutOnPageChangeListener(toolbar_tab);
         main_vp_container.addOnPageChangeListener(listener);
@@ -157,11 +141,5 @@ public class PersonaQiangActivity extends AppCompatActivity implements SwipeRefr
 
             }
         });
-    }
-
-
-    @Override
-    public void onRefresh() {
-        mSwipeRefreshLayout.setRefreshing(false);
     }
 }

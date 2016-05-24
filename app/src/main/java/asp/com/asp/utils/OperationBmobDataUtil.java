@@ -35,6 +35,7 @@ public class OperationBmobDataUtil {
     private static int chatPageNum;
     private static int dgPageNum;
     private static int personQiangPageNum;
+    private static int personQiangDgPageNum;
    // private List<QiangItem> mListItems = new ArrayList<QiangItem>();
 
     private Context mContext;
@@ -390,8 +391,8 @@ public class OperationBmobDataUtil {
 
         //筛选 用户信息、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、//
         BmobQuery<QiangItem> query = new BmobQuery<QiangItem>();
-        query.setLimit(15); // 限制 15条 消息
-        query.setSkip(15* (personQiangPageNum++));
+        query.setLimit(NUMBERS_PER_PAGE); // 限制 15条 消息
+        query.setSkip(NUMBERS_PER_PAGE* (personQiangPageNum++));
         query.order("-createdAt");
         query.include("author");
         query.addWhereEqualTo("author", mUser);
@@ -458,7 +459,49 @@ public class OperationBmobDataUtil {
 
     }
 
+    /**
+     * 上拉加载  加载用户 发布过的信息
+     * @param refresHandle
+     * @param mListItems
+     */
+    public void loadPersonDgData(final Handler refresHandle, User mUser,final List<QiangItemDg> mListItems) {
+
+        //筛选 用户信息、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、//
+        BmobQuery<QiangItemDg> query = new BmobQuery<QiangItemDg>();
+        query.setLimit(NUMBERS_PER_PAGE); // 限制 15条 消息
+        query.setSkip(NUMBERS_PER_PAGE* (personQiangDgPageNum++));
+        query.order("-createdAt");
+        query.include("author");
+        query.addWhereEqualTo("author", mUser);
+        query.findObjects(mContext, new FindListener<QiangItemDg>() {
+
+            @Override
+            public void onSuccess(List<QiangItemDg> list) {
+                // TODO 自动生成的方法存根
+                User user = null;
+                if(list.size()!=0&&list.get(list.size()-1)!=null){
+
+                    mListItems.addAll(list);
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
+                }else{
+                    personQiangDgPageNum--;
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotOld);
+
+                }
+            }
+            @Override
+            public void onError(int arg0, String arg1) {
+                personQiangDgPageNum--;
+                refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingFault);
+            }
+        });
+
+    }
+
     public void clearnPageNum(){
         personQiangPageNum = 0;
+    }
+    public void clearPersonQiangDgPageNum(){
+        personQiangDgPageNum = 0;
     }
 }

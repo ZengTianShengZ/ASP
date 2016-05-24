@@ -5,32 +5,26 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.handmark.pulltorefresh.library.PullToRefreshBase;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import asp.com.appbase.adapter.BaseRecycleViewAdapter;
 import asp.com.asp.R;
 import asp.com.asp.activity.PersonaQiangActivity;
-import asp.com.asp.activity.PersonalQiangActivityxx;
-import asp.com.asp.adapter.PersonQiangAdapter;
 import asp.com.asp.adapter.PersonQiangRecycleAdapter;
 import asp.com.asp.domain.QiangItem;
 import asp.com.asp.domain.User;
 import asp.com.asp.utils.ConfigConstantUtil;
 import asp.com.asp.utils.OperationBmobDataUtil;
 import asp.com.asp.utils.SwipeRefreshFooterLoading;
-import asp.com.asp.view.InnerListView;
 
 /**
  * Created by Administrator on 2016/5/19.
@@ -42,9 +36,10 @@ public class PersonalQiangFragment extends Fragment implements SwipeRefreshFoote
 
    // private InnerListView personQ_listview;
     private RecyclerView qiang_recycleview;
-    private View refresh_footer;
+    private View progress_loading;
   //  private PersonQiangAdapter mPersonQiangAdapter;
     private PersonQiangRecycleAdapter mPersonQiangRecycleAdapter;
+    private LinearLayoutManager mLinearLayoutManager;
     private List<QiangItem> mListItems =  new ArrayList<QiangItem>();
 
     private User mUser;
@@ -74,12 +69,11 @@ public class PersonalQiangFragment extends Fragment implements SwipeRefreshFoote
 
     private void initView() {
         qiang_recycleview = (RecyclerView) mRootview.findViewById(R.id.personal_qiang_recycleview);
-        qiang_recycleview.setLayoutManager(new LinearLayoutManager(qiang_recycleview.getContext()));
+        mLinearLayoutManager = new LinearLayoutManager(qiang_recycleview.getContext());
+        qiang_recycleview.setLayoutManager( mLinearLayoutManager);
     /*    mPullRefreshListView = (PullToRefreshListView)mRootview. findViewById(R.id.person_qiang_refresh_list);
         personQ_listview = mPullRefreshListView.getRefreshableView();
         mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);*/
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        refresh_footer =   inflater.inflate(R.layout.swipe_refresh_footer,null);
 
     }
     private void initData() {
@@ -117,6 +111,24 @@ public class PersonalQiangFragment extends Fragment implements SwipeRefreshFoote
                 mOperationBmobDataUtil.loadPersonData(refresHandle,mUser, mListItems);
             }
         });*/
+        qiang_recycleview.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+
+        mPersonQiangRecycleAdapter.setOnLoadingListener(new BaseRecycleViewAdapter.OnLoadingListener() {
+            @Override
+            public void loading(View loadingview) {
+                if(progress_loading ==null){
+                    progress_loading = loadingview;
+                }
+                progress_loading.setVisibility(View.VISIBLE);
+                mOperationBmobDataUtil.loadPersonData(refresHandle,mUser, mListItems);
+
+            }
+        });
 
     }
     /**
@@ -143,6 +155,9 @@ public class PersonalQiangFragment extends Fragment implements SwipeRefreshFoote
                     Toast.makeText(mContext,"网络异常，请检查网络！",Toast.LENGTH_LONG).show();
                     break;
 
+            }
+            if(progress_loading!=null) {
+                progress_loading.setVisibility(View.GONE);
             }
          //   mPullRefreshListView.onRefreshComplete();
 

@@ -390,8 +390,8 @@ public class OperationBmobDataUtil {
 
         //筛选 用户信息、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、//
         BmobQuery<QiangItem> query = new BmobQuery<QiangItem>();
-        query.setLimit(NUMBERS_PER_PAGE); // 限制 15条 消息
-        query.setSkip(NUMBERS_PER_PAGE* (personQiangPageNum++));
+        query.setLimit(15); // 限制 15条 消息
+        query.setSkip(15* (personQiangPageNum++));
         query.order("-createdAt");
         query.include("author");
         query.addWhereEqualTo("author", mUser);
@@ -456,5 +456,9 @@ public class OperationBmobDataUtil {
             }
         });
 
+    }
+
+    public void clearnPageNum(){
+        personQiangPageNum = 0;
     }
 }

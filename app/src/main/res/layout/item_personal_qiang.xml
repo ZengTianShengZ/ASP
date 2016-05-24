@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:padding="20dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="120dp"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/item_personal_qiang_nameTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="曾田生"
+        android:textSize="9pt"
+        />
+
+    <TextView
+        android:id="@+id/item_personal_qiang_time_Tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/item_qiang_nameTv"
+        android:text="今天 18：31 上海"
+        android:textSize="7pt"
+        />
+    <TextView
+        android:id="@+id/item_personal_qiang_content_Tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/item_qiang_time_Tv"
+        android:text="被忘记了 忘记了그땐 그게 전분 줄 알았는데那时以为这些是全部시간이 흐르면随着时间流逝"
+        android:textSize="7pt"
+        />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/personal_qiang_sdView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        fresco:placeholderImage="@mipmap/ic_logo"
+        fresco:placeholderImageScaleType="fitCenter"
+        ></com.facebook.drawee.view.SimpleDraweeView>
+    </LinearLayout>
+</RelativeLayout>

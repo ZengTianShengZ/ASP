@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -18,24 +21,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import asp.com.asp.R;
-import asp.com.asp.activity.PersonalQiangActivity;
-import asp.com.asp.adapter.HomePagerAdapter;
+import asp.com.asp.activity.PersonaQiangActivity;
+import asp.com.asp.activity.PersonalQiangActivityxx;
 import asp.com.asp.adapter.PersonQiangAdapter;
+import asp.com.asp.adapter.PersonQiangRecycleAdapter;
 import asp.com.asp.domain.QiangItem;
 import asp.com.asp.domain.User;
 import asp.com.asp.utils.ConfigConstantUtil;
 import asp.com.asp.utils.OperationBmobDataUtil;
+import asp.com.asp.utils.SwipeRefreshFooterLoading;
+import asp.com.asp.view.InnerListView;
 
 /**
  * Created by Administrator on 2016/5/19.
  */
-public class PersonalQiangFragment extends Fragment {
+public class PersonalQiangFragment extends Fragment implements SwipeRefreshFooterLoading.OnSwipeLoadListener {
 
 
-    private PullToRefreshListView mPullRefreshListView;;
+  //  private PullToRefreshListView mPullRefreshListView;;
 
-    private ListView personQ_listview;
-    private PersonQiangAdapter mPersonQiangAdapter;
+   // private InnerListView personQ_listview;
+    private RecyclerView qiang_recycleview;
+    private View refresh_footer;
+  //  private PersonQiangAdapter mPersonQiangAdapter;
+    private PersonQiangRecycleAdapter mPersonQiangRecycleAdapter;
     private List<QiangItem> mListItems =  new ArrayList<QiangItem>();
 
     private User mUser;
@@ -64,23 +73,26 @@ public class PersonalQiangFragment extends Fragment {
     }
 
     private void initView() {
-        mPullRefreshListView = (PullToRefreshListView)mRootview. findViewById(R.id.person_qiang_refresh_list);
+        qiang_recycleview = (RecyclerView) mRootview.findViewById(R.id.personal_qiang_recycleview);
+        qiang_recycleview.setLayoutManager(new LinearLayoutManager(qiang_recycleview.getContext()));
+    /*    mPullRefreshListView = (PullToRefreshListView)mRootview. findViewById(R.id.person_qiang_refresh_list);
         personQ_listview = mPullRefreshListView.getRefreshableView();
-        mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
-
-
+        mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);*/
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        refresh_footer =   inflater.inflate(R.layout.swipe_refresh_footer,null);
 
     }
     private void initData() {
 
-        mUser = ((PersonalQiangActivity)mContext).getUser();
+
+        mUser = ((PersonaQiangActivity)mContext).getUser();
        // mUser = (User)getIntent().getSerializableExtra(ConfigConstantUtil.intentDtat_Author);
 
         mOperationBmobDataUtil = mOperationBmobDataUtil.getInstance();
         mOperationBmobDataUtil.initData(mContext);
 
-        mPersonQiangAdapter = new PersonQiangAdapter(mContext,mListItems);
-        personQ_listview.setAdapter(mPersonQiangAdapter);
+        mPersonQiangRecycleAdapter = new PersonQiangRecycleAdapter(mContext,mListItems);
+        qiang_recycleview.setAdapter(mPersonQiangRecycleAdapter);
 
         if(mListItems.size() == 0){
 
@@ -90,8 +102,9 @@ public class PersonalQiangFragment extends Fragment {
         }
     }
     private void initEvent() {
-
-        Toast.makeText(getActivity(),"yyyy",Toast.LENGTH_LONG).show();
+      /* SwipeRefreshFooterLoading mSwipeRefreshFooterLoading = new SwipeRefreshFooterLoading(mContext,qiang_recycleview);
+        mSwipeRefreshFooterLoading.setOnLoadListener(this);*/
+/*        Toast.makeText(getActivity(),"yyyy",Toast.LENGTH_LONG).show();
         mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
@@ -103,7 +116,7 @@ public class PersonalQiangFragment extends Fragment {
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 mOperationBmobDataUtil.loadPersonData(refresHandle,mUser, mListItems);
             }
-        });
+        });*/
 
     }
     /**
@@ -120,7 +133,8 @@ public class PersonalQiangFragment extends Fragment {
                     break;
                 case ConfigConstantUtil.loadingSuccess :
 
-                    mPersonQiangAdapter.notifyDataSetChanged();
+                    mPersonQiangRecycleAdapter.notifyDataSetChanged();
+
                     break;
                 case ConfigConstantUtil.loadingNotOld :
                     Toast.makeText(mContext,"数据到底啦！！！",Toast.LENGTH_LONG).show();
@@ -130,9 +144,19 @@ public class PersonalQiangFragment extends Fragment {
                     break;
 
             }
-            mPullRefreshListView.onRefreshComplete();
+         //   mPullRefreshListView.onRefreshComplete();
 
         }
     };
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        mOperationBmobDataUtil.clearnPageNum();
+    }
+
+    @Override
+    public void onSwipeLoading() {
+
+    }
 }

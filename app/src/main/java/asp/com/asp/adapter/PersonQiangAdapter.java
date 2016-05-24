@@ -33,17 +33,15 @@ public class PersonQiangAdapter extends BaseListAdapter<QiangItem> {
         final QiangItem item = list.get(position);
         if (convertView == null) {
             // convertView = createViewByType(position);
-            convertView = mInflater.inflate(R.layout.item_qiang, null);
+            convertView = mInflater.inflate(R.layout.item_personal_qiang, null);
         }
 
-        SimpleDraweeView qiang_logo = ViewHolder.get(convertView, R.id.item_qiang_logo);
-        qiang_logo.setVisibility(View.GONE);
-        TextView nameTv = ViewHolder.get(convertView, R.id.item_qiang_nameTv);
-        TextView time_Tv = ViewHolder.get(convertView, R.id.item_qiang_time_Tv);
+        SimpleDraweeView imageView = ViewHolder.get(convertView, R.id.personal_qiang_sdView);
+        TextView nameTv = ViewHolder.get(convertView, R.id.item_personal_qiang_nameTv);
+        TextView time_Tv = ViewHolder.get(convertView, R.id.item_personal_qiang_time_Tv);
         TextView comment_Tv = ViewHolder.get(convertView, R.id.item_qiang_comment_Tv);
-        TextView context_Tv = ViewHolder.get(convertView, R.id.item_qiang_context_Tv);
+        TextView context_Tv = ViewHolder.get(convertView, R.id.item_personal_qiang_content_Tv);
 
-        innerGridView qiang_gridView = ViewHolder.get(convertView, R.id.item_qiang_gridView);
 
    /* personal 墙 adapter  不需要显示头像
       String Imageurl = null;
@@ -60,9 +58,9 @@ public class PersonQiangAdapter extends BaseListAdapter<QiangItem> {
         context_Tv.setText(item.getContent()+"");
 
         if (null == item.getContentfigureurl()) {
-            qiang_gridView.setVisibility(View.GONE);
+            imageView.setVisibility(View.GONE);
         } else {
-            qiang_gridView.setVisibility(View.VISIBLE);
+
             ArrayList<String> paths = new ArrayList<String>();
             if (item.getContentfigureurl() != null)
                 paths.add(item.getContentfigureurl().getFileUrl(mContext));
@@ -82,8 +80,10 @@ public class PersonQiangAdapter extends BaseListAdapter<QiangItem> {
                 paths.add(item.getContentfigureurl7().getFileUrl(mContext));
             if (item.getContentfigureurl8() != null)
                 paths.add(item.getContentfigureurl8().getFileUrl(mContext));
-            mQiangItemGridViewAdapter = new QiangItemGridViewAdapter(mContext, paths);
-            qiang_gridView.setAdapter(mQiangItemGridViewAdapter);
+
+            imageView.setImageURI(Uri.parse(paths.get(0)));
+
+
         }
 
 

@@ -1,10 +1,12 @@
 package asp.com.asp.utils;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,6 +19,7 @@ public class SwipeRefreshFooterLoading  {
 
     private Context mContext;
     private  ListView mListView;
+    private RecyclerView mRecycleView;
     /**
      * 按下时的y坐标
      */
@@ -43,7 +46,29 @@ public class SwipeRefreshFooterLoading  {
         mListViewFooter = LayoutInflater.from(context).inflate(R.layout.swipe_refresh_footer, null,
                 false);
 
-        initToucEvent();
+        initScrollEvent();
+    }
+    public SwipeRefreshFooterLoading(Context context, RecyclerView recyclerView,int i){
+        this.mContext = context;
+        this.mRecycleView = recyclerView;
+
+
+        initRecycleViewScrollEvent();
+    }
+
+    private void initRecycleViewScrollEvent() {
+        mRecycleView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+        mRecycleView.setRecyclerListener(new RecyclerView.RecyclerListener() {
+            @Override
+            public void onViewRecycled(RecyclerView.ViewHolder holder) {
+
+            }
+        });
     }
 
     private void initToucEvent() {
@@ -67,7 +92,7 @@ public class SwipeRefreshFooterLoading  {
                             Log.i("MotionEvent", ".....llooo");
                             Toast.makeText(mContext,"hhhhhhh    "+(mYDown - mLastY),Toast.LENGTH_SHORT).show();
 
-                            loadData();
+
                         }
 
                         break;
@@ -81,8 +106,38 @@ public class SwipeRefreshFooterLoading  {
             }
 
         });
-    }
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
 
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
+    }
+    private void initScrollEvent() {
+
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                if(firstVisibleItem+visibleItemCount == totalItemCount){
+                    if (mOnLoadListener != null) {
+                        mListView.addFooterView(mListViewFooter);
+                        mOnLoadListener.onSwipeLoading();
+                    }
+                }
+            }
+        });
+    }
     /**
      * 如果到了最底部,而且是上拉操作.那么执行onLoad方法
      */

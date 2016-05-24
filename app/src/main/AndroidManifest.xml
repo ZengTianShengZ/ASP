@@ -48,9 +48,13 @@
         <activity android:name=".weibo.WBAuthActivity_"
             >
         </activity>
-        <activity android:name=".activity.PersonalQiangActivity_"
+        <activity android:name=".activity.PersonaQiangActivity"
             >
         </activity>
+        <activity android:name=".activity.PersonalQiangActivityxx_"
+            >
+        </activity>
+
     </application>
 
 </manifest>

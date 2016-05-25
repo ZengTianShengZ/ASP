@@ -47,6 +47,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/personal_qiang_nameTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="曾田生"
@@ -55,6 +56,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/personal_qiang_signatureTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
@@ -82,10 +84,22 @@
                         fresco:retryImageScaleType="centerCrop"
                         fresco:fadeDuration="5000"
                         fresco:backgroundImage="@android:color/holo_orange_light"
+
                         />
+                    <asp.com.appbase.view.CircleImageView
+                        android:id="@+id/personal_qiang_info_circleLogo"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:visibility="gone"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@mipmap/ic_logo"
+                        android:paddingTop="@dimen/nav_header_vertical_spacing" />
+
                 </RelativeLayout>
 
                 <TextView
+                    android:id="@+id/personal_qiang_contentTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"

@@ -2,6 +2,8 @@ package asp.com.asp.weibo;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,6 +27,13 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 
 import asp.com.asp.R;
+import asp.com.asp.domain.User;
+import asp.com.asp.utils.BmobUserUtil;
+import asp.com.asp.utils.ConfigConstantUtil;
+import asp.com.asp.utils.ImageLoaderUtil;
+import asp.com.asp.utils.SharedPreferencesUtil;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.listener.SaveListener;
 
 /**
  * Created by Administrator on 2016/5/18.
@@ -41,6 +50,11 @@ public class WBAuthActivity extends Activity {
     /** 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能  */
     private Oauth2AccessToken mAccessToken;
 
+    private ImageLoaderUtil mImageLoaderUtil;
+    private SharedPreferencesUtil mSharedPreferencesUtil;
+
+    private String ImgUrl ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +62,9 @@ public class WBAuthActivity extends Activity {
     }
     @AfterViews
     void updateQiangDate() {
-
+        mImageLoaderUtil = ImageLoaderUtil.getInstance();
+        mImageLoaderUtil.initData(getApplicationContext());
+        mSharedPreferencesUtil =SharedPreferencesUtil.getInstance(getApplicationContext(),getPackageName());
         // 创建微博实例
         //mWeiboAuth = new WeiboAuth(this, Constants.APP_KEY, Constants.REDIRECT_URL, Constants.SCOPE);
         // 快速授权时，请不要传入 SCOPE，否则可能会授权不成功
@@ -174,14 +190,57 @@ public class WBAuthActivity extends Activity {
             try {
 
                 JSONObject jsonObject = new JSONObject(response);
-                String idStr = jsonObject.getString("idstr");// 唯一标识符(uid)
-                String name = jsonObject.getString("name");// 姓名
-                String avatarHd = jsonObject.getString("avatar_hd");// 头像
+                final String idStr = jsonObject.getString("idstr");// 唯一标识符(uid)
+                final String name = jsonObject.getString("name");// 姓名
+                final String avatarHd = jsonObject.getString("avatar_hd");// 头像
+
+                Log.i("loginSuccess",name+".......///////........."+idStr+"/////"+avatarHd);
+                if(name != null) {
+
+                    new Thread() {
+                        public void run() {
+                            boolean loginSuccess = BmobUserUtil.BmobUserLogin(getApplicationContext(), name, idStr);
+                            Log.i("loginSuccess", ".... sssssssssssssss........"+loginSuccess);
+                            if(loginSuccess) {
+                                Bitmap bitmap = mImageLoaderUtil.getNetWorkBitmap(avatarHd);
+                                ImgUrl = mImageLoaderUtil.saveToSdCard(bitmap);
+                                boolean upSuccess = BmobUserUtil.uploadblockLogo(getApplicationContext(),ImgUrl);
+                                if(upSuccess){
+                                    SharedPreferences.Editor editor =  mSharedPreferencesUtil.getEditor();
+                                    editor.putString(ConfigConstantUtil.UserName,name);
+                                    editor.putString(ConfigConstantUtil.UserLogStr,ImgUrl);
+                                    editor.putString(ConfigConstantUtil.UserPassword,idStr);
+                                    editor.commit();
+                                    Log.i("uploadblockLogo",name+ "././././/./4444444444444././././"+ImgUrl);
+                                }
+                            }
+
+                            runOnUiThread(new Runnable() {
+
+                                @Override
+                                public void run() {
+
+                                }
+                            });
+                        };
+
+                    }.start();
+
+                }
             }  catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
+        /**
+         * 05-24 17:34:51.231 5046-5046/asp.com.asp W/ViewRootImpl: mView has no focus, use com.android.internal.policy.impl.PhoneWindow$DecorView{42d84168 V.E..... R.....ID 0,0-1080,1800} instead
+         05-24 17:34:51.586 5046-5046/asp.com.asp I/loginSuccess: 曾田生..........................2876232957/////http://tva4.sinaimg.cn/crop.85.16.180.180.1024/ab6fd4fdjw1e9e5obce5cj208c05h74f.jpg
+         05-24 17:34:51.741 5046-5131/asp.com.asp I/System.out: discardStream skip 0 bytes
+         05-24 17:34:51.751 5046-5046/asp.com.asp I/onFailure: 109..........................login data required.
+         05-24 17:34:51.846 5046-5133/asp.com.asp I/System.out: discardStream skip 0 bytes
+         05-24 17:34:51.851 5046-5046/asp.com.asp I/onFailure: 304..........................username or password is null.
+         * @param e
+         */
         @Override
         public void onWeiboException(WeiboException e) {
 

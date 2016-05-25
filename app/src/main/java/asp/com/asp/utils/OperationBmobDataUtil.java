@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -497,6 +498,48 @@ public class OperationBmobDataUtil {
         });
 
     }
+
+    /**
+     * 评论 以及 回复评论
+     * @param user
+     * @param content
+     * @param mReplyTo   mReplyTo if null , mReplyTo = null
+     * @param mQiangItem
+     * @param chatHandle
+     */
+    public void publishComment(Context context, User user, String content, User mReplyTo, QiangItem mQiangItem, final Handler chatHandle) {
+
+        final Comment comment = new Comment();
+        comment.setUser(user);
+        if(mReplyTo!=null){
+            // 对谁评论，也就是 回复
+            comment.setReplyTo(mReplyTo.getNickname());
+
+        }else{
+            // 没有的话 就是 评论而已
+            comment.setReplyTo(null);
+        }
+        comment.setCommentContent(content);
+        comment.setQiang(mQiangItem);
+        comment.save(context, new SaveListener() {
+
+            @Override
+            public void onSuccess() {
+                // TODO Auto-generated method stub
+                //showToast("评论成功。");
+                chatHandle.sendEmptyMessage(ConfigConstantUtil.commentSuccess);
+                Message message = new Message();
+                message.obj = comment;
+                chatHandle.sendMessage(message);
+            }
+
+            @Override
+            public void onFailure(int arg0, String arg1) {
+                chatHandle.sendEmptyMessage(ConfigConstantUtil.commentFault);
+            }
+        });
+    }
+
 
     public void clearnPageNum(){
         personQiangPageNum = 0;

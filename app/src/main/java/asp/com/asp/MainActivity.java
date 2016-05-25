@@ -1,6 +1,8 @@
 package asp.com.asp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentActivity;
@@ -10,17 +12,28 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
+
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 import asp.com.appbase.view.BottomTagView;
+import asp.com.appbase.view.CircleImageView;
 import asp.com.asp.activity.EditQiangActivity_;
+import asp.com.asp.adapterPop.ImageLoader;
+import asp.com.asp.domain.User;
 import asp.com.asp.fragment.HomeFragment_;
 import asp.com.asp.fragment.MeFragment_;
 import asp.com.asp.fragment.NewsFragment_;
+import asp.com.asp.utils.ConfigConstantUtil;
+import asp.com.asp.utils.SharedPreferencesUtil;
 import asp.com.asp.weibo.WBAuthActivity_;
+import cn.bmob.v3.BmobUser;
 
 /**
  * Created by Administrator on 2016/5/11.
@@ -36,6 +49,12 @@ public class MainActivity extends FragmentActivity
     private NewsFragment_ mNewsFragment;
     private MeFragment_ mMeFragment;
 
+    private View headerView;
+    private CircleImageView userImg;
+    private TextView nameTv,contentTv;
+
+    private SharedPreferencesUtil mSharedPreferencesUtil;
+
     @ViewById(R.id.drawer_layout)
     DrawerLayout drawerLayout;
     @ViewById(R.id.nav_view)
@@ -47,6 +66,13 @@ public class MainActivity extends FragmentActivity
     BottomTagView new_btn;
     @ViewById(R.id.main_base_me_btn)
     BottomTagView me_btn;
+/*
+    @ViewById(R.id.nav_header_mian_simpImg)
+    SimpleDraweeView userImg;
+    @ViewById(R.id.nav_header_mian_nameTv)
+    TextView nameTv;
+    @ViewById(R.id.nav_header_mian_contentTv)
+    TextView contentTv;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,19 +80,43 @@ public class MainActivity extends FragmentActivity
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+    @AfterViews
+    void afterViews() {
+
+        initView();
+        initData();
+
+    }
+
+
+    private void initView() {
+        headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
+        userImg = (CircleImageView) headerView.findViewById(R.id.nav_header_mian_cirImg);
+        nameTv = (TextView) headerView.findViewById(R.id.nav_header_mian_nameTv);
+        contentTv = (TextView) headerView.findViewById(R.id.nav_header_mian_contentTv);
+
+
+
+    }
+
+    private void initData() {
+        mSharedPreferencesUtil =SharedPreferencesUtil.getInstance(getApplicationContext(),getPackageName());
+
+        SharedPreferences spf =  mSharedPreferencesUtil.getPreferences();
+
+        String userName = spf.getString(ConfigConstantUtil.UserName,"");
+        if(!userName.equals("")){
+            nameTv.setText(userName+"name");
+            contentTv.setText(spf.getString(ConfigConstantUtil.UserPassword,"content"));
+           // userImg.setImageURI();
+            ImageLoader.getInstance(3, ImageLoader.Type.LIFO).
+                    loadImage(spf.getString(ConfigConstantUtil.UserLogStr,""),userImg);
+        }
 
         // 使用 @EActivity 控件的注册事件要放在 onStart（），不然会抛空指针
         navigationView.setNavigationItemSelectedListener(this);
         hong_btn.setIconAlpha(1);
 
-
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
         mFragmentManager =getSupportFragmentManager();
         mTransaction = mFragmentManager.beginTransaction();
 
@@ -77,6 +127,19 @@ public class MainActivity extends FragmentActivity
             mTransaction.show(mHomeFragment);
         }
         mTransaction.commit();
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+
+
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
     @Click(R.id.main_base_hong_btn)
     void hongBtnClick(){
@@ -103,7 +166,8 @@ public class MainActivity extends FragmentActivity
 
         if (id == R.id.nav_camera) {
             Intent intent = new Intent(this,WBAuthActivity_.class);
-            startActivity(intent);
+            startActivityForResult(intent,123);
+
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -129,6 +193,13 @@ public class MainActivity extends FragmentActivity
 
         }
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+    }
+
     private void setSelected(int index) {
 
         mTransaction = mFragmentManager.beginTransaction();

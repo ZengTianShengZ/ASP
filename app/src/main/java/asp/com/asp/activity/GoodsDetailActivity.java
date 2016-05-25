@@ -9,6 +9,8 @@ import android.os.Message;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ListView;
@@ -27,17 +29,21 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import asp.com.asp.AspApplications;
 import asp.com.asp.R;
 import asp.com.asp.adapter.CommentAdapter;
 import asp.com.asp.adapter.ImagePagerAdapter;
 import asp.com.asp.domain.Comment;
 import asp.com.asp.domain.Goods;
 import asp.com.asp.domain.QiangItem;
+import asp.com.asp.domain.User;
 import asp.com.asp.utils.ConfigConstantUtil;
 import asp.com.asp.utils.DialogUtils;
 import asp.com.asp.utils.OperationBmobDataUtil;
 import asp.com.asp.view.SnackbarUtil;
+import cn.bmob.v3.BmobUser;
 
 /**
  * Created by Administrator on 2016/5/17.
@@ -89,6 +95,7 @@ public class GoodsDetailActivity extends Activity  {
     private Context mContext;
     private List<Comment> commentDatalist = new ArrayList<Comment>();
     private OperationBmobDataUtil mOperationBmobDataUtil;
+    private User bmobUser;
 
 
 
@@ -197,33 +204,49 @@ public class GoodsDetailActivity extends Activity  {
     @Click(R.id.goods_detail_pinlunBtn)
     void pinlunBtnClick(final View clickedView){
 
-        dlg_view = new DialogUtils.Builder().titleStr("评论")
-                .leftBtnStr("取消").rightBtnStr("确定").build();
-        dlg_Comment_alert = new AlertDialog.Builder(GoodsDetailActivity.this).setView(dlg_view.getDialogView(this)).show();
+        bmobUser = BmobUser.getCurrentUser(this, User.class);
+        if(bmobUser != null){
+            dlg_view = new DialogUtils.Builder().titleStr("评论")
+                    .leftBtnStr("取消").rightBtnStr("确定").build();
+            dlg_Comment_alert = new AlertDialog.Builder(GoodsDetailActivity.this).setView(dlg_view.getDialogView(this)).show();
 
-        dlg_view.leftButtonClickListener(new DialogUtils.DialogLeftButtonClick(){
+            dlg_view.leftButtonClickListener(new DialogUtils.DialogLeftButtonClick(){
 
-            @Override
-            public void dialogLeftButtonClickListener() {
-                dlg_Comment_alert.dismiss();
-            }
-        });
-        dlg_view.rightButtonClickListener(new DialogUtils.DialogRightButtonClick(){
+                @Override
+                public void dialogLeftButtonClickListener() {
+                    dlg_Comment_alert.dismiss();
+                }
+            });
+            dlg_view.rightButtonClickListener(new DialogUtils.DialogRightButtonClick(){
 
-            @Override
-            public void dialogRightButtonClickListener(String editStr) {
-                dlg_Comment_alert.dismiss();
-                SnackbarUtil.LongSnackbar(clickedView,"评论成功",
-                        getResources().getColor(R.color.colorWhite),
-                        getResources().getColor(R.color.colorPrimaryDark)).show();
-            }
-        } );
+                @Override
+                public void dialogRightButtonClickListener(String editStr) {
+                    dlg_Comment_alert.dismiss();
+                    if(TextUtils.isEmpty(editStr)){
+                        SnackbarUtil.GreenSnackbar(mContext,clickedView,"评论不能为空");
+                    }else{
+                        mOperationBmobDataUtil.publishComment(mContext,bmobUser,editStr,null,item,chatHandle);
+                    }
+                    dlg_Comment_alert.dismiss();
+                }
+            } );
+        }else{
+
+            SnackbarUtil.GreenSnackbar(mContext,clickedView,"请先登录");
+        }
+
     }
     /**
      * 更新刷新 数据
      */
     private Handler chatHandle = new Handler() {
         public void handleMessage(Message msg) {
+            Log.i("Message","..........Message..............."+ msg.obj);
+            if(msg.obj!=null){
+                Comment comment = (Comment) msg.obj;
+                commentDatalist.add(0,comment);
+                mCommentAdapter.notifyDataSetChanged();
+            }
 
             switch (msg.what){
 
@@ -235,6 +258,12 @@ public class GoodsDetailActivity extends Activity  {
                     break;
                 case ConfigConstantUtil.loadingFault :
                     Toast.makeText(mContext,"获取评论失败。请检查网络~~",Toast.LENGTH_LONG).show();
+                    break;
+                case ConfigConstantUtil.commentSuccess :
+                    Toast.makeText(mContext,"评论成功~~",Toast.LENGTH_LONG).show();
+                    break;
+                case ConfigConstantUtil.commentFault :
+                    Toast.makeText(mContext,"评论失败~~",Toast.LENGTH_LONG).show();
                     break;
 
             }

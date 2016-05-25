@@ -14,7 +14,8 @@ public class Comment extends BmobObject implements Serializable{
 	private User user;
 	private QiangItem qiang;
 	private String replyTo;
-	
+	private String commentContent;
+
 	public String getReplyTo() {
 		return this.replyTo;
 	}
@@ -27,7 +28,6 @@ public class Comment extends BmobObject implements Serializable{
 	public void setQiang(QiangItem qiang) {
 		this.qiang = qiang;
 	}
-	private String commentContent;
 	public User getUser() {
 		return user;
 	}

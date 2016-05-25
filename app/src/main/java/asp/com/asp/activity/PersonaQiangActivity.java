@@ -84,7 +84,7 @@ public class PersonaQiangActivity extends AppCompatActivity {
         toolbar_tab = (TabLayout) findViewById(R.id.toolbar_tab);
         main_vp_container = (ViewPager) findViewById(R.id.main_vp_container);
 
-        PersonalViewPagerAdapter vpAdapter = new PersonalViewPagerAdapter(getSupportFragmentManager(), this);
+        PersonalViewPagerAdapter vpAdapter = new PersonalViewPagerAdapter(getSupportFragmentManager());
         main_vp_container.setAdapter(vpAdapter);
 
         //tablayout和viewpager建立联系为什么不用下面这个方法呢？自己去研究一下，可能收获更多

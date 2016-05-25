@@ -8,20 +8,21 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import asp.com.asp.activity.PersonaQiangActivity;
 import asp.com.asp.fragment.PersonQiangFragmentDg;
+import asp.com.asp.fragment.PersonalMeDgFragment_;
+import asp.com.asp.fragment.PersonalMeFragment_;
 import asp.com.asp.fragment.PersonalQiangFragment;
 
-public class PersonalViewPagerAdapter extends FragmentPagerAdapter {
+public class PersonalMeViewPagerAdapter extends FragmentPagerAdapter {
 
     final int PAGE_COUNT = 2;
     private String tabTitles[] = new String[]{"二手", "代购"};
     private Context context;
     private List<Fragment> mFragmentList = new ArrayList<Fragment>();
-    private PersonalQiangFragment mPersonalQiangFragment;
-    private PersonQiangFragmentDg mPersonQiangFragmentDg;
+    private PersonalMeDgFragment_ mPersonalMeDgFragment;
+    private PersonalMeFragment_ mPersonalMeFragment;
 
-    public PersonalViewPagerAdapter(FragmentManager fm) {
+    public PersonalMeViewPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -29,18 +30,18 @@ public class PersonalViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position){
             case 0:
-                if(mPersonalQiangFragment==null){
-                    mPersonalQiangFragment = new PersonalQiangFragment();
-                return  mPersonalQiangFragment;
+                if(mPersonalMeFragment==null){
+                    mPersonalMeFragment = new PersonalMeFragment_();
+                return  mPersonalMeFragment;
                 }else{
-                    return mPersonalQiangFragment;
+                    return mPersonalMeFragment;
                 }
             case 1:
-                if(mPersonQiangFragmentDg==null){
-                    mPersonQiangFragmentDg = new PersonQiangFragmentDg();
-                    return mPersonQiangFragmentDg;
+                if(mPersonalMeDgFragment==null){
+                    mPersonalMeDgFragment = new PersonalMeDgFragment_();
+                    return mPersonalMeDgFragment;
                 }else{
-                    return mPersonQiangFragmentDg;
+                    return mPersonalMeDgFragment;
                 }
 
         }

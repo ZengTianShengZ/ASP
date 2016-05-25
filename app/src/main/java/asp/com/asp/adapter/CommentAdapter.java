@@ -33,8 +33,10 @@ public class CommentAdapter extends BaseListAdapter<Comment> {
         }
         SimpleDraweeView comment_logo = ViewHolder.get(convertView, R.id.item_comment_logo);
 
-        String logoUrl = comment.getUser().getAvatar().getFileUrl(mContext);
-        comment_logo.setImageURI(Uri.parse(logoUrl));
+        if(comment.getUser().getAvatar()!= null) {
+            String logoUrl = comment.getUser().getAvatar().getFileUrl(mContext);
+            comment_logo.setImageURI(Uri.parse(logoUrl));
+        }
 
         TextView nameTv = ViewHolder.get(convertView, R.id.item_comment_nameTv);
         TextView time_Tv = ViewHolder.get(convertView, R.id.item_comment_time_Tv);

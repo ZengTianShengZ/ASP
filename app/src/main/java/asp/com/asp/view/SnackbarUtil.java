@@ -1,5 +1,6 @@
 package asp.com.asp.view;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.view.Gravity;
@@ -39,6 +40,11 @@ public class SnackbarUtil {
         return snackbar;
     }
 
+    public static  void GreenSnackbar(Context context,View view, String message){
+        LongSnackbar(view,message,
+                context.getResources().getColor(R.color.colorWhite),
+                context.getResources().getColor(R.color.colorPrimaryDark)).show();
+    }
     /**
      * 长显示Snackbar，自定义颜色
      * @param view

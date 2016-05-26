@@ -11,27 +11,37 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import asp.com.appbase.view.CircleImageView;
+import asp.com.asp.MainActivity_;
 import asp.com.asp.R;
 import asp.com.asp.adapter.PersonalMeViewPagerAdapter;
 import asp.com.asp.adapter.PersonalViewPagerAdapter;
 import asp.com.asp.adapterPop.ImageLoader;
 import asp.com.asp.domain.User;
 import asp.com.asp.utils.BlurUtil;
+import asp.com.asp.utils.BmobUserUtil;
 import asp.com.asp.utils.ConfigConstantUtil;
 import asp.com.asp.utils.SharedPreferencesUtil;
+import asp.com.asp.view.SnackbarUtil;
+import cn.bmob.v3.BmobUser;
+import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * Created by Administrator on 2016/5/12.
@@ -58,11 +68,17 @@ public class MeFragment extends Fragment {
     @ViewById(R.id.personal_qiang_signatureTv)
     TextView signatureTv;
     @ViewById(R.id.personal_qiang_contentTv)
-    TextView contentTv;
+    TextView detailTv;
+    @ViewById(R.id.personal_qiang_SettingTv)
+    TextView SettingTv;
+
+    private AlertDialog dlg_Comment_alert;
 
     private User mUser;
     private String userName;
+    private String userLogoPath;
     private Context mContext;
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_personal_qiang, container, false);
@@ -78,33 +94,65 @@ public class MeFragment extends Fragment {
         initView();
         initData();
         initEvent();
+
+
+
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(getUserVisibleHint()) {
 
+        }
+    }
 
     private void initView() {
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.sh_big_bg);
+      /*  Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.sh_big_bg);
         head_layout.setBackgroundDrawable(new BitmapDrawable(BlurUtil.fastblur(mContext, bitmap, 180)));
-        mCollapsingToolbarLayout.setContentScrim(new BitmapDrawable(BlurUtil.fastblur(mContext, bitmap, 180)));
+        mCollapsingToolbarLayout.setContentScrim(new BitmapDrawable(BlurUtil.fastblur(mContext, bitmap, 180)));*/
+
         PersonalMeViewPagerAdapter vpAdapter = new PersonalMeViewPagerAdapter(getFragmentManager());
         main_vp_container.setAdapter(vpAdapter);
 
         info_logo.setVisibility(View.GONE);
         circleLogo.setVisibility(View.VISIBLE);
+        SettingTv.setVisibility(View.VISIBLE);
     }
 
     private void initData() {
 
+        mUser =  BmobUser.getCurrentUser(mContext, User.class);
 
         SharedPreferencesUtil mSharedPreferencesUtil = SharedPreferencesUtil.getInstance(mContext.getApplicationContext(),mContext.getPackageName());
         SharedPreferences spf =  mSharedPreferencesUtil.getPreferences();
         userName = spf.getString(ConfigConstantUtil.UserName,"");
         if(!userName.equals("")){
-            nameTv.setText(userName+"name");
-            contentTv.setText(spf.getString(ConfigConstantUtil.UserPassword,"content"));
+            userLogoPath = spf.getString(ConfigConstantUtil.UserLogStr,"");
+            nameTv.setText(userName);
+            //contentTv.setText(spf.getString(ConfigConstantUtil.UserPassword,"content"));
             // userImg.setImageURI();
             ImageLoader.getInstance(3, ImageLoader.Type.LIFO).
-                    loadImage(spf.getString(ConfigConstantUtil.UserLogStr,""),circleLogo);
+                    loadImage(userLogoPath,circleLogo);
+        }
+
+        if(userLogoPath!=null){
+            new Thread() {
+                public void run() {
+
+                   Bitmap bitmap = ImageLoader.getInstance(3, ImageLoader.Type.LIFO).decodeSampledBitmapFromResource(userLogoPath,260,260);
+                   final Bitmap blurBitmap =   BlurUtil.fastblur(mContext, bitmap, 70);
+                    getActivity(). runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            head_layout.setBackgroundDrawable(new BitmapDrawable(blurBitmap));
+                            mCollapsingToolbarLayout.setContentScrim(new BitmapDrawable(blurBitmap));
+                        }
+                    });
+                };
+
+            }.start();
         }
     }
 
@@ -139,6 +187,43 @@ public class MeFragment extends Fragment {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
+            }
+        });
+    }
+
+    @Click(R.id.personal_qiang_SettingTv)
+    void SettingTvClick(final View clickView) {
+
+        View dlg_set_user_data = LayoutInflater.from(mContext).inflate(R.layout.dlg_set_user_data, null);
+        dlg_Comment_alert  = new AlertDialog.Builder(mContext).setView(dlg_set_user_data).show();
+
+        final Button sureBtn = (Button) dlg_set_user_data.findViewById(R.id.set_user_data_sureBtn);
+        final EditText signatureTv = (EditText) dlg_set_user_data.findViewById(R.id.set_user_data_signatureTv);
+        final EditText detailTv = (EditText) dlg_set_user_data.findViewById(R.id.set_user_data_detailTv);
+
+        sureBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mUser!=null){
+                    mUser.setSignature(signatureTv.getText()+"");
+                    mUser.setDetails(detailTv.getText()+"");
+
+                    mUser.update(mContext, new UpdateListener() {
+                        @Override
+                        public void onSuccess() {
+                            SnackbarUtil.GreenSnackbar(mContext,clickView,"修改成功！！！");
+                            SettingTv.setText(signatureTv.getText()+"");
+                            detailTv.setText(detailTv.getText()+"");
+                            dlg_Comment_alert.dismiss();
+                        }
+
+                        @Override
+                        public void onFailure(int i, String s) {
+                            SnackbarUtil.GreenSnackbar(mContext,clickView,"修改失败！！！");
+                            dlg_Comment_alert.dismiss();
+                        }
+                    });
+                }
             }
         });
     }

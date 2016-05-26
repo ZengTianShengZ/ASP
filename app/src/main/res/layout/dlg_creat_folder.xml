@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFFFFF"
+
     android:orientation="vertical" >
 
     <TextView
@@ -19,14 +20,14 @@
     
      <EditText
          android:id="@+id/dlg_creat_folder_et"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
      
         android:background="@null"
-        android:hint="未命名文件夹"
+        android:hint="写上你的评论 ! ! !"
         android:textColor="#353535"
-        android:textSize="8pt"
+        android:textSize="9pt"
         />
 
      <View 

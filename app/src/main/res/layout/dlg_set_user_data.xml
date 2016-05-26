@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/set_user_data_tv"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Set Usr Data"
+        android:textColor="#353535"
+        android:textSize="8pt"
+        />
+    <EditText
+        android:id="@+id/set_user_data_signatureTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/textview_bg"
+        android:hint="我的签名"
+        android:textColor="#353535"
+        android:textSize="9pt"
+        />
+
+    <EditText
+        android:id="@+id/set_user_data_detailTv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/textview_bg"
+        android:hint="我的描述：如@微博，淘宝账号"
+        android:textColor="#353535"
+        android:textSize="9pt"
+        />
+    <Button
+        android:id="@+id/set_user_data_sureBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorOverall"
+        android:textColor="#353535"
+        android:textSize="9pt"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp"
+        android:text="确定"/>
+</LinearLayout>

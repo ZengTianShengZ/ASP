@@ -10,6 +10,7 @@ import asp.com.asp.domain.User;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
 
 /**
@@ -73,7 +74,7 @@ public class BmobUserUtil {
                 //bmobFile.getFileUrl(context)--返回的上传文件的完整地址
                 User bmobUser = BmobUser.getCurrentUser(context, User.class);
                 bmobUser.setAvatar(bmobFile);
-                bmobFile.upload(context, new UploadFileListener() {
+                bmobUser.update(context, new UpdateListener() {
                     @Override
                     public void onSuccess() {
                         loginSuccess = true;
@@ -82,9 +83,9 @@ public class BmobUserUtil {
                     @Override
                     public void onFailure(int i, String s) {
                         loginSuccess = false;
-                        Log.i("uploadblockLogo",i+ "././././/./2222222222222222././././"+s);
                     }
                 });
+
             }
 
             @Override

@@ -16,7 +16,9 @@ import asp.com.appbase.adapter.RecycleViewHolder;
 import asp.com.appbase.adapter.ViewHolder;
 import asp.com.asp.R;
 import asp.com.asp.domain.QiangItem;
+import asp.com.asp.domain.User;
 import asp.com.asp.view.innerGridView;
+import cn.bmob.v3.BmobUser;
 
 /**
  * Created by Administrator on 2016/5/20.
@@ -27,10 +29,15 @@ public class PersonQiangRecycleAdapter  extends BaseRecycleViewAdapter   {
 
     private Context mContext;
 
+    private User mUser ;
 
     public PersonQiangRecycleAdapter(Context context, List<QiangItem> mListItems) {
         super(context, R.layout.item_personal_qiang, mListItems);
         this.mContext  =context;
+
+        mUser =  BmobUser.getCurrentUser(mContext, User.class);
+
+
     }
 
     @Override
@@ -55,6 +62,7 @@ public class PersonQiangRecycleAdapter  extends BaseRecycleViewAdapter   {
          //   imageView.setVisibility(View.GONE);
         } else {
 
+
             ArrayList<String> paths = new ArrayList<String>();
             if (item.getContentfigureurl() != null)
                 paths.add(item.getContentfigureurl().getFileUrl(mContext));
@@ -77,9 +85,16 @@ public class PersonQiangRecycleAdapter  extends BaseRecycleViewAdapter   {
 
             imageView.setImageURI(Uri.parse(paths.get(0)));
 
+//java.lang.UnsatisfiedLinkError: Couldn't load weibosdkcore from loader dalvik.system.PathClassLoader[DexPathList[[zip file "/data/app/asp.com.asp-1.apk"],nativeLibraryDirectories=[/data/app-lib/asp.com.asp-1, /vendor/lib, /system/lib]]]: findLibrary returned null
 
         }
 
+        if(mUser != null){
+            if((mUser.getNickname()).equals(item.getAuthor().getNickname())){
+                TextView delect_Tv = holder.getView( R.id.item_personal_qiang_delectTv);
+                delect_Tv.setVisibility(View.VISIBLE);
+            }
+        }
 
     }
 

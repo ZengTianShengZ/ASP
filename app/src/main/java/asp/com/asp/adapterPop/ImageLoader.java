@@ -14,6 +14,7 @@ import android.os.Message;
 import android.support.v4.util.LruCache;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 
@@ -376,7 +377,7 @@ public class ImageLoader
 	 * @param reqHeight
 	 * @return
 	 */
-	private Bitmap decodeSampledBitmapFromResource(String pathName,
+	public Bitmap decodeSampledBitmapFromResource(String pathName,
 			int reqWidth, int reqHeight)
 	{
 		// 第一次解析将inJustDecodeBounds设置为true，来获取图片大小

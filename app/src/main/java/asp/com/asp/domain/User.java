@@ -16,6 +16,7 @@ public class User extends BmobUser implements Serializable{
 	
 	private String nickname;
 	private String signature;
+	private String details;
 	private BmobFile avatar;
 	private BmobRelation favorite;
 	private BmobRelation focus;
@@ -80,9 +81,12 @@ public class User extends BmobUser implements Serializable{
 		this.signature = signature;
 	}
 
-	
-	
-	
-	
-	
+
+	public String getDetails() {
+		return details;
+	}
+
+	public void setDetails(String details) {
+		this.details = details;
+	}
 }

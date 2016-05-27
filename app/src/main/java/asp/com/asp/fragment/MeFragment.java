@@ -128,10 +128,11 @@ public class MeFragment extends Fragment {
         SharedPreferences spf =  mSharedPreferencesUtil.getPreferences();
         userName = spf.getString(ConfigConstantUtil.UserName,"");
         if(!userName.equals("")){
+
             userLogoPath = spf.getString(ConfigConstantUtil.UserLogStr,"");
             nameTv.setText(userName);
-            //contentTv.setText(spf.getString(ConfigConstantUtil.UserPassword,"content"));
-            // userImg.setImageURI();
+            SettingTv.setText(mUser.getSignature()+"");
+            detailTv.setText(mUser.getDetails()+"");
             ImageLoader.getInstance(3, ImageLoader.Type.LIFO).
                     loadImage(userLogoPath,circleLogo);
         }
@@ -198,8 +199,8 @@ public class MeFragment extends Fragment {
         dlg_Comment_alert  = new AlertDialog.Builder(mContext).setView(dlg_set_user_data).show();
 
         final Button sureBtn = (Button) dlg_set_user_data.findViewById(R.id.set_user_data_sureBtn);
-        final EditText signatureTv = (EditText) dlg_set_user_data.findViewById(R.id.set_user_data_signatureTv);
-        final EditText detailTv = (EditText) dlg_set_user_data.findViewById(R.id.set_user_data_detailTv);
+        final EditText signatureEv = (EditText) dlg_set_user_data.findViewById(R.id.set_user_data_signatureTv);
+        final EditText detailEv = (EditText) dlg_set_user_data.findViewById(R.id.set_user_data_detailTv);
 
         sureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,8 +213,8 @@ public class MeFragment extends Fragment {
                         @Override
                         public void onSuccess() {
                             SnackbarUtil.GreenSnackbar(mContext,clickView,"修改成功！！！");
-                            SettingTv.setText(signatureTv.getText()+"");
-                            detailTv.setText(detailTv.getText()+"");
+                            signatureTv.setText(signatureEv.getText()+"");
+                            detailTv.setText(detailEv.getText()+"");
                             dlg_Comment_alert.dismiss();
                         }
 

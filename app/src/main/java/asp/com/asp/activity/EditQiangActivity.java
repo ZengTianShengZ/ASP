@@ -28,6 +28,7 @@ import com.bmob.btp.callback.UploadBatchListener;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,6 +39,7 @@ import java.util.Date;
 
 import asp.com.asp.R;
 import asp.com.asp.adapterPop.ZssMyAdapter;
+import asp.com.asp.domain.EventBusBean;
 import asp.com.asp.domain.Goods;
 import asp.com.asp.domain.QiangItem;
 import asp.com.asp.domain.User;
@@ -242,6 +244,8 @@ public class EditQiangActivity extends Activity {
         public void handleMessage(Message msg) {
 
             if(msg.what!=0 ){
+                // 使用 开源EventBus 发布 成功消息
+                EventBus.getDefault().post(new EventBusBean("postSucceed"));
                 setResult(RESULT_OK);
                 finish();
             }else{

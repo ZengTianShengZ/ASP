@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+ <RelativeLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/goods_detail_cs_SwipeRefreshLayout"
+        android:layout_marginTop="@dimen/height_top_bar"
+        android:layout_marginBottom="@dimen/height_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+     <ScrollView
+     android:id="@+id/goods_detail_ScrollView"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/goods_detail_vp"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/textview_bg"
+                    android:layout_alignBottom="@id/goods_detail_vp"
+                    android:layout_alignParentRight="true"
+                    >
+                    <TextView
+                        android:id="@+id/goods_detail_imgNumTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="10pt"
+                        android:text="0"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10pt"
+                        android:text="/"/>
+                    <TextView
+                        android:id="@+id/goods_detail_totalImgNumTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="10pt"
+                        android:text="0"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+            <include layout="@layout/include_item_infor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
+
+            <include layout="@layout/include_goods_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:padding="5dp"
+                android:text="评论区"
+                android:textSize="9pt"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/goods_detail_recycleview"
+                android:layout_marginBottom="@dimen/height_loading_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+
+
+        </LinearLayout>
+
+
+ </ScrollView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+    <include layout="@layout/common_top_bar"
+
+        />
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="5dp"
+
+        android:background="#FFFFFF"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="57dp">
+        <TextView
+            android:id="@+id/goods_detail_priceTv"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:drawableTop="@mipmap/ic_price"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:text="价格：233"
+
+            android:textColor="@color/colorOverall"
+            android:textSize="8pt"/>
+        <TextView
+            android:id="@+id/goods_detail_pinlunBtn"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:drawableTop="@mipmap/ic_pinglun"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:textColor="@color/colorOverall"
+            android:text="评论"
+            android:textSize="8pt"/>
+        <TextView
+            android:id="@+id/goods_detail_callPhoneBtn"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:drawableTop="@mipmap/ic_phone"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:textColor="@color/colorOverall"
+            android:text="联系卖家"
+            android:textSize="8pt"/>
+    </LinearLayout>
+ </RelativeLayout>
+
+

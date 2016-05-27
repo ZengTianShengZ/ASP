@@ -45,6 +45,9 @@
         <activity android:name=".activity.GoodsDetailActivity_"
             >
         </activity>
+        <activity android:name=".activity.GoodsDetailActivityCs_"
+            >
+        </activity>
         <activity android:name=".weibo.WBAuthActivity_"
             >
         </activity>

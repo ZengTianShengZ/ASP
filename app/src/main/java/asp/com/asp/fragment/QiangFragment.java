@@ -20,6 +20,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.handmark.pulltorefresh.library.extras.SoundPullEventListener;
 
 import org.androidannotations.annotations.EFragment;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,7 @@ import java.util.List;
 import asp.com.asp.R;
 import asp.com.asp.activity.GoodsDetailActivity_;
 import asp.com.asp.adapter.QiangListAdapter;
+import asp.com.asp.domain.EventBusBean;
 import asp.com.asp.domain.QiangItem;
 import asp.com.asp.utils.ConfigConstantUtil;
 import asp.com.asp.utils.OperationBmobDataUtil;
@@ -52,6 +55,8 @@ public class QiangFragment  extends Fragment  {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootview = inflater.inflate(R.layout.fragment_qiang, container, false);
+
+        EventBus.getDefault().register(this);
 
         mContext = getActivity();
 
@@ -111,7 +116,11 @@ public class QiangFragment  extends Fragment  {
         });
 
     }
-
+    @Subscribe
+    public void onEventMainThread(EventBusBean event) {
+        Log.i( "onEventMainThread","................onEventMainThread....................."+event.getMsg());
+        mOperationBmobDataUtil.refreshQiangData(refresHandle, mListItems.get(0).getCreatedAt(), mListItems);
+    }
     /**
      * 更新刷新 数据
      */

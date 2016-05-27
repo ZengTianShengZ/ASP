@@ -92,13 +92,13 @@ public class GoodsDetailActivity extends Activity  {
 
     private CommentAdapter mCommentAdapter;
     private QiangItem item;
-    private Context mContext;
+
     private List<Comment> commentDatalist = new ArrayList<Comment>();
     private OperationBmobDataUtil mOperationBmobDataUtil;
     private User bmobUser;
 
 
-
+    private Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -189,6 +189,7 @@ public class GoodsDetailActivity extends Activity  {
             }
         });
 
+        mPullRefreshScrollView.setMode(PullToRefreshBase.Mode.PULL_FROM_END);
         mPullRefreshScrollView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ScrollView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ScrollView> refreshView) {

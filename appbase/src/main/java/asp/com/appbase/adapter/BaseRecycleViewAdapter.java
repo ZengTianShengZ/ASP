@@ -102,10 +102,30 @@ public abstract class BaseRecycleViewAdapter<T> extends RecyclerView.Adapter<Rec
 	public abstract void convert(RecycleViewHolder holder, T t, int holderPosition);
 
 	/**
-	 * 移除选中 的 item
+	 * 添加一条数据
+	 * @param t
+	 * @param position
+     */
+	public void insertedItem(T t,int position){
+		mDatas.add(position,t);
+		notifyItemInserted(position);
+	}
+	/**
+	 * 移除一条数据
+	 * @param position
+     */
+	public void removePosition(int position){
+		if(position >=0) {
+			mDatas.remove(position);
+			notifyItemRemoved(position);
+
+		}
+	}
+	/**
+	 * 移除所有选中 的 item
 	 *
 	 */
-	public void removeSelectPosition( Map<Integer,Integer> map) {
+	public void removeAllSelectPosition( Map<Integer,Integer> map) {
 
 		Map<Integer, Integer> orderMap = new TreeMap<Integer, Integer>(
 				new Comparator<Integer>() {

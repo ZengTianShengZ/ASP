@@ -16,6 +16,7 @@ import asp.com.appbase.adapter.BaseListAdapter;
 import asp.com.appbase.adapter.ViewHolder;
 import asp.com.asp.R;
 import asp.com.asp.activity.GoodsDetailActivity;
+import asp.com.asp.activity.GoodsDetailActivityCs_;
 import asp.com.asp.activity.GoodsDetailActivity_;
 import asp.com.asp.activity.PersonaQiangActivity;
 import asp.com.asp.domain.QiangItem;
@@ -97,7 +98,7 @@ public class QiangListAdapter extends BaseListAdapter<QiangItem>  {
             @Override
             public void onClick(View v) {
                 // TODO 自动生成的方法存根
-                Intent intent = new Intent(mContext,GoodsDetailActivity_.class);
+                Intent intent = new Intent(mContext,GoodsDetailActivityCs_.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("itemQiang", item);
                 mContext.startActivity(intent);

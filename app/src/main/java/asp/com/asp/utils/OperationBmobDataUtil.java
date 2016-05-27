@@ -547,4 +547,9 @@ public class OperationBmobDataUtil {
     public void clearPersonQiangDgPageNum(){
         personQiangDgPageNum = 0;
     }
+    public void clearPageNum(){
+        pageNum = 0;
+    }
+
+
 }

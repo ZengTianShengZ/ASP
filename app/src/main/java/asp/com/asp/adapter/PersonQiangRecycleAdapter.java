@@ -26,7 +26,7 @@ import cn.bmob.v3.BmobUser;
 public class PersonQiangRecycleAdapter  extends BaseRecycleViewAdapter   {
 
     private QiangItemGridViewAdapter mQiangItemGridViewAdapter;
-
+    private TextView delect_Tv;
     private Context mContext;
 
     private User mUser ;
@@ -41,7 +41,7 @@ public class PersonQiangRecycleAdapter  extends BaseRecycleViewAdapter   {
     }
 
     @Override
-    public void convert(RecycleViewHolder holder, Object obj, int holderPosition) {
+    public void convert(RecycleViewHolder holder, Object obj, final int holderPosition) {
         final QiangItem item = (QiangItem)obj;
 
         SimpleDraweeView imageView = holder.getView( R.id.personal_qiang_sdView);
@@ -91,11 +91,28 @@ public class PersonQiangRecycleAdapter  extends BaseRecycleViewAdapter   {
 
         if(mUser != null){
             if((mUser.getNickname()).equals(item.getAuthor().getNickname())){
-                TextView delect_Tv = holder.getView( R.id.item_personal_qiang_delectTv);
+                delect_Tv = holder.getView( R.id.item_personal_qiang_delectTv);
                 delect_Tv.setVisibility(View.VISIBLE);
+                delect_Tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(mDelectTvOnClickListener!=null){
+                            mDelectTvOnClickListener.delectTvClick(item.getObjectId(),holderPosition);
+                        }
+                    }
+                });
             }
         }
 
+    }
+
+
+    public interface DelectTvOnClickListener{
+        public void delectTvClick(String objectId, int holderPosition);
+    }
+    private DelectTvOnClickListener mDelectTvOnClickListener;
+    public  void setDelectTvOnClickListener(DelectTvOnClickListener mDelectTvOnClickListener){
+       this. mDelectTvOnClickListener = mDelectTvOnClickListener;
     }
 
 }

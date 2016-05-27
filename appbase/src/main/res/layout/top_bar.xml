@@ -8,12 +8,12 @@
 
     <ImageView
         android:id="@+id/topbar_back_btn"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentLeft="true"
         android:layout_centerInParent="true"
         android:layout_marginLeft="20dp"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@mipmap/ic_meun" />
 
     <RelativeLayout
         android:id="@+id/title_tv_rel"

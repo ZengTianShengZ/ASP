@@ -38,9 +38,10 @@ import asp.com.asp.domain.ImageFloder;
 
 public class ShowImageActivity extends Activity implements ListImageDirPopupWindow.OnImageDirSelected
 {
+
 	private ProgressDialog mProgressDialog;
-	public static ArrayList<String>  imgItem = new ArrayList<String>();
-	public static ArrayList<String>  imgDirPath = new ArrayList<String>();
+	private ArrayList<String>  imgItem = new ArrayList<String>();
+	private ArrayList<String>  imgDirPath = new ArrayList<String>();
 	private int mPicsSize;
 	private File mImgDir;
 	private List<String> mImgs;
@@ -54,6 +55,7 @@ public class ShowImageActivity extends Activity implements ListImageDirPopupWind
 	private TextView mImageCount;
 	private ImageView back_btn;
 	private TextView right_titleTv;
+	private TextView center_titleTv;
 	private ListImageDirPopupWindow mListImageDirPopupWindow;
 
 	int totalCount = 0;
@@ -254,7 +256,8 @@ public class ShowImageActivity extends Activity implements ListImageDirPopupWind
 
 	     back_btn = (ImageView) findViewById(R.id.common_top_bar_back_btn);
          right_titleTv  = (TextView) findViewById(R.id.common_top_bar_right_titleTv);
-
+		center_titleTv = (TextView) findViewById(R.id.common_top_bar_center_titleTv);
+		center_titleTv.setText("选择图片");
 
 
 	}
@@ -296,11 +299,12 @@ public class ShowImageActivity extends Activity implements ListImageDirPopupWind
 				imgItem =  mAdapter.returnImgItem();
 				imgDirPath = mAdapter.returnImgDirPath();
 
+
 				bundle.putStringArrayList("imgItem", imgItem);
 				bundle.putStringArrayList("imgDirPath", imgDirPath);
 				bundle.putString("IntentData","ShowImageActivity");
 				intent.putExtras(bundle);
-
+				mAdapter.cleanFlagList();
 				setResult(RESULT_OK, intent);
 				finish();
 			}

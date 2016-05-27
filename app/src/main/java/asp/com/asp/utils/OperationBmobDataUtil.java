@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bmob.BmobProFile;
@@ -24,6 +25,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.SaveListener;
 
@@ -36,6 +38,7 @@ public class OperationBmobDataUtil {
     private static int chatPageNum;
     private static int dgPageNum;
     private static int personQiangPageNum;
+    private static int personMeQiangPageNum;
     private static int personQiangDgPageNum;
    // private List<QiangItem> mListItems = new ArrayList<QiangItem>();
 
@@ -259,9 +262,11 @@ public class OperationBmobDataUtil {
         int i =0;
         //压缩
         for(String path :sourcepathlist){
-            Bitmap bitmap = ImageLoaderUtil.getInstance().compressImageFromFile(path);
-            targeturls[i] =ImageLoaderUtil.getInstance().saveToSdCard(bitmap);
-            i++;
+
+                Bitmap bitmap = ImageLoaderUtil.getInstance().compressImageFromFile(path);
+                targeturls[i] = ImageLoaderUtil.getInstance().saveToSdCard(bitmap);
+                i++;
+
         }
 
         BmobProFile.getInstance(mContext).uploadBatch(targeturls, new UploadBatchListener() {
@@ -422,6 +427,44 @@ public class OperationBmobDataUtil {
 
     }
     /**
+     * 上拉加载  加载用户 发布过的信息
+     * @param refresHandle
+     * @param mListItems
+     */
+    public void loadPersonMeData(final Handler refresHandle, User mUser,final List<QiangItem> mListItems) {
+
+        //筛选 用户信息、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、//
+        BmobQuery<QiangItem> query = new BmobQuery<QiangItem>();
+        query.setLimit(NUMBERS_PER_PAGE); // 限制 15条 消息
+        query.setSkip(NUMBERS_PER_PAGE* (personMeQiangPageNum++));
+        query.order("-createdAt");
+        query.include("author");
+        query.addWhereEqualTo("author", mUser);
+        query.findObjects(mContext, new FindListener<QiangItem>() {
+
+            @Override
+            public void onSuccess(List<QiangItem> list) {
+                // TODO 自动生成的方法存根
+                User user = null;
+                if(list.size()!=0&&list.get(list.size()-1)!=null){
+
+                    mListItems.addAll(list);
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
+                }else{
+                    personMeQiangPageNum--;
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotOld);
+
+                }
+            }
+            @Override
+            public void onError(int arg0, String arg1) {
+                personMeQiangPageNum--;
+                refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingFault);
+            }
+        });
+
+    }
+    /**
      * 下拉加载  加载用户 发布过的信息
      * @param refresHandle
      * @param mListItems
@@ -541,6 +584,46 @@ public class OperationBmobDataUtil {
     }
 
 
+    /**
+     * 查询 指定 用户 发过的 二手 商品的总数  Es :二手
+     * @param context
+     * @param userId
+     * @param countTv
+     */
+    public void queryEsCount(Context context, String userId, final TextView countTv){
+        BmobQuery<QiangItem> query = new BmobQuery<QiangItem>();
+        query.addWhereEqualTo("author", userId);
+        query.count(context, QiangItem.class, new CountListener() {
+            @Override
+            public void onSuccess(int count) {
+                countTv.setText(count+" 篇");
+            }
+            @Override
+            public void onFailure(int code, String msg) {
+                countTv.setText(null+" 篇");
+            }
+        });
+    }
+    /**
+     * 查询 指定 用户 发过的 二手 商品的总数  Dg :代购
+     * @param context
+     * @param userId
+     * @param countTv
+     */
+    public void queryDgCount(Context context, String userId, final TextView countTv){
+        BmobQuery<QiangItemDg> query = new BmobQuery<QiangItemDg>();
+        query.addWhereEqualTo("author", userId);
+        query.count(context, QiangItemDg.class, new CountListener() {
+            @Override
+            public void onSuccess(int count) {
+                countTv.setText(count+"");
+            }
+            @Override
+            public void onFailure(int code, String msg) {
+                countTv.setText(null+"");
+            }
+        });
+    }
     public void clearnPageNum(){
         personQiangPageNum = 0;
     }
@@ -549,6 +632,9 @@ public class OperationBmobDataUtil {
     }
     public void clearPageNum(){
         pageNum = 0;
+    }
+    public void clearPersonMeQiangPageNum(){
+        personMeQiangPageNum = 0;
     }
 
 

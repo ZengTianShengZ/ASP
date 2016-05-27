@@ -18,6 +18,7 @@
             android:id="@+id/goods_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:padding="10dp" >
 
             <TextView
@@ -37,7 +38,7 @@
                 android:layout_toRightOf="@id/goods_category_tip"
                 android:background="@null"
                 android:inputType="text"
-                android:lines="1" 
+                android:lines="1"
                 android:hint=" 例：手机"
                 />
         </RelativeLayout>
@@ -133,7 +134,7 @@
             android:id="@+id/sailer_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-             
+
             android:padding="10dp" >
 
             <TextView

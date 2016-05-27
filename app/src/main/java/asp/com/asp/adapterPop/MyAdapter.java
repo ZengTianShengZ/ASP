@@ -13,15 +13,16 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import asp.com.asp.R;
+import asp.com.asp.view.SnackbarUtil;
 
 public class MyAdapter extends CommonAdapter<String> {
 
 	/**
 	 * �û�ѡ���ͼƬ���洢ΪͼƬ������·��
 	 */
-	public static List<String> mSelectedImage = new LinkedList<String>();
-	public static ArrayList<String> imgItem = new ArrayList<String>();
-	public static ArrayList<String> imgDirPath = new ArrayList<String>();
+	private List<String> mSelectedImage = new LinkedList<String>();
+	private ArrayList<String> imgItem = new ArrayList<String>();
+	private ArrayList<String> imgDirPath = new ArrayList<String>();
 
 	public static int flag = 0;
 	/**
@@ -74,7 +75,6 @@ public class MyAdapter extends CommonAdapter<String> {
 							
 						 
 						mSelectedImage.add(mDirPath + "/" + item);
-						Log.i("iiiiiiiiiyyyyyyy", item);
 						mSelect.setImageResource(R.mipmap.zss_pictures_selected);
 						mImageView.setColorFilter(Color.parseColor("#77000000"));
 
@@ -82,7 +82,8 @@ public class MyAdapter extends CommonAdapter<String> {
 						imgDirPath.add(mDirPath);
 
 						}else{
-							Toast.makeText(context, "ͼƬѡ���ܳ���9��", Toast.LENGTH_SHORT).show();
+							SnackbarUtil.GreenSnackbar(mContext,mImageView,"图片不能超过9张！！！");
+							//Toast.makeText(context, "图片不能超过9张！！！", Toast.LENGTH_SHORT).show();
 							return;
 						}
 					}
@@ -106,6 +107,11 @@ public class MyAdapter extends CommonAdapter<String> {
 
 	public ArrayList<String> returnImgDirPath() {
 		return imgDirPath;
+	}
+
+	public void cleanFlagList(){
+		imgItem.clear();
+		imgDirPath.clear();
 	}
 
 }

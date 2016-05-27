@@ -38,6 +38,7 @@ import asp.com.asp.domain.User;
 import asp.com.asp.utils.BlurUtil;
 import asp.com.asp.utils.BmobUserUtil;
 import asp.com.asp.utils.ConfigConstantUtil;
+import asp.com.asp.utils.OperationBmobDataUtil;
 import asp.com.asp.utils.SharedPreferencesUtil;
 import asp.com.asp.view.SnackbarUtil;
 import cn.bmob.v3.BmobUser;
@@ -71,8 +72,14 @@ public class MeFragment extends Fragment {
     TextView detailTv;
     @ViewById(R.id.personal_qiang_SettingTv)
     TextView SettingTv;
+    @ViewById(R.id.personal_qiang_ErCountTv)
+    TextView ErCountTv;
+    @ViewById(R.id.personal_qiang_DgCountTv)
+    TextView DgCountTv;
 
     private AlertDialog dlg_Comment_alert;
+
+    private OperationBmobDataUtil mOperationBmobDataUtil;
 
     private User mUser;
     private String userName;
@@ -112,6 +119,8 @@ public class MeFragment extends Fragment {
         head_layout.setBackgroundDrawable(new BitmapDrawable(BlurUtil.fastblur(mContext, bitmap, 180)));
         mCollapsingToolbarLayout.setContentScrim(new BitmapDrawable(BlurUtil.fastblur(mContext, bitmap, 180)));*/
 
+
+
         PersonalMeViewPagerAdapter vpAdapter = new PersonalMeViewPagerAdapter(getFragmentManager());
         main_vp_container.setAdapter(vpAdapter);
 
@@ -124,6 +133,9 @@ public class MeFragment extends Fragment {
 
         mUser =  BmobUser.getCurrentUser(mContext, User.class);
 
+        mOperationBmobDataUtil = mOperationBmobDataUtil.getInstance();
+        mOperationBmobDataUtil.initData(mContext);
+
         SharedPreferencesUtil mSharedPreferencesUtil = SharedPreferencesUtil.getInstance(mContext.getApplicationContext(),mContext.getPackageName());
         SharedPreferences spf =  mSharedPreferencesUtil.getPreferences();
         userName = spf.getString(ConfigConstantUtil.UserName,"");
@@ -131,11 +143,14 @@ public class MeFragment extends Fragment {
 
             userLogoPath = spf.getString(ConfigConstantUtil.UserLogStr,"");
             nameTv.setText(userName);
-            SettingTv.setText(mUser.getSignature()+"");
+            signatureTv.setText(mUser.getSignature()+"");
             detailTv.setText(mUser.getDetails()+"");
-            ImageLoader.getInstance(3, ImageLoader.Type.LIFO).
-                    loadImage(userLogoPath,circleLogo);
+            ImageLoader.getInstance(3, ImageLoader.Type.LIFO). loadImage(userLogoPath,circleLogo);
+
+            mOperationBmobDataUtil.queryEsCount(mContext,mUser.getObjectId(),ErCountTv);
+            mOperationBmobDataUtil.queryDgCount(mContext,mUser.getObjectId(),DgCountTv);
         }
+
 
         if(userLogoPath!=null){
             new Thread() {

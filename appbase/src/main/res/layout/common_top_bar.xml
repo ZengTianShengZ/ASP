@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="#FFFFFF"
+    android:background="@color/colorOverall"
     android:id="@+id/common_top_bar_parent"
     android:layout_height="@dimen/height_top_bar" >
 
     <ImageView
         android:id="@+id/common_top_bar_back_btn"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="15dp"
         android:src="@mipmap/back_btn"/>
 
     <TextView
@@ -19,8 +19,9 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF"
         android:text="编辑商品"
-        android:textSize="9pt"/>
+        android:textSize="10pt"/>
 
     <TextView
         android:id="@+id/common_top_bar_right_titleTv"
@@ -28,7 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="15dp"
+        android:textColor="#FFFFFF"
         android:text="完成"
-        android:textSize="8pt"/>
+        android:textSize="9pt"/>
 </RelativeLayout>

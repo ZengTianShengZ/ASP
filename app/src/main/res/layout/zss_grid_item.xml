@@ -6,15 +6,15 @@
     <ImageView
         android:id="@+id/id_item_image"
         android:layout_width="fill_parent"
-        android:layout_height="100dp"
+        android:layout_height="130dp"
         android:background="#d7d7d7"
         android:scaleType="centerCrop" />
 
     <ImageButton
         android:id="@+id/id_item_select"
         android:clickable="false"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="3dp"

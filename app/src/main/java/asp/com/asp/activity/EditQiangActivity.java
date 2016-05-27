@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.bmob.BmobProFile;
 import com.bmob.btp.callback.UploadBatchListener;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
@@ -107,13 +108,22 @@ public class EditQiangActivity extends Activity {
 
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-        initData();
-        initEvent();
+
         return super.onCreateView(parent, name, context, attrs);
     }
 
-
+    @AfterViews
+    void updateQiangDate() {
+        initData();
+        initEvent();
+    }
     private void initData() {
+
+        sourcepathlist =new ArrayList<String>();
+        sourcepathlist.add("First");
+        zssMyAadapter = new ZssMyAdapter(getApplicationContext(),sourcepathlist,
+                R.layout.zss_show_image,this);
+        gridView.setAdapter(zssMyAadapter);
     }
 
     private void initEvent() {
@@ -201,6 +211,8 @@ public class EditQiangActivity extends Activity {
         }*/
         mProgressDialog = ProgressDialog.show(this, null, "正在上传...");
         OperationBmobDataUtil.getInstance().initData(getApplicationContext());
+        // 删除第一张 没用的
+        sourcepathlist.remove(0);
         OperationBmobDataUtil.getInstance().sendGoodData(finishHandle,commitContent,sourcepathlist,goods);
        // publish(commitContent,goods);
     }
@@ -220,7 +232,12 @@ public class EditQiangActivity extends Activity {
                     imgItem = data.getStringArrayListExtra("imgItem");
                     imgDirPath = data.getStringArrayListExtra("imgDirPath");
                     //图片太大，先显示原图片，发送时压缩发送
-                    sourcepathlist =new ArrayList<String>();
+
+                    for(int i=0;i<imgItem.size();i++){
+                        sourcepathlist.add(imgDirPath.get(i)+"/"+imgItem.get(i));
+                    }
+                    zssMyAadapter.notifyDataSetChanged();
+                /*    sourcepathlist =new ArrayList<String>();
                     for(int i=0;i<imgItem.size();i++){
                         sourcepathlist.add(imgDirPath.get(i)+"/"+imgItem.get(i));
                     }
@@ -231,7 +248,7 @@ public class EditQiangActivity extends Activity {
                         gridView.setAdapter(zssMyAadapter);
                     }else{
                         gridView.setVisibility(View.GONE);
-                    }
+                    }*/
                     break;
             }
         }

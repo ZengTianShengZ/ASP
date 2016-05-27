@@ -13,7 +13,9 @@ import cn.bmob.v3.datatype.BmobRelation;
  *
  */
 public class User extends BmobUser implements Serializable{
-	
+
+	private QiangItem mQiangItem;
+
 	private String nickname;
 	private String signature;
 	private String details;
@@ -88,5 +90,13 @@ public class User extends BmobUser implements Serializable{
 
 	public void setDetails(String details) {
 		this.details = details;
+	}
+
+	public QiangItem getmQiangItem() {
+		return mQiangItem;
+	}
+
+	public void setmQiangItem(QiangItem mQiangItem) {
+		this.mQiangItem = mQiangItem;
 	}
 }

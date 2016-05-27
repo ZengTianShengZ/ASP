@@ -15,7 +15,7 @@
         android:cacheColorHint="@android:color/transparent"
         android:clipChildren="true"
         android:gravity="center"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="@dimen/height_top_bar"
         android:horizontalSpacing="3dip"
         android:listSelector="@android:color/transparent"
         android:numColumns="3"

@@ -81,8 +81,9 @@
         android:id="@+id/item_qiang_comment_Tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/ic_pinglun_img"
         android:layout_below="@+id/item_qiang_delect_Tv"
-        android:text="评论 123 "
+        android:text="123 "
         android:textSize="9pt"
         />
     </LinearLayout>

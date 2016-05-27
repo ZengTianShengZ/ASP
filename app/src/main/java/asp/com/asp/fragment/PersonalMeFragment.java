@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.EFragment;
@@ -43,6 +44,7 @@ public class PersonalMeFragment extends Fragment{
 
     private RecyclerView qiangMe_recycleview;
     private View progress_loading;
+    private TextView defaultTv;
 
     private DialogUtils dlg_view;
     private AlertDialog dlg_Comment_alert;
@@ -69,6 +71,7 @@ public class PersonalMeFragment extends Fragment{
         return mRootview;
     }
     private void initView() {
+        defaultTv = (TextView) mRootview.findViewById(R.id.personal_qiang_defaultTv);
         qiangMe_recycleview = (RecyclerView) mRootview.findViewById(R.id.personal_qiang_recycleview);
         mLinearLayoutManager = new LinearLayoutManager(qiangMe_recycleview.getContext());
         qiangMe_recycleview.setLayoutManager( mLinearLayoutManager);
@@ -86,7 +89,7 @@ public class PersonalMeFragment extends Fragment{
 
         if(mListItems.size() == 0){
 
-            mOperationBmobDataUtil.loadPersonData(refresHandle,mUser,mListItems);
+            mOperationBmobDataUtil.loadPersonMeData(refresHandle,mUser,mListItems);
 
 
         }
@@ -107,7 +110,7 @@ public class PersonalMeFragment extends Fragment{
                     progress_loading = loadingview;
                 }
                 progress_loading.setVisibility(View.VISIBLE);
-                mOperationBmobDataUtil.loadPersonData(refresHandle,mUser, mListItems);
+                mOperationBmobDataUtil.loadPersonMeData(refresHandle,mUser, mListItems);
 
             }
         });
@@ -156,9 +159,9 @@ public class PersonalMeFragment extends Fragment{
     @Subscribe
     public void onEventMainThread(EventBusBean event) {
         Log.i( "onEventMainThread","................PersonalMeFragment....................."+event.getMsg());
-        mOperationBmobDataUtil.clearPersonQiangDgPageNum();
+        mOperationBmobDataUtil.clearPersonMeQiangPageNum();
         mListItems.clear();
-        mOperationBmobDataUtil.loadPersonData(refresHandle,mUser,mListItems);
+        mOperationBmobDataUtil.loadPersonMeData(refresHandle,mUser,mListItems);
     }
 
     /**
@@ -191,15 +194,24 @@ public class PersonalMeFragment extends Fragment{
             }
         }
     };
+
     @Override
     public void onStop() {
         super.onStop();
-
+        Log.i( "personalmeFragment","............. onStop................" );
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i( "personalmeFragment","............. onPause................" );
+    }
+
+
     @Override
     public void onDestroy(){
         super.onDestroy();
-        mOperationBmobDataUtil.clearPersonQiangDgPageNum();
+        Log.i( "personalmeFragment","............. onDestroy................" );
+        mOperationBmobDataUtil.clearPersonMeQiangPageNum();
         EventBus.getDefault().unregister(this);
     }
 }

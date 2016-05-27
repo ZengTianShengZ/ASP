@@ -134,9 +134,10 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/personal_qiang_ErCountTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="50篇"
+                            android:text="0篇"
                             android:textColor="#ffffff"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -160,9 +161,10 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/personal_qiang_DgCountTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="30篇"
+                            android:text="0篇"
                             android:textColor="#ffffff"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -216,9 +218,9 @@
             android:background="#ffffff"
             android:fillViewport="false"
             app:layout_scrollFlags="scroll"
-            app:tabIndicatorColor="#0835f8"
+            app:tabIndicatorColor="@color/colorOverall"
             app:tabIndicatorHeight="1.0dp"
-            app:tabSelectedTextColor="#0835f8"
+            app:tabSelectedTextColor="@color/colorOverall"
             app:tabTextColor="#ced0d3">
 
             <android.support.design.widget.TabItem

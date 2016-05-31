@@ -2,6 +2,7 @@ package asp.com.asp.adapterPop;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
@@ -14,10 +15,11 @@ import asp.com.asp.view.SnackbarUtil;
 
 public class ZssMyAdapter extends CommonAdapter<String>{
 	private static final int REQUEST_CODE_ALBUM = 1;
-	private EditQiangActivity mEditQiangActivity;
-	public ZssMyAdapter(Context context, List<String> mDatas, int itemLayoutId, EditQiangActivity editQiangActivity) {
+	private Activity activity;
+	private Context mContext;
+	public ZssMyAdapter(Context context, List<String> mDatas, int itemLayoutId, Activity activity) {
 		super(context, mDatas, itemLayoutId);
-		this.mEditQiangActivity = editQiangActivity;
+		this.activity = activity;
 	}
 
 	@Override
@@ -56,7 +58,7 @@ public class ZssMyAdapter extends CommonAdapter<String>{
 						SnackbarUtil.GreenSnackbar(mContext,mImageView,"图片不能超过9张！！！");
 					}else {
 						Intent intent = new Intent(mContext, ShowImageActivity.class);
-						mEditQiangActivity.startActivityForResult(intent, REQUEST_CODE_ALBUM);
+						activity.startActivityForResult(intent, REQUEST_CODE_ALBUM);
 					}
 				}
 			}

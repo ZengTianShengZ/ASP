@@ -42,6 +42,9 @@
         <activity android:name=".activity.EditQiangActivity_"
               >
         </activity>
+        <activity android:name=".activity.AddGdActivity_"
+            >
+        </activity>
         <activity android:name=".activity.GoodsDetailActivity_"
             >
         </activity>

@@ -9,13 +9,17 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.ListPopupWindow;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -37,6 +41,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import asp.com.asp.R;
 import asp.com.asp.adapterPop.ZssMyAdapter;
@@ -63,6 +68,8 @@ public class EditQiangActivity extends Activity {
     ImageView back_btn;
     @ViewById(R.id.common_top_bar_right_titleTv)
     TextView right_titleTv;
+    @ViewById(R.id.common_top_bar_center_titleTv)
+    TextView center_titleTv;
 
     @ViewById(R.id.edit_qiang_addImageview)
     ImageView add_imageview;
@@ -80,9 +87,12 @@ public class EditQiangActivity extends Activity {
     @ViewById(R.id.sailer_phone_edit)
     EditText sailer_phone_edit;
 
+
+
     private ProgressDialog mProgressDialog;
     private DialogUtils dlg_view;
     private AlertDialog dlg_back_alert;
+    private ListPopupWindow mListPopupWindow;
 
     private ZssMyAdapter zssMyAadapter;
 
@@ -96,7 +106,10 @@ public class EditQiangActivity extends Activity {
     public static ArrayList<String>  imgDirPath = new ArrayList<String>();
     public static ArrayList<BmobFile>  BmobFileList = new ArrayList<BmobFile>();
     private ArrayList<String> sourcepathlist;
+
+    private boolean sendDgGoods = false;
     private Goods goods;
+    private User bmobUser;
     private Context mContext;
 
     @Override
@@ -114,10 +127,13 @@ public class EditQiangActivity extends Activity {
 
     @AfterViews
     void updateQiangDate() {
+
         initData();
         initEvent();
     }
     private void initData() {
+
+        bmobUser = BmobUser.getCurrentUser(this, User.class);
 
         sourcepathlist =new ArrayList<String>();
         sourcepathlist.add("First");
@@ -136,6 +152,12 @@ public class EditQiangActivity extends Activity {
     void backBtnClick(){
 
         backDialogCreat();
+    }
+
+    @Click(R.id.common_top_bar_center_titleTv)
+    void centerTitleTvClick(){
+        Log.i("centerTitleTvClick","///////centerTitleTvClick////////");
+        initListPopupWindow();
     }
 
     /**
@@ -195,26 +217,32 @@ public class EditQiangActivity extends Activity {
             return;
         }
 
-        goods = new Goods();
-        goods.setCategory(goods_category);
-        goods.setName(goods_name);
-        goods.setPrice(Float.valueOf(goods_price));
-        goods.setDetails(commitContent);
-        goods.setCellphone(sailer_phone);
-   /*
-        if (sourcepathlist == null) {
+        if(bmobUser == null){
+            SnackbarUtil.GreenSnackbar(mContext,clickedView,"       请先登录！！！");
+        }else {
+            if(sendDgGoods){
+                if(bmobUser.isAddV()){
 
-            publishWithoutFigure(commitContent,null, goods);
+                }else{
+                    sendDgGoodsDialogCreat();
+                }
+
+            }else {
+                goods = new Goods();
+                goods.setCategory(goods_category);
+                goods.setName(goods_name);
+                goods.setPrice(Float.valueOf(goods_price));
+                goods.setDetails(commitContent);
+                goods.setCellphone(sailer_phone);
+
+                mProgressDialog = ProgressDialog.show(this, null, "正在上传...");
+                OperationBmobDataUtil.getInstance().initData(getApplicationContext());
+                // 删除第一张 没用的
+                sourcepathlist.remove(0);
+                OperationBmobDataUtil.getInstance().sendGoodData(finishHandle, commitContent, sourcepathlist, goods);
+                // publish(commitContent,goods);
+            }
         }
-        else {
-            publish(commitContent,goods);
-        }*/
-        mProgressDialog = ProgressDialog.show(this, null, "正在上传...");
-        OperationBmobDataUtil.getInstance().initData(getApplicationContext());
-        // 删除第一张 没用的
-        sourcepathlist.remove(0);
-        OperationBmobDataUtil.getInstance().sendGoodData(finishHandle,commitContent,sourcepathlist,goods);
-       // publish(commitContent,goods);
     }
     @Click(R.id.edit_qiang_addImageview)
     void addImageviewBtnClick(){
@@ -255,6 +283,45 @@ public class EditQiangActivity extends Activity {
     }
 
     /**
+     * 选择  ListPopupWindow
+     */
+    private void initListPopupWindow() {
+
+        List<String> listPopuStrLists = new ArrayList<String>();
+        listPopuStrLists.add("二手商品");
+        listPopuStrLists.add("代购商品");
+        mListPopupWindow = new ListPopupWindow(this);
+        ArrayAdapter listPopuAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listPopuStrLists);
+        mListPopupWindow.setAdapter(listPopuAdapter);
+        mListPopupWindow.setWidth(500);
+        mListPopupWindow.setHeight(AppBarLayout.LayoutParams.WRAP_CONTENT);
+        mListPopupWindow.setAnchorView(right_titleTv);// 设置ListPopupWindow的锚点，即关联PopupWindow的显示位置和这个锚点
+        mListPopupWindow.setPromptPosition(ListPopupWindow.POSITION_PROMPT_BELOW);
+        mListPopupWindow.setModal(true);// 设置是否是模式
+
+        mListPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mListPopupWindow.dismiss();
+                switch (position) {
+                    //二手商品
+                    case 0:
+                        sendDgGoods = false;
+                        center_titleTv.setText("二手商品");
+                        break;
+                    // 代购商品
+                    case 01:
+                        sendDgGoods = true;
+                        center_titleTv.setText("代购商品");
+                        break;
+
+                }
+            }
+        });
+        mListPopupWindow.show();
+    }
+    /**
      * 更新刷新 数据
      */
     private Handler finishHandle = new Handler() {
@@ -291,6 +358,28 @@ public class EditQiangActivity extends Activity {
             @Override
             public void dialogRightButtonClickListener(String editStr) {
                 finish();
+            }
+        } );
+    }
+
+    private void sendDgGoodsDialogCreat(){
+        dlg_view = new DialogUtils.Builder().titleStr("您现在还不是代购商家，前往注册成为代购商家")
+                .leftBtnStr("取消").rightBtnStr("确定").setEditVisible(View.GONE).build();
+        dlg_back_alert = new AlertDialog.Builder(EditQiangActivity.this).setView(dlg_view.getDialogView(this)).show();
+
+        dlg_view.leftButtonClickListener(new DialogUtils.DialogLeftButtonClick(){
+
+            @Override
+            public void dialogLeftButtonClickListener() {
+                dlg_back_alert.dismiss();
+            }
+        });
+        dlg_view.rightButtonClickListener(new DialogUtils.DialogRightButtonClick(){
+
+            @Override
+            public void dialogRightButtonClickListener(String editStr) {
+                dlg_back_alert.dismiss();
+               //。。。。
             }
         } );
     }

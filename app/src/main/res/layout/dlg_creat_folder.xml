@@ -18,18 +18,20 @@
         android:textSize="8pt"
         />
     
-     <EditText
-         android:id="@+id/dlg_creat_folder_et"
+
+    <EditText
+        android:id="@+id/dlg_creat_folder_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-     
-        android:background="@null"
+        android:padding="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/textview_bg"
         android:hint="写上你的评论 ! ! !"
         android:textColor="#353535"
         android:textSize="9pt"
         />
-
      <View 
          android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -51,10 +53,10 @@
                 android:layout_width="80dp"
                 android:layout_height="40dp"
                 android:layout_alignParentLeft="true"
-                android:background="@color/colorOverall"
+                android:background="@drawable/red_button_bg"
                  android:layout_marginLeft="20dp"
                 android:gravity="center"
-               
+
                 android:layout_marginBottom="30dp"
                 android:text="取消"
                 android:textColor="#ffffff"
@@ -65,7 +67,7 @@
                 android:layout_width="80dp"
                 android:layout_height="40dp"
                 android:layout_alignParentRight="true"
-                android:background="@color/colorOverall"
+                android:background="@drawable/red_button_bg"
                 android:layout_marginRight="20dp"
                 android:gravity="center"
                 android:padding="0dip"

@@ -24,6 +24,7 @@ public class User extends BmobUser implements Serializable{
 	private BmobRelation focus;
 	private String sex;
 	private String location;
+	private boolean addV;
 
 	
 	public String getLocation() {
@@ -98,5 +99,13 @@ public class User extends BmobUser implements Serializable{
 
 	public void setmQiangItem(QiangItem mQiangItem) {
 		this.mQiangItem = mQiangItem;
+	}
+
+	public boolean isAddV() {
+		return addV;
+	}
+
+	public void setAddV(boolean addV) {
+		this.addV = addV;
 	}
 }

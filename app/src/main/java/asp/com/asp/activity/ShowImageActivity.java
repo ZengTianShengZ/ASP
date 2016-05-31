@@ -304,7 +304,7 @@ public class ShowImageActivity extends Activity implements ListImageDirPopupWind
 				bundle.putStringArrayList("imgDirPath", imgDirPath);
 				bundle.putString("IntentData","ShowImageActivity");
 				intent.putExtras(bundle);
-				mAdapter.cleanFlagList();
+
 				setResult(RESULT_OK, intent);
 				finish();
 			}

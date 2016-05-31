@@ -24,6 +24,7 @@ import org.androidannotations.annotations.ViewById;
 
 import asp.com.appbase.view.BottomTagView;
 import asp.com.appbase.view.CircleImageView;
+import asp.com.asp.activity.AddGdActivity_;
 import asp.com.asp.activity.EditQiangActivity_;
 import asp.com.asp.adapterPop.ImageLoader;
 import asp.com.asp.domain.User;
@@ -39,9 +40,8 @@ import cn.bmob.v3.BmobUser;
  * Created by Administrator on 2016/5/11.
  */
 @EActivity(R.layout.activity_main2)
-public class MainActivity extends FragmentActivity
-        implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
-
+public class MainActivity extends FragmentActivity  implements  View.OnClickListener {
+//NavigationView.OnNavigationItemSelectedListener,
     private FragmentManager mFragmentManager ;
     private FragmentTransaction mTransaction;
 
@@ -49,16 +49,23 @@ public class MainActivity extends FragmentActivity
     private NewsFragment_ mNewsFragment;
     private MeFragment_ mMeFragment;
 
-    private View headerView;
+   /* private View headerView;
     private CircleImageView userImg;
-    private TextView nameTv,contentTv;
+    private TextView nameTv,contentTv;*/
 
     private SharedPreferencesUtil mSharedPreferencesUtil;
 
     @ViewById(R.id.drawer_layout)
     DrawerLayout drawerLayout;
-    @ViewById(R.id.nav_view)
-    NavigationView navigationView;
+/*    @ViewById(R.id.nav_view)
+    NavigationView navigationView;*/
+
+    @ViewById(R.id.nav_header_mian_cirImg)
+    CircleImageView userImg;
+    @ViewById(R.id.nav_header_mian_nameTv)
+    TextView nameTv;
+    @ViewById(R.id.nav_header_mian_contentTv)
+    TextView contentTv;
 
     @ViewById(R.id.main_base_hong_btn)
     BottomTagView hong_btn;
@@ -90,11 +97,11 @@ public class MainActivity extends FragmentActivity
 
 
     private void initView() {
-        headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
+       /* headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
         userImg = (CircleImageView) headerView.findViewById(R.id.nav_header_mian_cirImg);
         nameTv = (TextView) headerView.findViewById(R.id.nav_header_mian_nameTv);
         contentTv = (TextView) headerView.findViewById(R.id.nav_header_mian_contentTv);
-
+*/
 
 
     }
@@ -114,7 +121,7 @@ public class MainActivity extends FragmentActivity
         }
 
         // 使用 @EActivity 控件的注册事件要放在 onStart（），不然会抛空指针
-        navigationView.setNavigationItemSelectedListener(this);
+        //navigationView.setNavigationItemSelectedListener(this);
         hong_btn.setIconAlpha(1);
 
         mFragmentManager =getSupportFragmentManager();
@@ -159,34 +166,62 @@ public class MainActivity extends FragmentActivity
         me_btn.setIconAlpha(1);
         setSelected(2);
     }
-    @Override
+
+    /*****************侧拉菜单点击事件*******************/
+    @Click(R.id.main_drawer_singin)
+    void singinBtnClick(){
+        Intent intent = new Intent(this,WBAuthActivity_.class);
+        startActivityForResult(intent,123);
+    }
+    @Click(R.id.main_drawer_add_v)
+    void add_vBtnClick(){
+        Intent intent = new Intent(this,AddGdActivity_.class);
+        startActivity(intent);
+
+    }
+    @Click(R.id.main_drawer_send_goods)
+    void send_goodsBtnClick(){
+        Intent intent = new Intent(this,EditQiangActivity_.class);
+        startActivity(intent);
+    }
+    @Click(R.id.main_drawer_about_me)
+    void about_meBtnClick(){
+
+    }
+    @Click(R.id.main_drawer_share)
+    void shareBtnClick(){
+
+    }
+    @Click(R.id.include_activity_main_drawer)
+    void include_activity_main_drawerClick(){
+
+    }
+
+ /*   @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_singin) {
             Intent intent = new Intent(this,WBAuthActivity_.class);
             startActivityForResult(intent,123);
 
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_add_v) {
 
-        } else if (id == R.id.nav_slideshow) {
-            Intent intent = new Intent(this,WBAuthActivity_.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_send_goods) {
             Intent intent = new Intent(this,EditQiangActivity_.class);
             startActivity(intent);
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_about_ous) {
 
-        } else if (id == R.id.nav_send) {
+
+        } else if (id == R.id.nav_share_app) {
 
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
+*/
     @Override
     public void onClick(View v) {
         switch (v.getId()){

@@ -5,18 +5,24 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+     >
 
     <include layout="@layout/activity_main_base"></include>
 
 
-    <android.support.design.widget.NavigationView
+    <include layout="@layout/include_activity_main_drawer"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:tag="LEFT" />
+
+ <!--   <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:menu="@menu/activity_main_drawer" />
+
+        app:menu="@menu/activity_main_drawer" />-->
 </android.support.v4.widget.DrawerLayout>
 

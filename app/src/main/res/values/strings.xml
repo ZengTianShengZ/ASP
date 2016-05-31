@@ -12,7 +12,8 @@
     <string name="weibosdk_demo_toast_auth_failed">授权失败</string>
     <string name="weibosdk_demo_toast_auth_success">授权成功</string>
 
-
-
-
+    <string name="dg_declare">代购是同学在学习之余，从货源商家（如淘宝，阿里巴巴）那边进货，再进行销售。货源也不局限于网络，也可以是家乡特产，自己的手工品等等。区别于二手商品，代购商品要有一定的质量保证。目前此平台不提供质量保证，买家可以于卖家通过平台取得联系，确认质量后再进行购买，或到卖家提供的渠道购买！！！
+</string>
+    <string name="dg_dridge">开通代购只需要卖家把代购商品 的 照片 提交到本应用服务器，在一周之内客服人员完成对您的商品进行认证即可为您授权开通。</string>
+    <string name="dg_alera">开通代购的卖家可享受发布二手商品和代购商品的权利，但不可以在代购商品上面方表关于二手商品的任何消息，如经发现将会对卖家进行警告提醒，超过三次将会取消卖家代购商品的权利。这是为了规范用户体验，请卖家配合</string>
 </resources>

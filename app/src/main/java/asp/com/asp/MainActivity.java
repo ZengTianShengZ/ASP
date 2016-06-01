@@ -24,8 +24,10 @@ import org.androidannotations.annotations.ViewById;
 
 import asp.com.appbase.view.BottomTagView;
 import asp.com.appbase.view.CircleImageView;
+import asp.com.asp.activity.AboutMeActivity_;
 import asp.com.asp.activity.AddGdActivity_;
 import asp.com.asp.activity.EditQiangActivity_;
+import asp.com.asp.activity.NotificationActivity_;
 import asp.com.asp.adapterPop.ImageLoader;
 import asp.com.asp.domain.User;
 import asp.com.asp.fragment.HomeFragment_;
@@ -170,31 +172,45 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
     /*****************侧拉菜单点击事件*******************/
     @Click(R.id.main_drawer_singin)
     void singinBtnClick(){
+
         Intent intent = new Intent(this,WBAuthActivity_.class);
         startActivityForResult(intent,123);
+        drawerLayout.closeDrawers();
     }
     @Click(R.id.main_drawer_add_v)
     void add_vBtnClick(){
+        drawerLayout.closeDrawers();
         Intent intent = new Intent(this,AddGdActivity_.class);
         startActivity(intent);
 
     }
     @Click(R.id.main_drawer_send_goods)
     void send_goodsBtnClick(){
+        drawerLayout.closeDrawers();
         Intent intent = new Intent(this,EditQiangActivity_.class);
+        startActivity(intent);
+    }
+    @Click(R.id.main_drawer_dialog)
+    void dialogBtnClick(){
+        drawerLayout.closeDrawers();
+
+        Intent intent = new Intent(this,NotificationActivity_.class);
         startActivity(intent);
     }
     @Click(R.id.main_drawer_about_me)
     void about_meBtnClick(){
+        drawerLayout.closeDrawers();
+        Intent intent = new Intent(this,AboutMeActivity_.class);
+        startActivity(intent);
 
     }
     @Click(R.id.main_drawer_share)
     void shareBtnClick(){
-
+        drawerLayout.closeDrawers();
     }
     @Click(R.id.include_activity_main_drawer)
     void include_activity_main_drawerClick(){
-
+        drawerLayout.closeDrawers();
     }
 
  /*   @Override

@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 import asp.com.asp.domain.Comment;
+import asp.com.asp.domain.DgVerify;
 import asp.com.asp.domain.Goods;
 import asp.com.asp.domain.QiangItem;
 import asp.com.asp.domain.QiangItemDg;
@@ -255,8 +256,9 @@ public class OperationBmobDataUtil {
      * @param commitContent
      * @param sourcepathlist
      * @param goods
+     * @param noVip
      */
-    public void sendGoodData(final Handler finishandle,final String commitContent, ArrayList<String> sourcepathlist,final Goods goods){
+    public void sendGoodData(final Handler finishandle, final String commitContent, ArrayList<String> sourcepathlist, final Goods goods, final boolean noVip){
         String[] targeturls=null;
         targeturls = new String[sourcepathlist.size()];
         int i =0;
@@ -280,7 +282,14 @@ public class OperationBmobDataUtil {
                 //注：若上传的是图片，url(s)并不能直接在浏览器查看（会出现404错误），需要经过`URL签名`得到真正的可访问的URL地址,当然，`V3.4.1`版本可直接从BmobFile中获得可访问的文件地址。
 
                 if (isFinish) {
-                    publishWithoutFigure(finishandle, commitContent, files, goods);
+                    if(noVip){
+                        final QiangItemDg qiangitem = new QiangItemDg();
+                        publishDgWithoutFigure(finishandle, commitContent, files, goods,qiangitem);
+                    }else{
+                        final QiangItem qiangitem = new QiangItem();
+                        publishWithoutFigure(finishandle, commitContent, files, goods,qiangitem);
+                    }
+
                 }
             }
 
@@ -301,11 +310,11 @@ public class OperationBmobDataUtil {
         });
     }
     private void publishWithoutFigure(final Handler finishandle, final String commitContent,
-                                      final BmobFile[] BmobFileList, final Goods goods) {
+                                      final BmobFile[] BmobFileList, final Goods goods, final QiangItem qiangitem) {
         User user = BmobUser.getCurrentUser(mContext, User.class);
 
+
         // JavaBean  对数据set 到 JavaBean 里面
-        final QiangItem qiangitem = new QiangItem();
         qiangitem.setAuthor(user);
         qiangitem.setContent(commitContent);
 
@@ -352,7 +361,124 @@ public class OperationBmobDataUtil {
         });
 
     }
+    private void publishDgWithoutFigure(final Handler finishandle, final String commitContent,
+                                      final BmobFile[] BmobFileList, final Goods goods, final QiangItemDg qiangitem) {
+        User user = BmobUser.getCurrentUser(mContext, User.class);
 
+
+        // JavaBean  对数据set 到 JavaBean 里面
+        qiangitem.setAuthor(user);
+        qiangitem.setContent(commitContent);
+
+        if (BmobFileList != null) {
+            int flag=0;
+            for(BmobFile bf:BmobFileList){
+                qiangitem.setBmobFileList(bf,flag);
+                flag++;
+
+            }
+        }
+        qiangitem.setLove(0);
+        qiangitem.setHate(0);
+        qiangitem.setShare(0);
+        qiangitem.setComment(0);
+        qiangitem.setPass(true);
+        qiangitem.setFocus(false);
+
+        goods.save(mContext, new SaveListener() {
+            @Override
+            public void onSuccess() {
+                // TODO 自动生成的方法存根
+                qiangitem.setGoods(goods);
+                // Bmob 添加  JavaBean 的  方法  ！！！
+                qiangitem.save(mContext, new SaveListener() {
+
+                    @Override
+                    public void onSuccess() {
+                        finishandle.sendEmptyMessage(ConfigConstantUtil.sendSuccess);
+                    }
+
+                    @Override
+                    public void onFailure(int arg0, String arg1) {
+                        finishandle.sendEmptyMessage(ConfigConstantUtil.sendFault);
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(int arg0, String arg1) {
+                finishandle.sendEmptyMessage(ConfigConstantUtil.sendFault);
+            }
+        });
+
+    }
+    /**
+     * 发送 dg 墙验证照片
+     * @param finishandle
+     * @param sourcepathlist
+     */
+    public void sendDgAddV(final Handler finishandle, ArrayList<String> sourcepathlist){
+
+        String[] targeturls=null;
+        targeturls = new String[sourcepathlist.size()];
+        int i =0;
+        //压缩
+        for(String path :sourcepathlist){
+
+            Bitmap bitmap = ImageLoaderUtil.getInstance().compressImageFromFile(path);
+            targeturls[i] = ImageLoaderUtil.getInstance().saveToSdCard(bitmap);
+            i++;
+
+        }
+
+        BmobProFile.getInstance(mContext).uploadBatch(targeturls, new UploadBatchListener() {
+
+            @Override
+            public void onSuccess(boolean isFinish, String[] fileNames, String[] urls, BmobFile[] files) {
+
+                if (isFinish) {
+                    User user = BmobUser.getCurrentUser(mContext, User.class);
+                    // JavaBean  对数据set 到 JavaBean 里面
+                    final DgVerify dgVerify = new DgVerify();
+                    dgVerify.setAuthor(user);
+
+                    if (files != null) {
+                        int flag=0;
+                        for(BmobFile bf:files){
+                            dgVerify.setBmobFileList(bf,flag);
+                            flag++;
+
+                        }
+
+                        dgVerify.save(mContext, new SaveListener() {
+
+                            @Override
+                            public void onSuccess() {
+                                finishandle.sendEmptyMessage(ConfigConstantUtil.sendSuccess);
+                            }
+
+                            @Override
+                            public void onFailure(int arg0, String arg1) {
+                                finishandle.sendEmptyMessage(ConfigConstantUtil.sendFault);
+
+                            }
+                        });
+                    }
+
+                }
+            }
+
+            @Override
+            public void onProgress(int curIndex, int curPercent, int total, int totalPercent) {
+            }
+
+            @Override
+            public void onError(int statuscode, String errormsg) {
+                finishandle.sendEmptyMessage(ConfigConstantUtil.sendFault);
+            }
+        });
+    }
     /**
      * 评论 记录
      */

@@ -88,6 +88,8 @@ public class EditQiangActivity extends Activity {
     EditText sailer_phone_edit;
 
 
+    private static boolean IS_VIP = true;
+    private static boolean NO_VIP = false;
 
     private ProgressDialog mProgressDialog;
     private DialogUtils dlg_view;
@@ -220,26 +222,29 @@ public class EditQiangActivity extends Activity {
         if(bmobUser == null){
             SnackbarUtil.GreenSnackbar(mContext,clickedView,"       请先登录！！！");
         }else {
+            goods = new Goods();
+            goods.setCategory(goods_category);
+            goods.setName(goods_name);
+            goods.setPrice(Float.valueOf(goods_price));
+            goods.setDetails(commitContent);
+            goods.setCellphone(sailer_phone);
+
+            OperationBmobDataUtil.getInstance().initData(getApplicationContext());
+            // 删除第一张 没用的
+            sourcepathlist.remove(0);
+
             if(sendDgGoods){
                 if(bmobUser.isAddV()){
-
+                    mProgressDialog = ProgressDialog.show(this, null, "正在上传...");
+                    OperationBmobDataUtil.getInstance().sendGoodData(finishHandle, commitContent, sourcepathlist, goods,IS_VIP);
+                    // publish(commitContent,goods);
                 }else{
                     sendDgGoodsDialogCreat();
                 }
 
             }else {
-                goods = new Goods();
-                goods.setCategory(goods_category);
-                goods.setName(goods_name);
-                goods.setPrice(Float.valueOf(goods_price));
-                goods.setDetails(commitContent);
-                goods.setCellphone(sailer_phone);
-
                 mProgressDialog = ProgressDialog.show(this, null, "正在上传...");
-                OperationBmobDataUtil.getInstance().initData(getApplicationContext());
-                // 删除第一张 没用的
-                sourcepathlist.remove(0);
-                OperationBmobDataUtil.getInstance().sendGoodData(finishHandle, commitContent, sourcepathlist, goods);
+                OperationBmobDataUtil.getInstance().sendGoodData(finishHandle, commitContent, sourcepathlist, goods,NO_VIP);
                 // publish(commitContent,goods);
             }
         }
@@ -295,7 +300,7 @@ public class EditQiangActivity extends Activity {
         mListPopupWindow.setAdapter(listPopuAdapter);
         mListPopupWindow.setWidth(500);
         mListPopupWindow.setHeight(AppBarLayout.LayoutParams.WRAP_CONTENT);
-        mListPopupWindow.setAnchorView(right_titleTv);// 设置ListPopupWindow的锚点，即关联PopupWindow的显示位置和这个锚点
+        mListPopupWindow.setAnchorView(center_titleTv);// 设置ListPopupWindow的锚点，即关联PopupWindow的显示位置和这个锚点
         mListPopupWindow.setPromptPosition(ListPopupWindow.POSITION_PROMPT_BELOW);
         mListPopupWindow.setModal(true);// 设置是否是模式
 
@@ -379,7 +384,9 @@ public class EditQiangActivity extends Activity {
             @Override
             public void dialogRightButtonClickListener(String editStr) {
                 dlg_back_alert.dismiss();
-               //。。。。
+
+                Intent intent = new Intent(EditQiangActivity.this, AddGdActivity_.class);
+                startActivity(intent);
             }
         } );
     }

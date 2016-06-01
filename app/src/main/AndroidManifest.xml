@@ -60,6 +60,12 @@
         <activity android:name=".activity.PersonalQiangActivityxx_"
             >
         </activity>
+        <activity android:name=".activity.NotificationActivity_"
+            >
+        </activity>
+        <activity android:name=".activity.AboutMeActivity_"
+            >
+        </activity>
 
     </application>
 

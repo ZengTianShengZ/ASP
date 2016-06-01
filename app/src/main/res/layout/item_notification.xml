@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/item_notification_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center_horizontal"
+        android:text="2016-5-31"/>
+    <TextView
+        android:id="@+id/item_notification_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="9pt"
+        android:padding="10dp"
+        android:background="@drawable/red_button_bg"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="#FFFFFF"
+        android:text="恭喜您，获得发表代购商品的资格！！！"/>
+</LinearLayout>

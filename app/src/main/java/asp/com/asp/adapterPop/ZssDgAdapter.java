@@ -1,23 +1,23 @@
 package asp.com.asp.adapterPop;
 
-import java.util.List;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.util.List;
+
 import asp.com.asp.R;
+import asp.com.asp.activity.AddGdActivity;
 import asp.com.asp.activity.EditQiangActivity;
 import asp.com.asp.activity.ShowImageActivity;
 import asp.com.asp.view.SnackbarUtil;
 
-public class ZssMyAdapter extends CommonAdapter<String>{
+public class ZssDgAdapter extends CommonAdapter<String>{
 	private static final int REQUEST_CODE_ALBUM = 1;
-	private EditQiangActivity activity;
+	private AddGdActivity activity;
 	private Context mContext;
-	public ZssMyAdapter(Context context, List<String> mDatas, int itemLayoutId, EditQiangActivity activity) {
+	public ZssDgAdapter(Context context, List<String> mDatas, int itemLayoutId, AddGdActivity activity) {
 		super(context, mDatas, itemLayoutId);
 		this.activity = activity;
 	}

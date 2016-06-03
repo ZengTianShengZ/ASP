@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView
+    android:id="@+id/news_list_card_view"
+    style="@style/cardStyle"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="4dp">
+
+    <RelativeLayout
+        style="@style/cardRelativeLayoutStyle"
+        tools:ignore="UselessParent">
+
+         <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/iten_zhihu_news_thumbnail_image"
+             style="@style/cardImageViewStyle"
+            fresco:placeholderImage="@mipmap/ic_logo"
+            fresco:placeholderImageScaleType="fitCenter"
+            >
+
+         </com.facebook.drawee.view.SimpleDraweeView>
+
+        <TextView
+            android:id="@+id/iten_zhihu_news_question_title"
+            style="@style/cardQuestionTitleStyle"
+            android:layout_toRightOf="@+id/iten_zhihu_news_thumbnail_image"
+            android:layout_marginLeft="5dp"
+            />
+
+        <TextView
+            android:id="@+id/iten_zhihu_news_daily_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/iten_zhihu_news_question_title"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="20dp"/>
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

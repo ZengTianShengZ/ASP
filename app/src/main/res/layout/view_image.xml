@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.facebook.drawee.view.SimpleDraweeView
+xmlns:fresco="http://schemas.android.com/apk/res-auto"
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/item_grid_view"
+android:layout_width="match_parent"
+android:layout_height="200dp"
+android:layout_centerInParent="true"
+fresco:placeholderImage="@mipmap/ic_logo"
+fresco:placeholderImageScaleType="fitCenter"
+    >
+
+</com.facebook.drawee.view.SimpleDraweeView>

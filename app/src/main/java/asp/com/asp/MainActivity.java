@@ -28,6 +28,7 @@ import asp.com.asp.activity.AboutMeActivity_;
 import asp.com.asp.activity.AddGdActivity_;
 import asp.com.asp.activity.EditQiangActivity_;
 import asp.com.asp.activity.NotificationActivity_;
+import asp.com.asp.activity.ZhihuNewsActivity;
 import asp.com.asp.adapterPop.ImageLoader;
 import asp.com.asp.domain.User;
 import asp.com.asp.fragment.HomeFragment_;
@@ -200,13 +201,18 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
     @Click(R.id.main_drawer_about_me)
     void about_meBtnClick(){
         drawerLayout.closeDrawers();
-        Intent intent = new Intent(this,AboutMeActivity_.class);
+        /*Intent intent = new Intent(this,AboutMeActivity_.class);
+        startActivity(intent);*/
+        Intent intent = new Intent(this,ZhihuNewsActivity.class);
         startActivity(intent);
-
     }
     @Click(R.id.main_drawer_share)
     void shareBtnClick(){
         drawerLayout.closeDrawers();
+        Intent intent = new Intent(this,ZhihuNewsActivity.class);
+        startActivity(intent);
+
+
     }
     @Click(R.id.include_activity_main_drawer)
     void include_activity_main_drawerClick(){

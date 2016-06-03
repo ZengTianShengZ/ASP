@@ -66,6 +66,9 @@
         <activity android:name=".activity.AboutMeActivity_"
             >
         </activity>
+        <activity android:name=".activity.ZhihuNewsActivity"
+            >
+        </activity>
 
     </application>
 

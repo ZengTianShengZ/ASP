@@ -17,7 +17,10 @@ import cn.bmob.v3.BmobUser;
 /**
  * Created by Administrator on 2016/5/13.
  */
-public class AspApplications extends Application {
+public  class AspApplications extends Application {
+
+
+    private static AspApplications mAspApplications;
 
     private static String BMOB_APP_ID = "cb23185f8c0196d590fe317d74689f34";
     /**
@@ -54,7 +57,9 @@ public class AspApplications extends Application {
         }
 
     }
-
+    public static AspApplications getInstance() {
+        return mAspApplications;
+    }
     public void initFresco(){
 //        GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(getResources());
 //        GenericDraweeHierarchy hierarchy = builder

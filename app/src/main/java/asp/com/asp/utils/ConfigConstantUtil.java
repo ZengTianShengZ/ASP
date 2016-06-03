@@ -1,5 +1,9 @@
 package asp.com.asp.utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * Created by Administrator on 2016/5/17.
  */
@@ -23,4 +27,9 @@ public class ConfigConstantUtil {
     public static final String UserLogStr = "UserLogStr";
     public static final String UserPassword = "UserPassword";
 
+    public static final class Dates {
+        public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.US);
+        @SuppressWarnings("deprecation")
+        public static final Date birthday = new java.util.Date(113, 4, 19); // May 19th, 2013
+    }
 }

@@ -71,16 +71,17 @@ public class ZhihuPresenterImpl {
                     @Override
                     public ZhihuDaily call(ZhihuDaily zhihuDaily) {
                         String date = zhihuDaily.getDate();
-                        Log.i("subscription",".......subscription1......"+zhihuDaily.getStories().size());
-                        Log.i("subscription",".......subscription2......"+zhihuDaily.getStories().get(0).getTitle());
-                        for (ZhihuDailyItem zhihuDailyItem : zhihuDaily.getStories()) {
-                            Log.i("subscription",".......subscription3......"+zhihuDailyItem.getTitle());
-                            zhihuDailyItem.setDate(date);
+                         for (ZhihuDailyItem zhihuDailyItem : zhihuDaily.getStories()) {
+                             zhihuDailyItem.setDate(date);
                         }
                         return zhihuDaily;
                     }
                 });
-        /*Subscription subscription =  ZhihuRequest.getZhihuApi().getTheDaily(date)
+
+    }
+
+    public void getTheDailyNews(String date) {
+        Subscription subscription =  ZhihuRequest.getZhihuApi().getTheDaily(date)
                 .map(new Func1<ZhihuDaily, ZhihuDaily>() {
                     @Override
                     public ZhihuDaily call(ZhihuDaily zhihuDaily) {
@@ -100,9 +101,9 @@ public class ZhihuPresenterImpl {
                     @Override
                     public void onCompleted() {
 
-                       if(mZhihuDailyImpl != null) {
-                           mZhihuDailyImpl.RxZhihuNewsonCompleted();
-                       }
+                        if(mZhihuDailyImpl != null) {
+                            mZhihuDailyImpl.RxZhihuNewsonCompleted();
+                        }
                     }
 
                     @Override
@@ -121,10 +122,9 @@ public class ZhihuPresenterImpl {
                             mZhihuDailyImpl.RxZhihuonNewsNext(zhihuDaily.getZhihuDailyItems());
                         }
                     }
-                });*/
+                });
 
     }
-
     public interface ZhihuDailyImpl{
         public void RxZhihuonNewsNext(ArrayList<ZhihuDailyItem> getStories);
         public void RxZhihuonNewsError();

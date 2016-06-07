@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <include layout="@layout/common_top_bar"/>
@@ -12,6 +14,7 @@
         android:layout_height="match_parent">
 
         <ScrollView
+            android:id="@+id/fragment_news_scrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <LinearLayout
@@ -20,10 +23,15 @@
             android:orientation="vertical">
 
 
-        <cn.bingoogolapple.bgabanner.BGABanner
-        android:id="@+id/fragment_news_BGABanner"
-        style="@style/BannerDefaultStyle"
-        />
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/fragment_news_top_view"
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:scaleType="center"
+                android:layout_centerInParent="true"
+                fresco:placeholderImage="@mipmap/ic_logo"
+                fresco:placeholderImageScaleType="fitCenter"
+                ></com.facebook.drawee.view.SimpleDraweeView>
 
         <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_news_RecyclerView"

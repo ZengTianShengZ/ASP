@@ -12,7 +12,7 @@ import android.widget.TextView;
 public class RecycleViewHolder extends RecyclerView.ViewHolder{
 
 	private SparseArray<View> mViews;
-    private View mConvertView;
+    public View mConvertView;
     private Context mContext;
     
 	public RecycleViewHolder(Context context, View itemView, ViewGroup parent) {

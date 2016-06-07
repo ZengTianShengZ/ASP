@@ -219,7 +219,7 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
                     //view.getHeight() 得到的是 view 的 px 值（更屏幕密度有关），不是 dp值
                     if(scrollView.getScrollY()<=0){
                         mSwipeRefreshLayout.setEnabled(true);
-                        Toast.makeText(mContext, "到达顶部了", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(mContext, "到达顶部了", Toast.LENGTH_SHORT).show();
                     }
                 }
                 return false;

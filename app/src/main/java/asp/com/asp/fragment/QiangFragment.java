@@ -44,13 +44,13 @@ public class QiangFragment  extends Fragment  {
     private PullToRefreshListView mPullRefreshListView;
 
     private ListView qiang_listview;
-    private View mRootview;
+
 
     private List<QiangItem> mListItems =  new ArrayList<QiangItem>();
     private QiangListAdapter mQiangListAdapter;
 
     private OperationBmobDataUtil mOperationBmobDataUtil;
-
+    private View mRootview;
     private Context mContext;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

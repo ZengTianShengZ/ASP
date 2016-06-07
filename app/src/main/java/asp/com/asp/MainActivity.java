@@ -33,7 +33,7 @@ import asp.com.asp.adapterPop.ImageLoader;
 import asp.com.asp.domain.User;
 import asp.com.asp.fragment.HomeFragment_;
 import asp.com.asp.fragment.MeFragment_;
-import asp.com.asp.fragment.NewsFragment_;
+import asp.com.asp.fragment.ZhiHuNewsFragment;
 import asp.com.asp.utils.ConfigConstantUtil;
 import asp.com.asp.utils.SharedPreferencesUtil;
 import asp.com.asp.weibo.WBAuthActivity_;
@@ -49,8 +49,10 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
     private FragmentTransaction mTransaction;
 
     private HomeFragment_ mHomeFragment;
-    private NewsFragment_ mNewsFragment;
+    //private NewsFragment_ mNewsFragment;
     private MeFragment_ mMeFragment;
+
+    private ZhiHuNewsFragment mZhiHuNewsFragment;
 
    /* private View headerView;
     private CircleImageView userImg;
@@ -274,12 +276,12 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
 
                 break;
             case 1:
-                if(mNewsFragment==null){
-                    mNewsFragment =new NewsFragment_();
+                if(mZhiHuNewsFragment==null){
+                    mZhiHuNewsFragment =new  ZhiHuNewsFragment();
 
-                    mTransaction.add(R.id.main_base_fragment, mNewsFragment);
+                    mTransaction.add(R.id.main_base_fragment, mZhiHuNewsFragment);
                 }else{
-                    mTransaction.show(mNewsFragment);
+                    mTransaction.show(mZhiHuNewsFragment);
                 }
 
                 break;
@@ -302,8 +304,8 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
         if(mHomeFragment!=null){
             mTransaction.hide(mHomeFragment);
         }
-        if(mNewsFragment!=null){
-            mTransaction.hide(mNewsFragment);
+        if(mZhiHuNewsFragment!=null){
+            mTransaction.hide(mZhiHuNewsFragment);
         }
         if(mMeFragment!=null){
             mTransaction.hide(mMeFragment);

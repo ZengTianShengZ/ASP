@@ -157,15 +157,18 @@ public class MeFragment extends Fragment {
                 public void run() {
 
                    Bitmap bitmap = ImageLoader.getInstance(3, ImageLoader.Type.LIFO).decodeSampledBitmapFromResource(userLogoPath,260,260);
-                   final Bitmap blurBitmap =   BlurUtil.fastblur(mContext, bitmap, 70);
-                    getActivity(). runOnUiThread(new Runnable() {
+                   if(bitmap!=null){
+                       final Bitmap blurBitmap =   BlurUtil.fastblur(mContext, bitmap, 70);
+                       getActivity(). runOnUiThread(new Runnable() {
 
-                        @Override
-                        public void run() {
-                            head_layout.setBackgroundDrawable(new BitmapDrawable(blurBitmap));
-                            mCollapsingToolbarLayout.setContentScrim(new BitmapDrawable(blurBitmap));
-                        }
-                    });
+                           @Override
+                           public void run() {
+                               head_layout.setBackgroundDrawable(new BitmapDrawable(blurBitmap));
+                               mCollapsingToolbarLayout.setContentScrim(new BitmapDrawable(blurBitmap));
+                           }
+                       });
+                   }
+
                 };
 
             }.start();

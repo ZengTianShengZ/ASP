@@ -20,19 +20,34 @@ public class ZhihuStoryPresenterImpl {
                     @Override
                     public void onCompleted() {
 
+                        if(mZhihuStoryImpl!=null){
+                            mZhihuStoryImpl.RxZhihuStoryCompleted();
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        if(mZhihuStoryImpl!=null){
+                            mZhihuStoryImpl.RxZhihuStoryError();
+                        }
                     }
 
                     @Override
                     public void onNext(ZhihuStory zhihuStory) {
-
+                        if(mZhihuStoryImpl!=null){
+                            mZhihuStoryImpl.RxZhihuStoryNext(zhihuStory);
+                        }
                     }
                 });
 
     }
-
+    public interface ZhihuStoryImpl{
+        public void RxZhihuStoryNext(ZhihuStory zhihuStory);
+        public void RxZhihuStoryError();
+        public void RxZhihuStoryCompleted();
+    }
+    private ZhihuStoryImpl mZhihuStoryImpl;
+    public  void setZhihuStoryImpl(ZhihuStoryImpl mZhihuStoryImpl){
+        this.mZhihuStoryImpl = mZhihuStoryImpl;
+    }
 }

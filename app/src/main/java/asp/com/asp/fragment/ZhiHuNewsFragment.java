@@ -36,7 +36,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by Administrator on 2016/6/7.
  */
-public class ZhiHuNewsFragment extends Fragment {
+public class ZhiHuNewsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private ImageView back_btn;
     private TextView center_titleTv;
@@ -45,6 +45,7 @@ public class ZhiHuNewsFragment extends Fragment {
    // private BGABanner mFlipBanner;
    // private ViewPager img_Viewpager;
     private SimpleDraweeView topView;
+    private TextView top_title;
     private ScrollView scrollView;
     private View progress_loading;
 
@@ -80,7 +81,7 @@ public class ZhiHuNewsFragment extends Fragment {
         back_btn = (ImageView) mRootview.findViewById(R.id.common_top_bar_back_btn);
         center_titleTv = (TextView) mRootview.findViewById(R.id.common_top_bar_center_titleTv);
         right_titleTv = (TextView) mRootview.findViewById(R.id.common_top_bar_right_titleTv);
-
+        top_title = (TextView) mRootview.findViewById(R.id.fragment_news_top_title);
         mSwipeRefreshLayout = (SwipeRefreshLayout) mRootview.findViewById(R.id.fragment_news_refresh_layout);
         scrollView = (ScrollView) mRootview.findViewById(R.id.fragment_news_scrollView);
         topView = (SimpleDraweeView) mRootview.findViewById(R.id.fragment_news_top_view);
@@ -137,7 +138,9 @@ public class ZhiHuNewsFragment extends Fragment {
 
                         if(data_flag == 0) {
                             topView.setImageURI(Uri.parse(zhihuDaily.getStories().get(0).getImages()[0]));
+                            top_title.setText(zhihuDaily.getStories().get(0).getTitle()+"");
                             zhihuDaily.getStories().remove(0);
+
                         }
 
                         mZhihuDailyItemList.addAll(zhihuDaily.getStories());
@@ -149,7 +152,7 @@ public class ZhiHuNewsFragment extends Fragment {
 
     private void initEvent() {
 
-
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         scrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -177,7 +180,7 @@ public class ZhiHuNewsFragment extends Fragment {
                     progress_loading = loadingview;
                 }
                 progress_loading.setVisibility(View.VISIBLE);
-                mSwipeRefreshLayout.setEnabled(false);
+                //mSwipeRefreshLayout.setEnabled(false);
                 mSwipeRefreshLayout.setRefreshing(false);
 
                 if(data_flag == 0){
@@ -187,14 +190,11 @@ public class ZhiHuNewsFragment extends Fragment {
             }
         });
 
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Log.i("onRefresh","...........onRefresh............");
-                data_flag = 1;
-                getZhiHuNewsData();
-            }
-        });
     }
 
+    @Override
+    public void onRefresh() {
+        data_flag = 1;
+        getZhiHuNewsData();
+    }
 }

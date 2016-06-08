@@ -1,8 +1,10 @@
 package asp.com.asp.domain;
 
+import java.io.Serializable;
+
 import cn.bmob.v3.BmobObject;
 
-public class Goods extends BmobObject{
+public class Goods extends BmobObject implements Serializable {
 	/**
 	 * @author Mzone
 	 */

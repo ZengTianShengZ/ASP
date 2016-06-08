@@ -3,6 +3,7 @@ package asp.com.asp.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import asp.com.asp.activity.PersonaQiangActivity;
 import asp.com.asp.domain.QiangItem;
 import asp.com.asp.domain.QiangItemDg;
 import asp.com.asp.utils.ConfigConstantUtil;
+import asp.com.asp.utils.OperationBmobDataUtil;
 import asp.com.asp.view.innerGridView;
 
 /**
@@ -32,10 +34,14 @@ public class QiangListAdapter extends BaseListAdapter<QiangItem>  {
     private final int TYPE_RECOMMEND_SELLSE = 1;
     private final int TYPE_SEND_TXT = 1;
 
+    private int comment_Count;
+    private OperationBmobDataUtil mOperationBmobDataUtil;
     private QiangItemGridViewAdapter mQiangItemGridViewAdapter;
 
     public QiangListAdapter(Context context, List<QiangItem> list) {
         super(context, list);
+        mOperationBmobDataUtil = mOperationBmobDataUtil.getInstance();
+        mOperationBmobDataUtil.initData(context);
     }
 
     @Override
@@ -65,6 +71,9 @@ public class QiangListAdapter extends BaseListAdapter<QiangItem>  {
         time_Tv.setText(item.getCreatedAt()+"");
 
         context_Tv.setText(item.getContent()+"");
+
+        comment_Count =  mOperationBmobDataUtil.queryCommentCount(mContext,item.getObjectId(),comment_Tv);
+
 
         if (null == item.getContentfigureurl()) {
             qiang_gridView.setVisibility(View.GONE);
@@ -97,10 +106,11 @@ public class QiangListAdapter extends BaseListAdapter<QiangItem>  {
 
             @Override
             public void onClick(View v) {
-                // TODO 自动生成的方法存根
+
                 Intent intent = new Intent(mContext,GoodsDetailActivityCs_.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("itemQiang", item);
+                intent.putExtra("comment_Count",comment_Count);
                 mContext.startActivity(intent);
 
             }

@@ -26,6 +26,8 @@ public class ConfigConstantUtil {
     public static final String UserName = "UserName";
     public static final String UserLogStr = "UserLogStr";
     public static final String UserPassword = "UserPassword";
+    //"^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$"
+    public static final String isTelePhoneNumber = "^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
 
     public static final class Dates {
         public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.US);

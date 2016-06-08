@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:id="@+id/widget_toolbar"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorOverall"
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_centerInParent="true"
+                android:textColor="#FFFFFF"
+                android:textSize="10pt"
+                android:text="通知"/>
+        </RelativeLayout>
+    </FrameLayout>
+
+</android.support.v7.widget.Toolbar>

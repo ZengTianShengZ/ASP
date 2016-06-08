@@ -99,6 +99,7 @@ public class QiangFragment  extends Fragment  {
 
 
         }
+
     }
 
     private void initEvent() {

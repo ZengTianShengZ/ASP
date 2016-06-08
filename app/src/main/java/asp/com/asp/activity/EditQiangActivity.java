@@ -42,6 +42,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import asp.com.asp.R;
 import asp.com.asp.adapterPop.ZssMyAdapter;
@@ -167,8 +169,7 @@ public class EditQiangActivity extends Activity {
      */
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-
+        //super.onBackPressed();
         backDialogCreat();
     }
 
@@ -219,6 +220,13 @@ public class EditQiangActivity extends Activity {
             return;
         }
 
+       if( !matcherTelePhoneNumber(sailer_phone)){
+           SnackbarUtil.LongSnackbar(clickedView,"请填写正确的手机号码",
+                   getResources().getColor(R.color.colorWhite),
+                   getResources().getColor(R.color.colorPrimaryDark)).show();
+           return;
+       }
+
         if(bmobUser == null){
             SnackbarUtil.GreenSnackbar(mContext,clickedView,"       请先登录！！！");
         }else {
@@ -249,6 +257,13 @@ public class EditQiangActivity extends Activity {
             }
         }
     }
+
+    private boolean  matcherTelePhoneNumber(String sailer_phone) {
+        Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
+        Matcher m = p.matcher(sailer_phone);
+        return m.matches();
+    }
+
     @Click(R.id.edit_qiang_addImageview)
     void addImageviewBtnClick(){
         Intent intent  = new Intent(getApplicationContext(),ShowImageActivity.class);
@@ -319,6 +334,7 @@ public class EditQiangActivity extends Activity {
                     case 01:
                         sendDgGoods = true;
                         center_titleTv.setText("代购商品");
+                        Log.i("sendDgGoods","...........sendDgGoods..........."+bmobUser.isAddV());
                         break;
 
                 }
@@ -363,6 +379,7 @@ public class EditQiangActivity extends Activity {
             @Override
             public void dialogRightButtonClickListener(String editStr) {
                 finish();
+
             }
         } );
     }

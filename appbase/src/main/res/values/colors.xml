@@ -5,5 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorOverall">#CD3E3A</color>
     <color name="theme_color">#ff8800</color>
+    <color name="white_color">#ffffff</color>
 
 </resources>

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -32,7 +34,7 @@ import asp.com.asp.utils.OperationBmobDataUtil;
  * Created by Administrator on 2016/6/1.
  */
 @EActivity(R.layout.activity_notification)
-public class NotificationActivity extends Activity {
+public class NotificationActivity extends AppCompatActivity {
 
     @ViewById(R.id.common_top_bar_back_btn)
     ImageView back_btn;
@@ -67,6 +69,8 @@ public class NotificationActivity extends Activity {
     }
 
     private void initView() {
+
+
         center_titleTv.setText("通知");
         right_titleTv.setVisibility(View.GONE);
         notifiListView = mPullRefreshListView.getRefreshableView();

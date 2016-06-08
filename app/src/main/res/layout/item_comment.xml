@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    android:id="@+id/item_comment_card_view"
-    style="@style/cardStyle"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="4dp">
-
-
 <LinearLayout
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:background="#FFFFFF"
     android:layout_width="match_parent"
@@ -22,22 +14,30 @@
         android:padding="10dp"
          >
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:id="@+id/ll_flag"
+            >
+
+
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/item_comment_logo"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerVertical="true"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_marginLeft="10dp"
             fresco:placeholderImage="@mipmap/ic_logo"
             fresco:placeholderImageScaleType="fitCenter"
+            fresco:roundAsCircle="true"
             ></com.facebook.drawee.view.SimpleDraweeView>
-
+        </LinearLayout>
         <TextView
             android:id="@+id/item_comment_nameTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_toRightOf="@+id/item_comment_logo"
+            android:layout_toRightOf="@+id/ll_flag"
             android:layout_marginLeft="20dp"
             android:text="曾田生"
             android:textSize="9pt"
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/item_comment_nameTv"
-            android:layout_toRightOf="@+id/item_comment_logo"
+            android:layout_toRightOf="@+id/ll_flag"
             android:layout_marginLeft="20dp"
             android:text="今天 18：31 上海"
             android:textSize="7pt"
@@ -74,13 +74,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="85dp"
         android:layout_marginBottom="5dp"
-        android:text="我的来加,急速冻魂 都的我送大奖哦第四季度就开始觉得世界第三觉得四脚"
-
+        android:text="我的开始觉得世界第三觉得四脚"
+        android:textColor="#464545"
         android:textSize="9pt"
         />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.4pt"
+        android:background="#bebdbd"
+        android:layout_marginLeft="90dp"
+        android:layout_marginBottom="4dp"
+        />
 
 </LinearLayout>
-</android.support.v7.widget.CardView>

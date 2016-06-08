@@ -13,8 +13,8 @@
         android:scaleType="centerCrop" />
     <ImageView
         android:id="@+id/id_show_image_delect_btn"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_alignParentRight="true"
         android:src="@mipmap/delect_img_btn"/>
 </RelativeLayout>

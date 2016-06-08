@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    android:id="@+id/item_qiang_card_view"
-    style="@style/cardStyle"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="4dp">
 <LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#FFFFFF"
-    android:padding="10dp">
+    android:padding="6dp">
 
      <include layout="@layout/include_item_infor"/>
 
@@ -45,6 +39,4 @@
 
     </asp.com.asp.view.innerGridView>
 
-
 </LinearLayout>
-</android.support.v7.widget.CardView>

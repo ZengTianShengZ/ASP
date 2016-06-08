@@ -34,6 +34,9 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +55,7 @@ import asp.com.asp.utils.DialogUtils;
 import asp.com.asp.utils.OperationBmobDataUtil;
 import asp.com.asp.view.SnackbarUtil;
 import cn.bmob.v3.BmobUser;
+import rx.Observable;
 
 /**
  * Created by Administrator on 2016/5/26.
@@ -113,6 +117,7 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
     private List<Comment> commentDatalist = new ArrayList<Comment>();
     private OperationBmobDataUtil mOperationBmobDataUtil;
     private String sailerPhone;
+    private int comment_Count;
 
     private DialogUtils dlg_pingLun_View;
 
@@ -126,6 +131,8 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
+        EventBus.getDefault().register(this);
+
         mContext = getApplicationContext();
         mOperationBmobDataUtil = mOperationBmobDataUtil.getInstance();
         mOperationBmobDataUtil.initData(mContext);
@@ -133,6 +140,8 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
 
     @AfterViews
     void AfterActivityViews() {
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setEnabled(false);
         mSwipeRefreshLayout.setEnabled(false);
 
         initView();
@@ -149,25 +158,24 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
     }
     private void initData() {
 
+        Intent intent = getIntent();
         bmobUser = BmobUser.getCurrentUser(this, User.class);
-        item = (QiangItem) getIntent().getSerializableExtra("itemQiang");
+        item = (QiangItem)intent.getSerializableExtra("itemQiang");
+        comment_Count = intent.getIntExtra("comment_Count",0);
 
         String Imageurl = null;
         if (item.getAuthor().getAvatar() != null) {
             Imageurl = item.getAuthor().getAvatar().getFileUrl(mContext);
             qiang_logo.setImageURI(Uri.parse(Imageurl));
         }
+
         nameTv.setText(item.getAuthor().getNickname() + "");
-
         time_Tv.setText(item.getCreatedAt() + "");
-
         descTv.setText(item.getContent() + "");
+        comment_Tv.setText(" "+comment_Count);
 
-        Goods goods = item.getGoods();
-        goodsTv.setText(goods.getName()+"");
-        sortTv.setText(goods.getCategory()+"");
-        priceTv.setText("价格："+goods.getPrice()+"");
-        sailerPhone = goods.getCellphone();
+        mOperationBmobDataUtil.queryGoods(mContext,item.getGoods().getObjectId());
+
 
         if (null == item.getContentfigureurl()) {
             return;
@@ -235,7 +243,7 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
                     //scrollView.getScrollY() 可以得到 scrollView 滑动了 多少距离（从顶部开始计算）
                     //view.getHeight() 得到的是 view 的 px 值（更屏幕密度有关），不是 dp值
                     if(scrollView.getScrollY()<=0){
-                        mSwipeRefreshLayout.setEnabled(true);
+                       // mSwipeRefreshLayout.setEnabled(true);
                         //Toast.makeText(mContext, "到达顶部了", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -290,6 +298,17 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
             }
         });
     }
+
+    @Subscribe
+    public void onEventMainThread(Goods goods) {
+
+        goodsTv.setText(goods.getName()+"");
+        sortTv.setText(goods.getCategory()+"");
+        priceTv.setText("价格："+goods.getPrice()+"");
+        sailerPhone = goods.getCellphone();
+    }
+
+
     /**
      * 按推出按钮
      */
@@ -392,5 +411,6 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
     protected void onDestroy() {
         super.onDestroy();
         mOperationBmobDataUtil.cleachatPageNum();
+        EventBus.getDefault().unregister(this);
     }
 }

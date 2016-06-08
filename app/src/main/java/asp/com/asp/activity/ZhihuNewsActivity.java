@@ -55,6 +55,9 @@ public class ZhihuNewsActivity  extends Activity
 
 
     private void initView() {
+
+
+
         mNewRecyclerView = (RecyclerView) findViewById(R.id.acitivity_news_RecyclerView);
         mNewRecyclerView.setHasFixedSize(false);
 

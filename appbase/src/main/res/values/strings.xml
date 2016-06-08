@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">appbase</string>
+    <string name="toolbar_sure">确定</string>
 </resources>

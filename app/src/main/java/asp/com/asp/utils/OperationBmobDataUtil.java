@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.bmob.BmobProFile;
 import com.bmob.btp.callback.UploadBatchListener;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +30,7 @@ import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.GetListener;
 import cn.bmob.v3.listener.SaveListener;
 
 /**
@@ -749,6 +752,68 @@ public class OperationBmobDataUtil {
                 countTv.setText(null+"");
             }
         });
+    }
+
+    private  int commentCount ;
+
+    /**
+     * 查找 墙对应的评论数是多少
+     * @param context
+     * @param qiangId
+     * @param comment_Tv
+     * @return
+     */
+    public int  queryCommentCount(Context context, String qiangId, final TextView comment_Tv){
+
+        BmobQuery<Comment> query = new BmobQuery<Comment>();
+        query.addWhereEqualTo("qiang", qiangId);
+        query.count(context, Comment.class, new CountListener() {
+            @Override
+            public void onSuccess(int count) {
+                commentCount =  count;
+                comment_Tv.setText(" " +count);
+            }
+            @Override
+            public void onFailure(int code, String msg) {
+                commentCount = 0;
+                comment_Tv.setText(" "+0);
+            }
+        });
+        return commentCount;
+    }
+    private  Goods goods;
+
+    /**
+     * 查询 goods 商品信息
+     * @param context
+     * @param goodId
+     * @return
+     */
+    public Goods queryGoods(Context context, String goodId ){
+        Log.i("goods","........goodId........."+goodId);
+        BmobQuery<Goods> query = new BmobQuery<Goods>();
+        query.getObject(context,goodId, new GetListener<Goods>() {
+
+            @Override
+            public void onSuccess(Goods object) {
+
+                Log.i("goods","........getName........."+object.getName());
+                Log.i("goods","........getCategory........."+object.getCategory());
+                Log.i("goods","........getPrice........."+object.getPrice());
+
+                goods = object;
+                EventBus.getDefault().post(object);//发布事件
+
+
+            }
+
+            @Override
+            public void onFailure(int code, String arg0) {
+                goods = null;
+            }
+
+        });
+        return goods;
     }
     public void clearnPageNum(){
         personQiangPageNum = 0;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#f5f4f4"
+    android:background="#FFFFFF"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto">
     <LinearLayout
@@ -83,7 +83,8 @@
         android:layout_height="wrap_content"
         android:drawableLeft="@mipmap/ic_pinglun_img"
         android:layout_below="@+id/item_qiang_delect_Tv"
-        android:text="123 "
+        android:text=" 123 "
+
         android:textSize="9pt"
         />
     </LinearLayout>

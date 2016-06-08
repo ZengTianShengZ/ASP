@@ -4,7 +4,8 @@
  <RelativeLayout
      xmlns:android="http://schemas.android.com/apk/res/android"
      android:layout_width="match_parent"
-     android:layout_height="match_parent">
+     android:layout_height="match_parent"
+     android:background="#eaeaea">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/goods_detail_cs_SwipeRefreshLayout"
@@ -101,10 +102,14 @@
 
         />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.4pt"
+        android:layout_above="@+id/goods_detail_llflag"
+        android:background="@color/colorOverall"/>
     <LinearLayout
+        android:id="@+id/goods_detail_llflag"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="5dp"
-
         android:background="#FFFFFF"
         android:orientation="horizontal"
         android:layout_width="match_parent"

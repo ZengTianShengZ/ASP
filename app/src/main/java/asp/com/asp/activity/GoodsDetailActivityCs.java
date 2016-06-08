@@ -3,6 +3,7 @@ package asp.com.asp.activity;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -36,6 +38,7 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 import java.util.List;
 
+import asp.com.appbase.adapter.BaseRecycleViewAdapter;
 import asp.com.asp.R;
 import asp.com.asp.adapter.CommentAdapter;
 import asp.com.asp.adapter.CommentRecycleviewAdapter;
@@ -55,6 +58,13 @@ import cn.bmob.v3.BmobUser;
  */
 @EActivity(R.layout.activity_goods_datail_cs)
 public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayout.OnRefreshListener{
+
+    @ViewById(R.id.common_top_bar_back_btn)
+    ImageView back_btn;
+    @ViewById(R.id.common_top_bar_right_titleTv)
+    TextView right_titleTv;
+    @ViewById(R.id.common_top_bar_center_titleTv)
+    TextView center_titleTv;
 
     @ViewById(R.id.goods_detail_recycleview)
     RecyclerView comment_recycleview;
@@ -96,10 +106,13 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
     @ViewById(R.id.goods_detail_imgNumTv)
     TextView imgNumTv;
 
+    private View progress_loading;
+
     private CommentRecycleviewAdapter mCommentRecycleviewAdapter;
     private QiangItem item;
     private List<Comment> commentDatalist = new ArrayList<Comment>();
     private OperationBmobDataUtil mOperationBmobDataUtil;
+    private String sailerPhone;
 
     private DialogUtils dlg_pingLun_View;
 
@@ -135,6 +148,7 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
 
     }
     private void initData() {
+
         bmobUser = BmobUser.getCurrentUser(this, User.class);
         item = (QiangItem) getIntent().getSerializableExtra("itemQiang");
 
@@ -153,6 +167,7 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
         goodsTv.setText(goods.getName()+"");
         sortTv.setText(goods.getCategory()+"");
         priceTv.setText("价格："+goods.getPrice()+"");
+        sailerPhone = goods.getCellphone();
 
         if (null == item.getContentfigureurl()) {
             return;
@@ -185,6 +200,8 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
 
         }
 
+        center_titleTv.setText("商品详情");
+        right_titleTv.setVisibility(View.GONE);
 
         mCommentRecycleviewAdapter = new CommentRecycleviewAdapter(mContext,commentDatalist);
         comment_recycleview.setAdapter(mCommentRecycleviewAdapter);
@@ -260,8 +277,27 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
                 }
             }
         });
-    }
 
+        // 点击评论加载更多
+        mCommentRecycleviewAdapter.setOnLoadingListener(new BaseRecycleViewAdapter.OnLoadingListener() {
+            @Override
+            public void loading(View loadingview) {
+                if(progress_loading ==null){
+                    progress_loading = loadingview;
+                }
+                progress_loading.setVisibility(View.VISIBLE);
+                mOperationBmobDataUtil.loadCommentData(chatHandle, commentDatalist, item);
+            }
+        });
+    }
+    /**
+     * 按推出按钮
+     */
+    @Click(R.id.common_top_bar_back_btn)
+    void backBtnClick(){
+
+        finish();
+    }
     @Click(R.id.goods_detail_pinlunBtn)
     void pinlunBtnClick(final View clickedView){
 
@@ -297,8 +333,16 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
     }
     @Click(R.id.goods_detail_callPhoneBtn)
     void callPhoneBtnClick(final View clickedView){
-        mSwipeRefreshLayout.setEnabled(false);
-        mSwipeRefreshLayout.setRefreshing(false);
+       // mSwipeRefreshLayout.setEnabled(false);
+      //  mSwipeRefreshLayout.setRefreshing(false);
+
+        if(bmobUser != null) {
+            Uri uri = Uri.parse("tel:" + sailerPhone);
+            Intent intent = new Intent(Intent.ACTION_DIAL, uri);
+            startActivity(intent);
+        }else{
+            SnackbarUtil.GreenSnackbar(mContext,clickedView,"请先登录");
+        }
 
     }
     @Override
@@ -337,7 +381,16 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
 
             }
 
+            if(progress_loading!=null){
+                progress_loading.setVisibility(View.GONE);
+            }
+
         }
     };
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mOperationBmobDataUtil.cleachatPageNum();
+    }
 }

@@ -1,53 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.v7.widget.CardView
+    android:id="@+id/item_comment_card_view"
+    style="@style/cardStyle"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="4dp">
+
+
+<LinearLayout
     android:orientation="vertical"
     android:background="#FFFFFF"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RelativeLayout android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
         android:padding="10dp"
          >
-        <LinearLayout
-            android:id="@+id/ll_flag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/item_comment_logo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerVertical="true"
-
-            android:layout_marginLeft="10dp">
-
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/item_comment_logo"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                fresco:actualImageScaleType="focusCrop"
-                fresco:placeholderImage="@mipmap/ic_logo"
-                fresco:placeholderImageScaleType="fitCenter"
-                fresco:progressBarImage="@mipmap/ic_logo"
-                fresco:progressBarImageScaleType="centerInside"
-                fresco:progressBarAutoRotateInterval="5000"
-                fresco:failureImage="@mipmap/ic_logo"
-                fresco:failureImageScaleType="centerInside"
-                fresco:retryImage="@mipmap/ic_logo"
-                fresco:retryImageScaleType="centerCrop"
-                fresco:fadeDuration="5000"
-                fresco:backgroundImage="@android:color/holo_orange_light"
-                fresco:roundAsCircle="true"
-
-                />
-        </LinearLayout>
-
+            android:layout_marginLeft="10dp"
+            fresco:placeholderImage="@mipmap/ic_logo"
+            fresco:placeholderImageScaleType="fitCenter"
+            ></com.facebook.drawee.view.SimpleDraweeView>
 
         <TextView
             android:id="@+id/item_comment_nameTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_toRightOf="@+id/ll_flag"
+            android:layout_toRightOf="@+id/item_comment_logo"
             android:layout_marginLeft="20dp"
             android:text="曾田生"
             android:textSize="9pt"
@@ -58,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/item_comment_nameTv"
-            android:layout_toRightOf="@+id/ll_flag"
+            android:layout_toRightOf="@+id/item_comment_logo"
             android:layout_marginLeft="20dp"
             android:text="今天 18：31 上海"
             android:textSize="7pt"
@@ -70,6 +60,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:text="回复"
+            android:padding="5dp"
+            android:background="@drawable/textview_bg"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:textSize="9pt"
@@ -78,7 +70,7 @@
 
     <TextView
         android:id="@+id/item_comment_content_Tv"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginRight="20dp"
@@ -91,3 +83,4 @@
 
 
 </LinearLayout>
+</android.support.v7.widget.CardView>

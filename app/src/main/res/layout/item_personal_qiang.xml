@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+
+<android.support.v7.widget.CardView
+    android:id="@+id/item_personal_qiang_card_view"
+    style="@style/cardStyle"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/tools"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="4dp"
+     >
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFFFFF"
@@ -83,3 +92,4 @@
             ></com.facebook.drawee.view.SimpleDraweeView>
         </LinearLayout>-->
 </RelativeLayout>
+</android.support.v7.widget.CardView>

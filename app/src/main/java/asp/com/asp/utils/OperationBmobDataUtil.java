@@ -762,6 +762,8 @@ public class OperationBmobDataUtil {
     public void clearPersonMeQiangPageNum(){
         personMeQiangPageNum = 0;
     }
-
+    public void cleachatPageNum(){
+        chatPageNum = 0;
+    }
 
 }

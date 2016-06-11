@@ -16,13 +16,17 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import org.androidannotations.annotations.EFragment;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import asp.com.asp.MainActivity;
 import asp.com.asp.R;
 import asp.com.asp.adapter.QiangDgListAdapter;
 import asp.com.asp.adapter.QiangListAdapter;
+import asp.com.asp.domain.EventBusBean;
 import asp.com.asp.domain.QiangItem;
 import asp.com.asp.domain.QiangItemDg;
 import asp.com.asp.utils.ConfigConstantUtil;
@@ -49,6 +53,7 @@ public class QiangFragment2  extends Fragment  {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mRootview = inflater.inflate(R.layout.fragment_qiang, container, false);
+        EventBus.getDefault().register(this);
         initView();
 
         return mRootview;
@@ -99,7 +104,7 @@ public class QiangFragment2  extends Fragment  {
                 if(mListItems.size()==0){
                     mPullRefreshListView.onRefreshComplete();
                 }else{
-                    mOperationBmobDataUtil.refreshDgQiangData(refresHandleDg, mListItems.get(0).getCreatedAt(), mListItems);
+                    mOperationBmobDataUtil.refreshDgQiangData(refresHandleDg,  mListItems);
 
                 }
              }
@@ -111,7 +116,14 @@ public class QiangFragment2  extends Fragment  {
         });
 
     }
+    @Subscribe
+    public void onEventMainThread(EventBusBean event) {
+        Log.i( "onEventMainThread","................onEventMainThread....................."+event.getMsg());
+        if((ConfigConstantUtil.Send_DG_Goods).equals(event.getMsg())){
+            mOperationBmobDataUtil.refreshDgQiangData(refresHandleDg,  mListItems);
+        }
 
+    }
     /**
      * 更新刷新 数据
      */
@@ -137,7 +149,7 @@ public class QiangFragment2  extends Fragment  {
                     break;
             }
             mPullRefreshListView.onRefreshComplete();
-
+            ((MainActivity)getActivity()).dismissShapeLoadingDialog();
         }
     };
 }

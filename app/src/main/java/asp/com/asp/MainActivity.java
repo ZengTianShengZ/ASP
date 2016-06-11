@@ -2,6 +2,7 @@ package asp.com.asp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -10,17 +11,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.mingle.widget.ShapeLoadingDialog;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import asp.com.appbase.view.BottomTagView;
 import asp.com.appbase.view.CircleImageView;
@@ -30,6 +35,7 @@ import asp.com.asp.activity.EditQiangActivity_;
 import asp.com.asp.activity.NotificationActivity_;
 import asp.com.asp.activity.ZhihuNewsActivity;
 import asp.com.asp.adapterPop.ImageLoader;
+import asp.com.asp.domain.EventBusBean;
 import asp.com.asp.domain.User;
 import asp.com.asp.fragment.HomeFragment_;
 import asp.com.asp.fragment.MeFragment_;
@@ -85,11 +91,12 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
     TextView nameTv;
     @ViewById(R.id.nav_header_mian_contentTv)
     TextView contentTv;*/
+    private ShapeLoadingDialog shapeLoadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        EventBus.getDefault().register(this);
     }
 
     @AfterViews
@@ -108,7 +115,10 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
         contentTv = (TextView) headerView.findViewById(R.id.nav_header_mian_contentTv);
 */
 
-
+        shapeLoadingDialog=new ShapeLoadingDialog(this);
+        shapeLoadingDialog.setLoadingText("加载中...");
+        shapeLoadingDialog.setBackground(Color.WHITE);
+        shapeLoadingDialog.show();
     }
 
     private void initData() {
@@ -140,12 +150,26 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
         }
         mTransaction.commit();
     }
+
+
+    @Subscribe
+    public void onEventMainThread(EventBusBean event) {
+        Log.i( "onEventMainThread",".....MainActivity...........onEventMainThread....................."+event.getMsg());
+        shapeLoadingDialog.show();
+        if((ConfigConstantUtil.Send_ER_Goods).equals(event.getMsg())){
+            if(mHomeFragment!=null){
+                mHomeFragment.setCurrentViewPagerItem(0);
+            }
+        }
+        if((ConfigConstantUtil.Send_DG_Goods).equals(event.getMsg())){
+            if(mHomeFragment!=null){
+                mHomeFragment.setCurrentViewPagerItem(1);
+            }
+        }
+    }
     @Override
     protected void onStart() {
         super.onStart();
-
-
-
 
     }
     @Override
@@ -320,5 +344,12 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
 
     public DrawerLayout getDrawerLayout(){
         return drawerLayout;
+    }
+
+    public void showShapeLoadingDialog(){
+        shapeLoadingDialog.show();
+    }
+    public void dismissShapeLoadingDialog(){
+        shapeLoadingDialog.dismiss();
     }
 }

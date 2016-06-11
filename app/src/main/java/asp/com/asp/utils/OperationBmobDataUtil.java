@@ -37,7 +37,7 @@ import cn.bmob.v3.listener.SaveListener;
  * Created by Administrator on 2016/5/16.
  */
 public class OperationBmobDataUtil {
-    public static final int NUMBERS_PER_PAGE = 2;
+    public static final int NUMBERS_PER_PAGE = 10;
     private static int pageNum;
     private static int chatPageNum;
     private static int dgPageNum;
@@ -125,21 +125,21 @@ public class OperationBmobDataUtil {
      * @param refresHandle
      * @param mListItems
      */
-    public void refreshQiangData(final Handler refresHandle, final String oldTime, final List<QiangItem> mListItems){
-        Log.i("refreshQiangData","1111");
+    public void refreshQiangData(final Handler refresHandle, final List<QiangItem> mListItems){
+
         BmobQuery<QiangItem> query = new BmobQuery<QiangItem>();
         query.order("-createdAt");
         query.setLimit(NUMBERS_PER_PAGE);
         BmobDate date = new BmobDate(new Date(System.currentTimeMillis()));
         query.addWhereLessThan("createdAt", date);
-        query.setSkip(NUMBERS_PER_PAGE);
+        query.setSkip(0);
         query.include("author");
         query.findObjects(mContext, new FindListener<QiangItem>() {
 
             @Override
             public void onError(int arg0, String arg1) {
                 refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingFault);
-                Log.i("refreshQiangData", "222");
+
             }
 
             @Override
@@ -151,11 +151,11 @@ public class OperationBmobDataUtil {
                     pageNum = 0;
                     mListItems.addAll(list);
                     refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
-                    Log.i("refreshQiangData", "333");
+
 
                 }else{
                     refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotNew);
-                    Log.i("refreshQiangData", "444");
+
                 }
             }
 
@@ -214,7 +214,7 @@ public class OperationBmobDataUtil {
      * @param refresHandle
      * @param mListItems
      */
-    public void refreshDgQiangData(final Handler refresHandle, final String oldTime, final List<QiangItemDg> mListItems){
+    public void refreshDgQiangData(final Handler refresHandle, final List<QiangItemDg> mListItems){
 
 
         BmobQuery<QiangItemDg> query = new BmobQuery<QiangItemDg>();
@@ -222,7 +222,7 @@ public class OperationBmobDataUtil {
         query.setLimit(NUMBERS_PER_PAGE);
         BmobDate date = new BmobDate(new Date(System.currentTimeMillis()));
         query.addWhereLessThan("createdAt", date);
-        query.setSkip(NUMBERS_PER_PAGE);
+        query.setSkip(0);
         query.include("author");
         query.findObjects(mContext, new FindListener<QiangItemDg>() {
 

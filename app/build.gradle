@@ -48,6 +48,8 @@ dependencies {
     compile 'cn.bingoogolapple:bga-banner:2.0.4@aar'
     compile 'com.nineoldandroids:library:2.4.0'
 
+
+    compile project(path: ':shapeloading')
 }
 
 apt {

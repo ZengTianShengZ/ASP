@@ -2,6 +2,7 @@ package asp.com.asp.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.handmark.pulltorefresh.library.extras.SoundPullEventListener;
+import com.mingle.widget.ShapeLoadingDialog;
 
 import org.androidannotations.annotations.EFragment;
 import org.greenrobot.eventbus.EventBus;
@@ -26,6 +28,8 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import asp.com.asp.AspApplications;
+import asp.com.asp.MainActivity;
 import asp.com.asp.R;
 import asp.com.asp.activity.GoodsDetailActivity_;
 import asp.com.asp.adapter.QiangListAdapter;
@@ -81,6 +85,8 @@ public class QiangFragment  extends Fragment  {
     }
 
     private void initView() {
+
+
         mPullRefreshListView = (PullToRefreshListView)mRootview. findViewById(R.id.qiang_pull_refresh_list);
         qiang_listview = mPullRefreshListView.getRefreshableView();
         mPullRefreshListView.setMode(PullToRefreshBase.Mode.BOTH);
@@ -106,8 +112,8 @@ public class QiangFragment  extends Fragment  {
         mPullRefreshListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
-                Log.i("refreshQiangData", "0000");
-                mOperationBmobDataUtil.refreshQiangData(refresHandle, mListItems.get(0).getCreatedAt(), mListItems);
+
+                mOperationBmobDataUtil.refreshQiangData(refresHandle,  mListItems);
             }
 
             @Override
@@ -120,7 +126,10 @@ public class QiangFragment  extends Fragment  {
     @Subscribe
     public void onEventMainThread(EventBusBean event) {
         Log.i( "onEventMainThread","................onEventMainThread....................."+event.getMsg());
-        mOperationBmobDataUtil.refreshQiangData(refresHandle, mListItems.get(0).getCreatedAt(), mListItems);
+        if((ConfigConstantUtil.Send_ER_Goods).equals(event.getMsg())){
+            mOperationBmobDataUtil.refreshQiangData(refresHandle, mListItems);
+        }
+
     }
     /**
      * 更新刷新 数据
@@ -147,8 +156,16 @@ public class QiangFragment  extends Fragment  {
 
             }
             mPullRefreshListView.onRefreshComplete();
-
+            ((MainActivity)getActivity()).dismissShapeLoadingDialog();
         }
     };
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Log.i("onResume","..............onResume...Send_DG_Goods........"+ ((AspApplications)mContext.getApplicationContext()).Send_DG_Goods);
+        Log.i("onResume","............onResume.....Send_DG_Goods........"+ ((AspApplications)mContext.getApplicationContext()).Send_DG_Goods);
+    }
 }

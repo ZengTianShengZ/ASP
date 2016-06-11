@@ -156,4 +156,7 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
     public void onPageScrollStateChanged(int state) {
 
     }
+    public void setCurrentViewPagerItem(int item){
+        home_viewPager.setCurrentItem(item);
+    }
 }

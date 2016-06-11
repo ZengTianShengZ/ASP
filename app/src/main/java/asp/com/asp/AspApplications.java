@@ -28,6 +28,8 @@ public  class AspApplications extends Application {
      */
     public static boolean GET_User = false;
 
+    public static  boolean Send_ER_Goods = false;
+    public static  boolean Send_DG_Goods = false;
 
     @Override
     public void onCreate() {

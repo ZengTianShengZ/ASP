@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import asp.com.asp.AspApplications;
 import asp.com.asp.R;
 import asp.com.asp.adapterPop.ZssMyAdapter;
 import asp.com.asp.domain.EventBusBean;
@@ -52,6 +53,7 @@ import asp.com.asp.domain.Goods;
 import asp.com.asp.domain.QiangItem;
 import asp.com.asp.domain.User;
 import asp.com.asp.utils.CacheUtils;
+import asp.com.asp.utils.ConfigConstantUtil;
 import asp.com.asp.utils.DialogUtils;
 import asp.com.asp.utils.OperationBmobDataUtil;
 import asp.com.asp.view.SnackbarUtil;
@@ -351,6 +353,14 @@ public class EditQiangActivity extends Activity {
             if(msg.what!=0 ){
                 // 使用 开源EventBus 发布 成功消息
                 EventBus.getDefault().post(new EventBusBean("postSucceed"));
+                if(sendDgGoods){
+                    ((AspApplications)getApplication()).Send_DG_Goods = true;
+                    EventBus.getDefault().post(new EventBusBean(ConfigConstantUtil.Send_DG_Goods));
+                }else{
+                    ((AspApplications)getApplication()).Send_ER_Goods = true;
+                    EventBus.getDefault().post(new EventBusBean(ConfigConstantUtil.Send_ER_Goods));
+                }
+
                 setResult(RESULT_OK);
                 finish();
             }else{

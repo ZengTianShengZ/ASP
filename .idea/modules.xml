@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/appbase/appbase.iml" filepath="$PROJECT_DIR$/appbase/appbase.iml" />
       <module fileurl="file://$PROJECT_DIR$/dialoglibrary/dialoglibrary_.iml" filepath="$PROJECT_DIR$/dialoglibrary/dialoglibrary_.iml" />
       <module fileurl="file://$PROJECT_DIR$/pullrefreshlibrary/pullrefreshlibrary.iml" filepath="$PROJECT_DIR$/pullrefreshlibrary/pullrefreshlibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shapeloading/shapeloading.iml" filepath="$PROJECT_DIR$/shapeloading/shapeloading.iml" />
     </modules>
   </component>
 </project>

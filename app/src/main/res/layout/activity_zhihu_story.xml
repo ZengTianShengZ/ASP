@@ -44,7 +44,7 @@
                 app:layout_collapseMode="pin"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                android:background="#FFFFFF"/>
+                android:background="@android:color/transparent"/>
 
 
         </android.support.design.widget.CollapsingToolbarLayout>

@@ -1,6 +1,7 @@
 package asp.com.asp.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -29,6 +30,8 @@ import java.util.ArrayList;
 
 import asp.com.asp.MainActivity;
 import asp.com.asp.R;
+import asp.com.asp.activity.SearchViewActivity_;
+import asp.com.asp.activity.ZhihuNewsActivity;
 import asp.com.asp.adapter.HomePagerAdapter;
 import asp.com.asp.adapter.MyFragmentPagerAdapter;
 
@@ -136,14 +139,14 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
 
     @Click(R.id.topbar_search_btn)
     void searchBtn(View clickedView) {
-        Snackbar.make(clickedView, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setActionTextColor(getResources().getColor(R.color.colorPrimaryDark))
-                .setAction("Action", null).show();
+        Intent intent = new Intent(context,SearchViewActivity_.class);
+        startActivity(intent);
     }
 
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        Log.i("onPageScrolled","........positionOffsetPixels.........."+positionOffsetPixels);
         if (positionOffsetPixels > 1)
             slide_ling.setTranslationX(positionOffsetPixels / layoutlWidth);
     }
@@ -158,5 +161,6 @@ public class HomeFragment extends Fragment implements ViewPager.OnPageChangeList
     }
     public void setCurrentViewPagerItem(int item){
         home_viewPager.setCurrentItem(item);
+        slide_ling.setTranslationX(item*tv_ll_width / 2);
     }
 }

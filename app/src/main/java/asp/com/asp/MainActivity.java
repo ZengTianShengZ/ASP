@@ -76,7 +76,7 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
     @ViewById(R.id.nav_header_mian_nameTv)
     TextView nameTv;
     @ViewById(R.id.nav_header_mian_contentTv)
-    TextView contentTv;
+    TextView signatureTv;
 
     @ViewById(R.id.main_base_hong_btn)
     BottomTagView hong_btn;
@@ -107,14 +107,17 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
 
     }
 
-
-    private void initView() {
+     private void initView() {
        /* headerView = navigationView.inflateHeaderView(R.layout.nav_header_main);
         userImg = (CircleImageView) headerView.findViewById(R.id.nav_header_mian_cirImg);
         nameTv = (TextView) headerView.findViewById(R.id.nav_header_mian_nameTv);
         contentTv = (TextView) headerView.findViewById(R.id.nav_header_mian_contentTv);
 */
+         signatureTv.setVisibility(View.GONE);
+         initShapeLoadingDialog();
 
+    }
+    public void initShapeLoadingDialog(){
         shapeLoadingDialog=new ShapeLoadingDialog(this);
         shapeLoadingDialog.setLoadingText("加载中...");
         shapeLoadingDialog.setBackground(Color.WHITE);
@@ -128,8 +131,9 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
 
         String userName = spf.getString(ConfigConstantUtil.UserName,"");
         if(!userName.equals("")){
-            nameTv.setText(userName+"name");
-            contentTv.setText(spf.getString(ConfigConstantUtil.UserPassword,"content"));
+            nameTv.setText(userName+"");
+           // signatureTv.setText(mUser.getSignature()+"");
+            //signatureTv.setText(spf.getString(ConfigConstantUtil.UserPassword,"content"));
            // userImg.setImageURI();
             ImageLoader.getInstance(3, ImageLoader.Type.LIFO).
                     loadImage(spf.getString(ConfigConstantUtil.UserLogStr,""),userImg);
@@ -166,6 +170,10 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
                 mHomeFragment.setCurrentViewPagerItem(1);
             }
         }
+        if("complete".equals(event.getMsg())){
+            shapeLoadingDialog.dismiss();
+        }
+
     }
     @Override
     protected void onStart() {
@@ -227,17 +235,16 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
     @Click(R.id.main_drawer_about_me)
     void about_meBtnClick(){
         drawerLayout.closeDrawers();
-        /*Intent intent = new Intent(this,AboutMeActivity_.class);
-        startActivity(intent);*/
-        Intent intent = new Intent(this,ZhihuNewsActivity.class);
+
+        Intent intent = new Intent(this,AboutMeActivity_.class);
         startActivity(intent);
     }
     @Click(R.id.main_drawer_share)
     void shareBtnClick(){
         drawerLayout.closeDrawers();
-        Intent intent = new Intent(this,ZhihuNewsActivity.class);
+       /* Intent intent = new Intent(this,ZhihuNewsActivity.class);
         startActivity(intent);
-
+*/
 
     }
     @Click(R.id.include_activity_main_drawer)
@@ -347,9 +354,15 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
     }
 
     public void showShapeLoadingDialog(){
+        if(shapeLoadingDialog==null){
+            initShapeLoadingDialog();
+        }
         shapeLoadingDialog.show();
     }
     public void dismissShapeLoadingDialog(){
+        if(shapeLoadingDialog==null){
+            initShapeLoadingDialog();
+        }
         shapeLoadingDialog.dismiss();
     }
 }

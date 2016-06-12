@@ -1,6 +1,8 @@
 package asp.com.asp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +16,12 @@ import java.util.List;
 import asp.com.appbase.adapter.BaseListAdapter;
 import asp.com.appbase.adapter.ViewHolder;
 import asp.com.asp.R;
+import asp.com.asp.activity.GoodsDetailActivityCs_;
+import asp.com.asp.activity.PersonaQiangActivity;
 import asp.com.asp.domain.QiangItem;
 import asp.com.asp.domain.QiangItemDg;
+import asp.com.asp.utils.ConfigConstantUtil;
+import asp.com.asp.utils.OperationBmobDataUtil;
 import asp.com.asp.view.innerGridView;
 
 /**
@@ -26,10 +32,15 @@ public class QiangDgListAdapter extends BaseListAdapter<QiangItemDg> {
     private final int TYPE_RECOMMEND_SELLSE = 1;
     private final int TYPE_SEND_TXT = 1;
 
+    private int comment_Count;
+
+    private OperationBmobDataUtil mOperationBmobDataUtil;
     private QiangItemGridViewAdapter mQiangItemGridViewAdapter;
 
     public QiangDgListAdapter(Context context, List<QiangItemDg> list) {
         super(context, list);
+        mOperationBmobDataUtil = mOperationBmobDataUtil.getInstance();
+        mOperationBmobDataUtil.initData(context);
     }
 
     @Override
@@ -46,6 +57,10 @@ public class QiangDgListAdapter extends BaseListAdapter<QiangItemDg> {
         TextView comment_Tv = ViewHolder.get(convertView, R.id.item_qiang_comment_Tv);
         TextView context_Tv = ViewHolder.get(convertView, R.id.item_qiang_context_Tv);
 
+        context_Tv.setText(item.getContent()+"");
+
+        comment_Count =  mOperationBmobDataUtil.queryCommentCount(mContext,item.getObjectId(),comment_Tv);
+
         innerGridView qiang_gridView = ViewHolder.get(convertView, R.id.item_qiang_gridView);
 
         String Imageurl = null;
@@ -55,6 +70,7 @@ public class QiangDgListAdapter extends BaseListAdapter<QiangItemDg> {
         }
         if(item.getAuthor().getNickname() != null){
             nameTv.setText(item.getAuthor().getNickname()+"");
+            nameTv.setTextColor(Color.RED);
         }
         time_Tv.setText(item.getCreatedAt()+"");
 
@@ -86,6 +102,29 @@ public class QiangDgListAdapter extends BaseListAdapter<QiangItemDg> {
             mQiangItemGridViewAdapter = new QiangItemGridViewAdapter(mContext, paths);
             qiang_gridView.setAdapter(mQiangItemGridViewAdapter);
         }
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(mContext,GoodsDetailActivityCs_.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("itemDgQiang", item);
+                intent.putExtra("comment_Count",comment_Count);
+                mContext.startActivity(intent);
+
+            }
+        });
+        qiang_logo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,PersonaQiangActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(ConfigConstantUtil.intentDtat_Author, item.getAuthor());
+                mContext.startActivity(intent);
+            }
+        });
 
         return  convertView;
     }

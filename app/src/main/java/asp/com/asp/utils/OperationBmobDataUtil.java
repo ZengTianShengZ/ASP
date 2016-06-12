@@ -21,6 +21,7 @@ import java.util.List;
 import asp.com.asp.domain.Comment;
 import asp.com.asp.domain.DgVerify;
 import asp.com.asp.domain.Goods;
+import asp.com.asp.domain.Notification;
 import asp.com.asp.domain.QiangItem;
 import asp.com.asp.domain.QiangItemDg;
 import asp.com.asp.domain.User;
@@ -44,6 +45,7 @@ public class OperationBmobDataUtil {
     private static int personQiangPageNum;
     private static int personMeQiangPageNum;
     private static int personQiangDgPageNum;
+    private static int notificationPageNum;
    // private List<QiangItem> mListItems = new ArrayList<QiangItem>();
 
     private Context mContext;
@@ -336,6 +338,8 @@ public class OperationBmobDataUtil {
         qiangitem.setPass(true);
         qiangitem.setFocus(false);
 
+        //goods.setQiang(qiangitem);
+
         goods.save(mContext, new SaveListener() {
             @Override
             public void onSuccess() {
@@ -387,6 +391,8 @@ public class OperationBmobDataUtil {
         qiangitem.setComment(0);
         qiangitem.setPass(true);
         qiangitem.setFocus(false);
+
+        //goods.setDgQiang(qiangitem);
 
         goods.save(mContext, new SaveListener() {
             @Override
@@ -517,6 +523,41 @@ public class OperationBmobDataUtil {
         });
     }
 
+    /**
+     * 代购评论
+     * 评论 记录
+     */
+    public void loadCommentData_Dg(final Handler chatHandle, final List<Comment> commentDatalist,QiangItemDg item) {
+
+        BmobQuery<Comment> query = new BmobQuery<Comment>();
+        query.addWhereEqualTo("dgqiang", item);
+        query.include("user");
+        query.order("-createdAt");
+        query.setLimit(NUMBERS_PER_PAGE);
+        query.setSkip(NUMBERS_PER_PAGE * (chatPageNum++));
+        query.findObjects(mContext, new FindListener<Comment>() {
+
+            @Override
+            public void onSuccess(List<Comment> data) {
+                // TODO Auto-generated method stub
+                if (data.size() != 0 && data.get(data.size() - 1) != null) {
+
+                    commentDatalist.addAll(data);
+                    chatHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
+
+                } else {
+                    chatHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotOld);
+                    chatPageNum--;
+                }
+            }
+
+            @Override
+            public void onError(int arg0, String arg1) {
+                chatHandle.sendEmptyMessage(ConfigConstantUtil.loadingFault);
+                chatPageNum--;
+            }
+        });
+    }
     /**
      * 上拉加载  加载用户 发布过的信息
      * @param refresHandle
@@ -711,7 +752,46 @@ public class OperationBmobDataUtil {
             }
         });
     }
+    /**
+     * 代购 评论 以及 回复评论
+     * @param user
+     * @param content
+     * @param mReplyTo   mReplyTo if null , mReplyTo = null
+     * @param mQiangItem
+     * @param chatHandle
+     */
+    public void publishComment_Dg(Context context, User user, String content, User mReplyTo, QiangItemDg mQiangItem, final Handler chatHandle) {
 
+        final Comment comment = new Comment();
+        comment.setUser(user);
+        if(mReplyTo!=null){
+            // 对谁评论，也就是 回复
+            comment.setReplyTo(mReplyTo.getNickname());
+
+        }else{
+            // 没有的话 就是 评论而已
+            comment.setReplyTo(null);
+        }
+        comment.setCommentContent(content);
+        comment.setQiangDg(mQiangItem);
+        comment.save(context, new SaveListener() {
+
+            @Override
+            public void onSuccess() {
+                // TODO Auto-generated method stub
+                //showToast("评论成功。");
+                chatHandle.sendEmptyMessage(ConfigConstantUtil.commentSuccess);
+                Message message = new Message();
+                message.obj = comment;
+                chatHandle.sendMessage(message);
+            }
+
+            @Override
+            public void onFailure(int arg0, String arg1) {
+                chatHandle.sendEmptyMessage(ConfigConstantUtil.commentFault);
+            }
+        });
+    }
 
     /**
      * 查询 指定 用户 发过的 二手 商品的总数  Es :二手
@@ -815,6 +895,44 @@ public class OperationBmobDataUtil {
         });
         return goods;
     }
+
+    /**
+     * 拉取 通知数据
+     */
+    public void loadNotificationData(final Handler refresHandle, User mUser,final List<Notification> mListItems) {
+
+        //筛选 用户信息、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、//
+        BmobQuery<Notification> query = new BmobQuery<Notification>();
+        query.setLimit(NUMBERS_PER_PAGE); // 限制 15条 消息
+        query.setSkip(NUMBERS_PER_PAGE* (notificationPageNum++));
+        query.order("-createdAt");
+        query.include("author");
+        query.addWhereEqualTo("author", mUser);
+        query.findObjects(mContext, new FindListener<Notification>() {
+
+            @Override
+            public void onSuccess(List<Notification> list) {
+                // TODO 自动生成的方法存根
+                User user = null;
+                if(list.size()!=0&&list.get(list.size()-1)!=null){
+
+                    mListItems.addAll(list);
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingSuccess);
+                }else{
+                    notificationPageNum--;
+                    refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingNotOld);
+
+                }
+            }
+            @Override
+            public void onError(int arg0, String arg1) {
+                notificationPageNum--;
+                refresHandle.sendEmptyMessage(ConfigConstantUtil.loadingFault);
+            }
+        });
+
+    }
+
     public void clearnPageNum(){
         personQiangPageNum = 0;
     }

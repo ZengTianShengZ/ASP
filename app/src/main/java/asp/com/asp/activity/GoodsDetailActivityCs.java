@@ -49,6 +49,7 @@ import asp.com.asp.adapter.ImagePagerAdapter;
 import asp.com.asp.domain.Comment;
 import asp.com.asp.domain.Goods;
 import asp.com.asp.domain.QiangItem;
+import asp.com.asp.domain.QiangItemDg;
 import asp.com.asp.domain.User;
 import asp.com.asp.utils.ConfigConstantUtil;
 import asp.com.asp.utils.DialogUtils;
@@ -114,6 +115,7 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
 
     private CommentRecycleviewAdapter mCommentRecycleviewAdapter;
     private QiangItem item;
+    private QiangItemDg itemDg;
     private List<Comment> commentDatalist = new ArrayList<Comment>();
     private OperationBmobDataUtil mOperationBmobDataUtil;
     private String sailerPhone;
@@ -160,9 +162,20 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
 
         Intent intent = getIntent();
         bmobUser = BmobUser.getCurrentUser(this, User.class);
-        item = (QiangItem)intent.getSerializableExtra("itemQiang");
         comment_Count = intent.getIntExtra("comment_Count",0);
 
+        item = (QiangItem)intent.getSerializableExtra("itemQiang");
+        if(item == null){
+            itemDg = (QiangItemDg)intent.getSerializableExtra("itemDgQiang");
+            initQiangDgData();
+        }else {
+            initQiangData();
+        }
+
+    }
+
+
+    private void initQiangData() {
         String Imageurl = null;
         if (item.getAuthor().getAvatar() != null) {
             Imageurl = item.getAuthor().getAvatar().getFileUrl(mContext);
@@ -214,8 +227,61 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
         mCommentRecycleviewAdapter = new CommentRecycleviewAdapter(mContext,commentDatalist);
         comment_recycleview.setAdapter(mCommentRecycleviewAdapter);
         mOperationBmobDataUtil.loadCommentData(chatHandle, commentDatalist, item);
-
     }
+    private void initQiangDgData() {
+        String Imageurl = null;
+        if (itemDg.getAuthor().getAvatar() != null) {
+            Imageurl = itemDg.getAuthor().getAvatar().getFileUrl(mContext);
+            qiang_logo.setImageURI(Uri.parse(Imageurl));
+        }
+
+        nameTv.setText(itemDg.getAuthor().getNickname() + "");
+        time_Tv.setText(itemDg.getCreatedAt() + "");
+        descTv.setText(itemDg.getContent() + "");
+        comment_Tv.setText(" "+comment_Count);
+
+        mOperationBmobDataUtil.queryGoods(mContext,itemDg.getGoods().getObjectId());
+
+
+        if (null == itemDg.getContentfigureurl()) {
+            return;
+        } else {
+
+            ArrayList<String> paths = new ArrayList<String>();
+            if (itemDg.getContentfigureurl() != null)
+                paths.add(itemDg.getContentfigureurl().getFileUrl(mContext));
+            if (itemDg.getContentfigureurl1() != null)
+                paths.add(itemDg.getContentfigureurl1().getFileUrl(mContext));
+            if (itemDg.getContentfigureurl2() != null)
+                paths.add(itemDg.getContentfigureurl2().getFileUrl(mContext));
+            if (itemDg.getContentfigureurl3() != null)
+                paths.add(itemDg.getContentfigureurl3().getFileUrl(mContext));
+            if (itemDg.getContentfigureurl4() != null)
+                paths.add(itemDg.getContentfigureurl4().getFileUrl(mContext));
+            if (itemDg.getContentfigureurl5() != null)
+                paths.add(itemDg.getContentfigureurl5().getFileUrl(mContext));
+            if (itemDg.getContentfigureurl6() != null)
+                paths.add(itemDg.getContentfigureurl6().getFileUrl(mContext));
+            if (itemDg.getContentfigureurl7() != null)
+                paths.add(itemDg.getContentfigureurl7().getFileUrl(mContext));
+            if (itemDg.getContentfigureurl8() != null)
+                paths.add(itemDg.getContentfigureurl8().getFileUrl(mContext));
+
+            ImagePagerAdapter mImagePagerAdapter = new ImagePagerAdapter(mContext, paths);
+            img_Viewpager.setAdapter(mImagePagerAdapter);
+            totalImgNumTv.setText(paths.size() + "");
+            imgNumTv.setText("1");
+
+        }
+
+        center_titleTv.setText("商品详情");
+        right_titleTv.setVisibility(View.GONE);
+
+        mCommentRecycleviewAdapter = new CommentRecycleviewAdapter(mContext,commentDatalist);
+        comment_recycleview.setAdapter(mCommentRecycleviewAdapter);
+        mOperationBmobDataUtil.loadCommentData_Dg(chatHandle, commentDatalist, itemDg);
+    }
+
     private void initEvent() {
 
         img_Viewpager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -274,8 +340,14 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
                             if(TextUtils.isEmpty(editStr)){
                                 SnackbarUtil.GreenSnackbar(mContext,pinlunBtn,"评论不能为空");
                             }else{
-                                mOperationBmobDataUtil.publishComment(mContext,bmobUser,"[@"+nickname+"]"+editStr,null,item,chatHandle);
-                            }
+                                if(item == null){
+                                    mOperationBmobDataUtil.publishComment_Dg(mContext,bmobUser,"[@"+nickname+"]"+editStr,null,itemDg,chatHandle);
+
+                                }else{
+                                    mOperationBmobDataUtil.publishComment(mContext,bmobUser,"[@"+nickname+"]"+editStr,null,item,chatHandle);
+
+                                }
+                             }
                             dlg_Comment_alert.dismiss();
                         }
                     } );
@@ -294,7 +366,12 @@ public class GoodsDetailActivityCs extends Activity implements SwipeRefreshLayou
                     progress_loading = loadingview;
                 }
                 progress_loading.setVisibility(View.VISIBLE);
-                mOperationBmobDataUtil.loadCommentData(chatHandle, commentDatalist, item);
+                if(item==null){
+                    mOperationBmobDataUtil.loadCommentData_Dg(chatHandle, commentDatalist, itemDg);
+                }else{
+                    mOperationBmobDataUtil.loadCommentData(chatHandle, commentDatalist, item);
+                }
+
             }
         });
     }

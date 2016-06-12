@@ -6,6 +6,7 @@ import android.util.Log;
 
 import java.io.File;
 
+import asp.com.asp.domain.Notification;
 import asp.com.asp.domain.User;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
@@ -21,6 +22,9 @@ public class BmobUserUtil {
     private static boolean loginSuccess = false;
 
     public static boolean BmobUserLogin(final Context context, final String userName,final  String password){
+
+        loginSuccess = false;
+
         User bu2 =   new User();
         bu2.setNickname(userName);
         bu2.setUsername(userName);
@@ -31,18 +35,36 @@ public class BmobUserUtil {
 
                 //通过BmobUser user = BmobUser.getCurrentUser(context)获取登录成功后的本地用户信息
                 //如果是自定义用户对象MyUser，可通过MyUser user = BmobUser.getCurrentUser(context,MyUser.class)获取自定义用户信息
-                loginSuccess = true;
+
+
+                Notification notification = new Notification();
+                notification.setUser((User)BmobUser.getCurrentUser(context));
+                notification.setNotification("登陆成功，感谢您的加入！！！");
+                notification.save(context, new SaveListener() {
+                    @Override
+                    public void onSuccess() {
+                        loginSuccess = true;
+                    }
+
+                    @Override
+                    public void onFailure(int i, String s) {
+                        loginSuccess = false;
+                    }
+                });
+
+
+                Log.i("BmobUserLogin", "............loginSuccess.............."+loginSuccess);
             }
             @Override
             public void onFailure(int code, String msg) {
-                Log.i("onFailure",code+".........................."+msg);
+                Log.i("BmobUserLogin",code+".........................."+msg);
                 BmobSignUp(context,userName,password);
             }
         });
         return loginSuccess;
     }
 
-    private static void BmobSignUp(Context context,String userName,String password){
+    private static void BmobSignUp(final Context context,String userName,String password){
         User bu  =   new User();
         bu.setNickname(userName);
         bu.setUsername(userName);
@@ -52,12 +74,26 @@ public class BmobUserUtil {
         bu.signUp(context, new SaveListener() {
             @Override
             public void onSuccess() {
-                loginSuccess = true;
+                Notification notification = new Notification();
+                notification.setUser((User)BmobUser.getCurrentUser(context));
+                notification.setNotification("感谢您的加入！！！");
+                notification.save(context, new SaveListener() {
+                    @Override
+                    public void onSuccess() {
+                        loginSuccess = true;
+                    }
+
+                    @Override
+                    public void onFailure(int i, String s) {
+                        loginSuccess = false;
+                    }
+                });
                 //通过BmobUser.getCurrentUser(context)方法获取登录成功后的本地用户信息
+                Log.i("BmobUserLogin","....=.....=...=loginSuccess..=...=..=...=...."+loginSuccess);
             }
             @Override
             public void onFailure(int code, String msg) {
-                Log.i("onFailure",code+"....=.....=...=..=...=..=...=...."+msg);
+                Log.i("BmobUserLogin",code+"....=.....=...=..=...=..=...=...."+msg);
                 // TODO Auto-generated method stub
                 loginSuccess = false;
             }

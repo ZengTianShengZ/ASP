@@ -13,6 +13,7 @@ public class Comment extends BmobObject implements Serializable{
 
 	private User user;
 	private QiangItem qiang;
+	private QiangItemDg dgqiang;
 	private String replyTo;
 	private String commentContent;
 
@@ -40,7 +41,12 @@ public class Comment extends BmobObject implements Serializable{
 	public void setCommentContent(String commentContent) {
 		this.commentContent = commentContent;
 	}
-	
-	
 
+	public QiangItemDg getQiangDg() {
+		return dgqiang;
+	}
+
+	public void setQiangDg(QiangItemDg qiangDg) {
+		this.dgqiang = qiangDg;
+	}
 }

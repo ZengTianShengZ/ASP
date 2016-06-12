@@ -156,6 +156,7 @@ public class QiangFragment  extends Fragment  {
 
             }
             mPullRefreshListView.onRefreshComplete();
+            EventBus.getDefault().post(new EventBusBean("complete"));
             ((MainActivity)getActivity()).dismissShapeLoadingDialog();
         }
     };

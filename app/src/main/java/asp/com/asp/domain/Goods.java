@@ -14,7 +14,9 @@ public class Goods extends BmobObject implements Serializable {
 	private int count;
 	private String details;
 	private String cellphone;
-	
+
+	private QiangItem qiang;
+	private QiangItemDg DgQiang;
 	
 	public String getCellphone() {
 		return this.cellphone;
@@ -52,5 +54,20 @@ public class Goods extends BmobObject implements Serializable {
 	public void setCount(int count) {
 		this.count = count;
 	}
-	
+
+	public QiangItem getQiang() {
+		return qiang;
+	}
+
+	public void setQiang(QiangItem qiang) {
+		this.qiang = qiang;
+	}
+
+	public QiangItemDg getDgQiang() {
+		return DgQiang;
+	}
+
+	public void setDgQiang(QiangItemDg dgQiang) {
+		DgQiang = dgQiang;
+	}
 }

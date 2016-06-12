@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -41,6 +44,9 @@ import cn.bmob.v3.listener.SaveListener;
 @EActivity(R.layout.activity_wb_auth)
 public class WBAuthActivity extends Activity {
 
+  /*  @ViewById(R.id.wb_toolbar)
+    Toolbar wb_toolbar;*/
+
     @ViewById(R.id.wb_auth_btn)
     Button wb_auth_btn;
 
@@ -62,6 +68,16 @@ public class WBAuthActivity extends Activity {
     }
     @AfterViews
     void updateQiangDate() {
+
+      /*  setSupportActionBar(wb_toolbar);
+        wb_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });*/
+
+
         mImageLoaderUtil = ImageLoaderUtil.getInstance();
         mImageLoaderUtil.initData(getApplicationContext());
         mSharedPreferencesUtil =SharedPreferencesUtil.getInstance(getApplicationContext(),getPackageName());
@@ -81,6 +97,7 @@ public class WBAuthActivity extends Activity {
         if (mAccessToken.isSessionValid()) {
             updateTokenView(true);
         }
+
 
     }
     @Click(R.id.wb_auth_btn)

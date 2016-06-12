@@ -1,6 +1,7 @@
 package asp.com.asp.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import asp.com.appbase.adapter.BaseRecycleViewAdapter;
 import asp.com.asp.R;
+import asp.com.asp.activity.ZhihuStoryActivity;
 import asp.com.asp.adapter.ZhihuNewsRecycleAdapter;
 import asp.com.asp.domain.ZhihuDaily;
 import asp.com.asp.domain.ZhihuDailyItem;
@@ -55,6 +57,7 @@ public class ZhiHuNewsFragment extends Fragment implements SwipeRefreshLayout.On
     private List<ZhihuDailyItem> mZhihuDailyItemList = new ArrayList<ZhihuDailyItem>();
 
     private ZhihuPresenterImpl mZhihuPresenterImpl;
+    private ZhihuDailyItem topZhihuDailyItem;
 
     private String date;
     private  int data_flag = 1;
@@ -104,11 +107,14 @@ public class ZhiHuNewsFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     private void initData() {
+
         dateToGetUrl = Calendar.getInstance();
 
         mZhihuPresenterImpl = new ZhihuPresenterImpl();
 
         getZhiHuNewsData();
+
+
     }
 
     private void getZhiHuNewsData(){
@@ -124,7 +130,7 @@ public class ZhiHuNewsFragment extends Fragment implements SwipeRefreshLayout.On
                         if(progress_loading !=null){
                             progress_loading.setVisibility(View.GONE);
                         }
-                        mSwipeRefreshLayout.setEnabled(false);
+                        //mSwipeRefreshLayout.setEnabled(false);
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
 
@@ -137,8 +143,9 @@ public class ZhiHuNewsFragment extends Fragment implements SwipeRefreshLayout.On
                     public void onNext(ZhihuDaily zhihuDaily) {
 
                         if(data_flag == 0) {
-                            topView.setImageURI(Uri.parse(zhihuDaily.getStories().get(0).getImages()[0]));
-                            top_title.setText(zhihuDaily.getStories().get(0).getTitle()+"");
+                            topZhihuDailyItem = zhihuDaily.getStories().get(0);
+                            topView.setImageURI(Uri.parse(topZhihuDailyItem.getImages()[0]));
+                            top_title.setText(topZhihuDailyItem.getTitle()+"");
                             zhihuDaily.getStories().remove(0);
 
                         }
@@ -162,7 +169,7 @@ public class ZhiHuNewsFragment extends Fragment implements SwipeRefreshLayout.On
                     //view.getHeight() 得到的是 view 的 px 值（更屏幕密度有关），不是 dp值
                     if(scrollView.getScrollY()<=0){
                         //开启手势
-                        mSwipeRefreshLayout.setEnabled(true);
+                        //mSwipeRefreshLayout.setEnabled(true);
                         //开启旋转效果
                         mSwipeRefreshLayout.setRefreshing(true);
                         //Toast.makeText(mContext, "到达顶部了", Toast.LENGTH_SHORT).show();
@@ -190,10 +197,24 @@ public class ZhiHuNewsFragment extends Fragment implements SwipeRefreshLayout.On
             }
         });
 
+        topView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(topZhihuDailyItem!=null){
+                    Intent intent = new Intent(mContext, ZhihuStoryActivity.class);
+                    intent.putExtra("type", ZhihuStoryActivity.TYPE_ZHIHU);
+                    intent.putExtra("id", topZhihuDailyItem.getId());
+                    intent.putExtra("title", topZhihuDailyItem.getTitle());
+                    startActivity(intent);
+                }
+
+            }
+        });
     }
 
     @Override
     public void onRefresh() {
+        Log.i("onRefresh","............mSwipeRefreshLayout.......onRefresh...............");
         data_flag = 1;
         getZhiHuNewsData();
     }

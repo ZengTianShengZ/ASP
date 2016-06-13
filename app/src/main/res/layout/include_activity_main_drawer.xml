@@ -123,7 +123,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:text="关于我们"
+            android:text="分享应用"
             android:layout_gravity="center_vertical"
             android:textSize="8pt"/>
 
@@ -145,7 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:text="分享应用"
+            android:text="关于我们"
             android:layout_gravity="center_vertical"
             android:textSize="8pt"/>
 

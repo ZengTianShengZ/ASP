@@ -50,6 +50,8 @@
         <activity
             android:name=".activity.BrowseImageAvitivty"
             ></activity>
+        <activity android:name=".activity.OfficialActivity_"></activity>
+
     </application>
 
 </manifest>

@@ -35,6 +35,7 @@ import asp.com.asp.utils.BmobUserUtil;
 import asp.com.asp.utils.ConfigConstantUtil;
 import asp.com.asp.utils.ImageLoaderUtil;
 import asp.com.asp.utils.SharedPreferencesUtil;
+import asp.com.asp.view.SnackbarUtil;
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.listener.SaveListener;
 
@@ -42,10 +43,10 @@ import cn.bmob.v3.listener.SaveListener;
  * Created by Administrator on 2016/5/18.
  */
 @EActivity(R.layout.activity_wb_auth)
-public class WBAuthActivity extends Activity {
+public class WBAuthActivity extends AppCompatActivity {
 
-  /*  @ViewById(R.id.wb_toolbar)
-    Toolbar wb_toolbar;*/
+     @ViewById(R.id.wb_toolbar)
+    Toolbar wb_toolbar;
 
     @ViewById(R.id.wb_auth_btn)
     Button wb_auth_btn;
@@ -69,14 +70,15 @@ public class WBAuthActivity extends Activity {
     @AfterViews
     void updateQiangDate() {
 
-      /*  setSupportActionBar(wb_toolbar);
+        setSupportActionBar(wb_toolbar);
         wb_toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
-        });*/
-
+        });
+        wb_toolbar.setNavigationIcon(R.mipmap.back_btn);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mImageLoaderUtil = ImageLoaderUtil.getInstance();
         mImageLoaderUtil.initData(getApplicationContext());
@@ -92,7 +94,7 @@ public class WBAuthActivity extends Activity {
         // 第一次启动本应用，AccessToken 不可用
         mAccessToken = AccessTokenKeeper.readAccessToken(this);
 
-        Toast.makeText(WBAuthActivity.this,mAccessToken.getUid(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(WBAuthActivity.this,mAccessToken.getUid(), Toast.LENGTH_LONG).show();
 
         if (mAccessToken.isSessionValid()) {
             updateTokenView(true);
@@ -127,9 +129,16 @@ public class WBAuthActivity extends Activity {
 
                 // 保存 Token 到 SharedPreferences
                 AccessTokenKeeper.writeAccessToken(WBAuthActivity.this, mAccessToken);
-                Toast.makeText(WBAuthActivity.this,
+               /* Toast.makeText(WBAuthActivity.this,
                         //授权成功
-                        R.string.weibosdk_demo_toast_auth_success, Toast.LENGTH_SHORT).show();
+                        R.string.weibosdk_demo_toast_auth_success, Toast.LENGTH_SHORT).show();*/
+
+
+
+                // bmob 调用第三方登录接口
+                BmobUserUtil.bmobWbLoggin(getApplicationContext(), mAccessToken.getToken(),mAccessToken.getExpiresTime()+"", mAccessToken.getUid());
+
+
             } else {
                 // 以下几种情况，您会收到 Code：
                 // 1. 当您未在平台上注册的应用程序的包名与签名时；
@@ -141,8 +150,10 @@ public class WBAuthActivity extends Activity {
                 if (!TextUtils.isEmpty(code)) {
                     message = message + "\nObtained the code: " + code;
                 }
-                Toast.makeText(WBAuthActivity.this, message, Toast.LENGTH_LONG).show();
+               // Toast.makeText(WBAuthActivity.this, message, Toast.LENGTH_LONG).show();
+
             }
+
             UsersAPI usersAPI = new UsersAPI(getApplicationContext(), Constants.APP_KEY, mAccessToken);
             usersAPI.show(Long.valueOf(mAccessToken.getUid()), new SinaRequestListener());
 
@@ -198,7 +209,7 @@ public class WBAuthActivity extends Activity {
         }
         //mTokenText.setText(message);
     }
-
+    private boolean upSuccess = false;
     class SinaRequestListener implements RequestListener { //新浪微博请求接口
 
         @Override
@@ -207,37 +218,44 @@ public class WBAuthActivity extends Activity {
             try {
 
                 JSONObject jsonObject = new JSONObject(response);
+                Log.i("jsonObject",".....jsonObject......"+jsonObject.toString());
                 final String idStr = jsonObject.getString("idstr");// 唯一标识符(uid)
                 final String name = jsonObject.getString("name");// 姓名
                 final String avatarHd = jsonObject.getString("avatar_hd");// 头像
-
+                final String description = jsonObject.getString("description");
                 Log.i("loginSuccess",name+".......///////........."+idStr+"/////"+avatarHd);
                 if(name != null) {
 
                     new Thread() {
                         public void run() {
-                            boolean loginSuccess = BmobUserUtil.BmobUserLogin(getApplicationContext(), name, idStr);
-                            Log.i("loginSuccess", ".... sssssssssssssss........"+loginSuccess);
-                            if(loginSuccess) {
+
+                            if(BmobUserUtil.Bmob_Wb_ID != null && !BmobUserUtil.Bmob_Wb_ID.equals("")){
+                                Log.i("Bmob_Wb_ID", ".......Bmob_Wb_ID........"+BmobUserUtil.Bmob_Wb_ID);
                                 Bitmap bitmap = mImageLoaderUtil.getNetWorkBitmap(avatarHd);
                                 ImgUrl = mImageLoaderUtil.saveToSdCard(bitmap);
-                                boolean upSuccess = BmobUserUtil.uploadblockLogo(getApplicationContext(),ImgUrl);
-                                if(upSuccess){
-                                    SharedPreferences.Editor editor =  mSharedPreferencesUtil.getEditor();
-                                    editor.putString(ConfigConstantUtil.UserName,name);
-                                    editor.putString(ConfigConstantUtil.UserLogStr,ImgUrl);
-                                    editor.putString(ConfigConstantUtil.UserPassword,idStr);
-                                    editor.commit();
-                                    Log.i("uploadblockLogo",name+ "././././/./4444444444444././././"+ImgUrl);
-                                }
+                                upSuccess = BmobUserUtil.uploadblockLogo(getApplicationContext(),name,idStr,ImgUrl);
+                                Log.i("uploadblockLogo",ImgUrl+ "././././/./upSuccess././././"+upSuccess);
+
                             }
 
                             runOnUiThread(new Runnable() {
 
                                 @Override
                                 public void run() {
+                                    if(upSuccess){
+                                        SharedPreferences.Editor editor =  mSharedPreferencesUtil.getEditor();
+                                        editor.putString(ConfigConstantUtil.UserName,name);
+                                        editor.putString(ConfigConstantUtil.UserLogStr,ImgUrl);
+                                        editor.putString(ConfigConstantUtil.UserPassword,idStr);
+                                        editor.commit();
+                                        Log.i("uploadblockLogo",name+ "././././/./4444444444444././././"+ImgUrl);
+                                        SnackbarUtil.GreenSnackbar(getApplicationContext(),wb_auth_btn,"       授权成功，可返回继续！！！");
 
-                                }
+                                    }else{
+                                        SnackbarUtil.GreenSnackbar(getApplicationContext(),wb_auth_btn,"       授权失败，请重新授权登陆！！！");
+
+                                    }
+                                 }
                             });
                         };
 

@@ -12,7 +12,7 @@
         android:padding="10dp"
          >
 
-        <com.facebook.drawee.view.SimpleDraweeView
+    <!--    <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/item_qiang_logo"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -30,7 +30,17 @@
             fresco:backgroundImage="@android:color/holo_orange_light"
             fresco:roundAsCircle="true"
 
-            />
+            />-->
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/item_qiang_logo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            fresco:progressBarImage="@mipmap/ic_logo"
+            fresco:placeholderImageScaleType="fitCenter"
+            fresco:failureImageScaleType="centerInside"
+            fresco:backgroundImage="@android:color/holo_orange_light"
+            fresco:roundAsCircle="true"
+            ></com.facebook.drawee.view.SimpleDraweeView>
     </LinearLayout>
 
 

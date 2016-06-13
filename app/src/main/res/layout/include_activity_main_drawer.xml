@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="10dp"
+        android:background="@drawable/button_pressed"
         android:orientation="horizontal">
 
         <ImageView
@@ -36,6 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="10dp"
+        android:background="@drawable/button_pressed"
         android:orientation="horizontal">
 
         <ImageView
@@ -58,6 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="15dp"
+        android:background="@drawable/button_pressed"
         android:orientation="horizontal">
 
         <ImageView
@@ -79,6 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="10dp"
+        android:background="@drawable/button_pressed"
         android:orientation="horizontal">
 
         <ImageView
@@ -106,6 +110,7 @@
         android:id="@+id/main_drawer_about_me"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/button_pressed"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="10dp"
         android:orientation="horizontal">
@@ -129,6 +134,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="10dp"
+        android:background="@drawable/button_pressed"
         android:orientation="horizontal">
 
         <ImageView

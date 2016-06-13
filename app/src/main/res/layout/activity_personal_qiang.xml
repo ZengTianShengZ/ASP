@@ -51,7 +51,7 @@
                             android:id="@+id/personal_qiang_nameTv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="曾田生"
+                            android:text="姓名"
                             android:textColor="#ffffff"
                             android:textSize="26sp"
                             android:textStyle="bold" />

@@ -144,7 +144,15 @@ public class MeFragment extends Fragment {
             userLogoPath = spf.getString(ConfigConstantUtil.UserLogStr,"");
             nameTv.setText(userName);
             signatureTv.setText(mUser.getSignature()+"");
+            if(mUser.getSignature()==null){
+                signatureTv.setText("我的签名");
+            }
+
             detailTv.setText(mUser.getDetails()+"");
+            if(mUser.getDetails() == null){
+                detailTv.setText( "关注我@微博，@淘宝链接，@微店连接");
+            }
+
             ImageLoader.getInstance(3, ImageLoader.Type.LIFO). loadImage(userLogoPath,circleLogo);
 
             mOperationBmobDataUtil.queryEsCount(mContext,mUser.getObjectId(),ErCountTv);

@@ -13,6 +13,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
@@ -39,6 +41,13 @@ import cn.bmob.v3.datatype.BmobFile;
  */
 @EActivity(R.layout.activity_add_dg)
 public class AddGdActivity extends Activity {
+
+    @ViewById(R.id.common_top_bar_back_btn)
+    ImageView back_btn;
+    @ViewById(R.id.common_top_bar_right_titleTv)
+    TextView right_titleTv;
+    @ViewById(R.id.common_top_bar_center_titleTv)
+    TextView center_titleTv;
 
     @ViewById(R.id.activity_add_dagridView)
     GridView gridView;
@@ -74,6 +83,8 @@ public class AddGdActivity extends Activity {
     @AfterViews
     void updateQiangDate() {
 
+        center_titleTv.setText("加入代购");
+        right_titleTv.setVisibility(View.GONE);
         initData();
        // initEvent();
     }
@@ -108,7 +119,14 @@ public class AddGdActivity extends Activity {
             }
         }
     }
+    /**
+     * 按推出按钮
+     */
+    @Click(R.id.common_top_bar_back_btn)
+    void backBtnClick(){
 
+        finish();
+    }
     @Click(R.id.activity_add_da_btn)
     void add_da_btnClick(View clickedView) {
         if(bmobUser==null){

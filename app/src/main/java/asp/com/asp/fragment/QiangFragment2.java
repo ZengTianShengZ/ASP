@@ -144,7 +144,7 @@ public class QiangFragment2  extends Fragment  {
                     Toast.makeText(getActivity(),"数据到底啦22！！！",Toast.LENGTH_LONG).show();
                     break;
                 case ConfigConstantUtil.loadingFault :
-                    Toast.makeText(getActivity(),"网络异常，请检查网络22！",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"网络异常，请检查网络！",Toast.LENGTH_LONG).show();
                  // onError+++object not found for QiangItemDg.
                     break;
             }

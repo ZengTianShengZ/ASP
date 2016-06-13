@@ -34,7 +34,7 @@
                 android:layout_height="230dp"
                 android:scaleType="center"
                 android:layout_centerInParent="true"
-                fresco:placeholderImage="@mipmap/ic_logo"
+                fresco:placeholderImage="@mipmap/sh_bg"
                 fresco:placeholderImageScaleType="fitCenter"
                 ></com.facebook.drawee.view.SimpleDraweeView>
 

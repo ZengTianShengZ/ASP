@@ -1,6 +1,7 @@
 package asp.com.asp.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import java.util.List;
 import asp.com.appbase.adapter.BaseListAdapter;
 import asp.com.appbase.adapter.ViewHolder;
 import asp.com.asp.R;
+import asp.com.asp.activity.BrowseImageAvitivty;
 import asp.com.asp.domain.QiangItem;
 
 /**
@@ -28,7 +30,7 @@ public class QiangItemGridViewAdapter  extends BaseListAdapter<String> {
 
 
     @Override
-    public View bindView(int position, View convertView, ViewGroup parent) {
+    public View bindView(final int position, View convertView, ViewGroup parent) {
         final String item = list.get(position);
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_grid_view, null);
@@ -38,6 +40,16 @@ public class QiangItemGridViewAdapter  extends BaseListAdapter<String> {
         if(item != null){
             item_grid.setImageURI(Uri.parse(item));
         }
+        item_grid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,BrowseImageAvitivty.class);
+                intent.putExtra("position", position);
+                intent.putExtra("listSize",list.size());
+                intent.putStringArrayListExtra("urlStringArraay", (ArrayList<String>) list);
+                mContext.startActivity(intent);
+            }
+        });
 
         return convertView;
     }

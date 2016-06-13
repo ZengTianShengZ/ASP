@@ -43,7 +43,7 @@ public class SnackbarUtil {
     public static  void GreenSnackbar(Context context,View view, String message){
         LongSnackbar(view,message,
                 context.getResources().getColor(R.color.colorWhite),
-                context.getResources().getColor(R.color.colorPrimaryDark)).show();
+                context.getResources().getColor(R.color.colorOverall)).show();
     }
     /**
      * 长显示Snackbar，自定义颜色

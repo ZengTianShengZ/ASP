@@ -47,7 +47,9 @@
         <activity android:name=".activity.ZhihuNewsActivity"></activity>
         <activity android:name=".activity.ZhihuStoryActivity"></activity>
         <activity android:name=".activity.SearchViewActivity_"></activity>
-
+        <activity
+            android:name=".activity.BrowseImageAvitivty"
+            ></activity>
     </application>
 
 </manifest>

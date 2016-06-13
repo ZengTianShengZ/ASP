@@ -42,6 +42,7 @@ import asp.com.asp.fragment.MeFragment_;
 import asp.com.asp.fragment.ZhiHuNewsFragment;
 import asp.com.asp.utils.ConfigConstantUtil;
 import asp.com.asp.utils.SharedPreferencesUtil;
+import asp.com.asp.view.SnackbarUtil;
 import asp.com.asp.weibo.WBAuthActivity_;
 import cn.bmob.v3.BmobUser;
 
@@ -65,7 +66,7 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
     private TextView nameTv,contentTv;*/
 
     private SharedPreferencesUtil mSharedPreferencesUtil;
-
+    private  SharedPreferences spf;
     @ViewById(R.id.drawer_layout)
     DrawerLayout drawerLayout;
 /*    @ViewById(R.id.nav_view)
@@ -126,18 +127,9 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
 
     private void initData() {
         mSharedPreferencesUtil =SharedPreferencesUtil.getInstance(getApplicationContext(),getPackageName());
+        spf =  mSharedPreferencesUtil.getPreferences();
 
-        SharedPreferences spf =  mSharedPreferencesUtil.getPreferences();
-
-        String userName = spf.getString(ConfigConstantUtil.UserName,"");
-        if(!userName.equals("")){
-            nameTv.setText(userName+"");
-           // signatureTv.setText(mUser.getSignature()+"");
-            //signatureTv.setText(spf.getString(ConfigConstantUtil.UserPassword,"content"));
-           // userImg.setImageURI();
-            ImageLoader.getInstance(3, ImageLoader.Type.LIFO).
-                    loadImage(spf.getString(ConfigConstantUtil.UserLogStr,""),userImg);
-        }
+        initUserData();
 
         // 使用 @EActivity 控件的注册事件要放在 onStart（），不然会抛空指针
         //navigationView.setNavigationItemSelectedListener(this);
@@ -155,23 +147,38 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
         mTransaction.commit();
     }
 
+    private void initUserData() {
+
+        String userName = spf.getString(ConfigConstantUtil.UserName,"");
+        if(!userName.equals("")){
+            nameTv.setText(userName+"");
+            ImageLoader.getInstance(3, ImageLoader.Type.LIFO).
+                    loadImage(spf.getString(ConfigConstantUtil.UserLogStr,""),userImg);
+        }
+    }
+
 
     @Subscribe
     public void onEventMainThread(EventBusBean event) {
         Log.i( "onEventMainThread",".....MainActivity...........onEventMainThread....................."+event.getMsg());
-        shapeLoadingDialog.show();
+
         if((ConfigConstantUtil.Send_ER_Goods).equals(event.getMsg())){
+            shapeLoadingDialog.show();
             if(mHomeFragment!=null){
                 mHomeFragment.setCurrentViewPagerItem(0);
             }
         }
         if((ConfigConstantUtil.Send_DG_Goods).equals(event.getMsg())){
+            shapeLoadingDialog.show();
             if(mHomeFragment!=null){
                 mHomeFragment.setCurrentViewPagerItem(1);
             }
         }
         if("complete".equals(event.getMsg())){
             shapeLoadingDialog.dismiss();
+        }
+        if("Bmob_WB_Login_Success".equals(event.getMsg())){
+            initUserData();
         }
 
     }
@@ -185,6 +192,32 @@ public class MainActivity extends FragmentActivity  implements  View.OnClickList
         super.onResume();
 
     }
+
+    private int backApp ;
+    @Override
+    public void onBackPressed() {
+
+        backApp++;
+        if(backApp == 2){
+            super.onBackPressed();
+        }else{
+            SnackbarUtil.GreenSnackbar(getApplicationContext(),hong_btn,"       再按一下推出！！！");
+            new Thread() {
+                public void run() {
+                    try {
+                        Thread.sleep(3000);
+                        backApp = 0;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                };
+
+            }.start();
+        }
+
+    }
+
     @Click(R.id.main_base_hong_btn)
     void hongBtnClick(){
         setIconAlpha_0();

@@ -11,13 +11,13 @@
     <string name="weibosdk_demo_toast_auth_canceled">取消授权</string>
     <string name="weibosdk_demo_toast_auth_failed">授权失败</string>
     <string name="weibosdk_demo_toast_auth_success">授权成功</string>
-
-    <string name="dg_declare">代购是同学在学习之余，从货源商家（如淘宝，阿里巴巴）那边进货，再进行销售。货源也不局限于网络，也可以是家乡特产，自己的手工品等等。区别于二手商品，代购商品要有一定的质量保证。目前此平台不提供质量保证，买家可以于卖家通过平台取得联系，确认质量后再进行购买，或到卖家提供的渠道购买！！！
+<string name="dg_declare">代购是同学在学习之余，从货源商家（如淘宝，阿里巴巴）那边进货，再进行销售。货源也不局限于网络，也可以是家乡特产，自己的手工品等等。区别于二手商品，代购商品要有一定的质量保证。目前此平台不提供质量保证，买家可以于卖家通过平台取得联系，确认质量后再进行购买，或到卖家提供的渠道购买！！！
 </string>
     <string name="dg_dridge">开通代购只需要卖家把代购商品 的 照片 提交到本应用服务器，在一周之内客服人员完成对您的商品进行认证即可为您授权开通。</string>
     <string name="dg_alera">开通代购的卖家可享受发布二手商品和代购商品的权利，但不可以在代购商品上面方表关于二手商品的任何消息，如经发现将会对卖家进行警告提醒，超过三次将会取消卖家代购商品的权利。这是为了规范用户体验，请卖家配合</string>
     <string name="about_app0">app 功能简介：总体来讲，app 可分为两大板块，二手商品和代购商品，二手商品是为了满足大家有闲置商品，但没有渠道销售的尴尬。卖家可以再此app晒出自己的商品，而买家可以在此平台上留意自己喜欢的二手商品并与卖家取得联系。app还有一个板块是代购商品，代购是为了满足有的同学做一些导购，或者一些零售商品，也可以在代购商品的板块进行发表</string>
     <string name="about_app">本 app 是 由12级电子4班 陈智明 和 我 曾思生 于2016 年 开发的，并由我完成当前版本的改版。目前只有Android 版本。由于经验和时间有限，当前版本还不够完善，我们会尽快征集各用户体验，推出下一个版本，满足大家的需求！！！有什么宝贵的建议或意见，可以关注微信公众号"SecondHands"与我们取得联系，谢谢！！！</string>
     <string name="statement">郑重声明：本平台是为了提供大家方便，平台上的商品质量不提供保证，买家对有意愿的商品应该与卖家取得联系后确认的再进行交易。如有质量问题，本应用不承担任何责任。当然如果卖家尽发一些有损买家利益的商品，一经投诉，本平台有权利屏蔽卖家的账号进行管理，保障买家的合法利益不受危害！！！买家可以截图发送到公众号举报，微信公众号为 "SecondHands</string>
-
+    <string name="title_activity_browse_image_avitivty">BrowseImageAvitivty</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

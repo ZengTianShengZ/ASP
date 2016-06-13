@@ -23,7 +23,8 @@
         android:id="@+id/personal_qiang_defaultTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
         android:textSize="10pt"
         android:text="无数据！！！ "/>
     <android.support.v7.widget.RecyclerView

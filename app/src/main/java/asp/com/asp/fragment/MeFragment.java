@@ -27,6 +27,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import asp.com.appbase.view.CircleImageView;
 import asp.com.asp.MainActivity_;
@@ -34,6 +36,7 @@ import asp.com.asp.R;
 import asp.com.asp.adapter.PersonalMeViewPagerAdapter;
 import asp.com.asp.adapter.PersonalViewPagerAdapter;
 import asp.com.asp.adapterPop.ImageLoader;
+import asp.com.asp.domain.EventBusBean;
 import asp.com.asp.domain.User;
 import asp.com.asp.utils.BlurUtil;
 import asp.com.asp.utils.BmobUserUtil;
@@ -80,6 +83,7 @@ public class MeFragment extends Fragment {
     private AlertDialog dlg_Comment_alert;
 
     private OperationBmobDataUtil mOperationBmobDataUtil;
+    private SharedPreferences spf;
 
     private User mUser;
     private String userName;
@@ -90,6 +94,7 @@ public class MeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_personal_qiang, container, false);
         mContext = getActivity();
+        EventBus.getDefault().register(this);
         return view;
     }
 
@@ -137,7 +142,14 @@ public class MeFragment extends Fragment {
         mOperationBmobDataUtil.initData(mContext);
 
         SharedPreferencesUtil mSharedPreferencesUtil = SharedPreferencesUtil.getInstance(mContext.getApplicationContext(),mContext.getPackageName());
-        SharedPreferences spf =  mSharedPreferencesUtil.getPreferences();
+        spf =  mSharedPreferencesUtil.getPreferences();
+
+        initUserData();
+
+
+
+    }
+    private void initUserData() {
         userName = spf.getString(ConfigConstantUtil.UserName,"");
         if(!userName.equals("")){
 
@@ -164,25 +176,24 @@ public class MeFragment extends Fragment {
             new Thread() {
                 public void run() {
 
-                   Bitmap bitmap = ImageLoader.getInstance(3, ImageLoader.Type.LIFO).decodeSampledBitmapFromResource(userLogoPath,260,260);
-                   if(bitmap!=null){
-                       final Bitmap blurBitmap =   BlurUtil.fastblur(mContext, bitmap, 70);
-                       getActivity(). runOnUiThread(new Runnable() {
+                    Bitmap bitmap = ImageLoader.getInstance(3, ImageLoader.Type.LIFO).decodeSampledBitmapFromResource(userLogoPath,260,260);
+                    if(bitmap!=null){
+                        final Bitmap blurBitmap =   BlurUtil.fastblur(mContext, bitmap, 70);
+                        getActivity(). runOnUiThread(new Runnable() {
 
-                           @Override
-                           public void run() {
-                               head_layout.setBackgroundDrawable(new BitmapDrawable(blurBitmap));
-                               mCollapsingToolbarLayout.setContentScrim(new BitmapDrawable(blurBitmap));
-                           }
-                       });
-                   }
+                            @Override
+                            public void run() {
+                                head_layout.setBackgroundDrawable(new BitmapDrawable(blurBitmap));
+                                mCollapsingToolbarLayout.setContentScrim(new BitmapDrawable(blurBitmap));
+                            }
+                        });
+                    }
 
                 };
 
             }.start();
         }
     }
-
     private void initEvent() {
         app_bar_layout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -217,7 +228,16 @@ public class MeFragment extends Fragment {
             }
         });
     }
+    @Subscribe
+    public void onEventMainThread(EventBusBean event) {
+        Log.i( "onEventMainThread",".....MeFragment...........onEventMainThread....................."+event.getMsg());
 
+        if("Bmob_WB_Login_Success".equals(event.getMsg())){
+            initUserData();
+
+        }
+
+    }
     @Click(R.id.personal_qiang_SettingTv)
     void SettingTvClick(final View clickView) {
 

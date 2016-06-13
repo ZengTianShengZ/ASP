@@ -1,13 +1,17 @@
 package asp.com.asp.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Button;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONObject;
 
 import java.io.File;
 
+import asp.com.asp.domain.EventBusBean;
 import asp.com.asp.domain.Notification;
 import asp.com.asp.domain.User;
 import asp.com.asp.view.SnackbarUtil;
@@ -31,7 +35,7 @@ public class BmobUserUtil {
         loginSuccess = false;
 
         BmobUser bu2 = new BmobUser();
-       // bu2.setNickname(userName);
+        // bu2.setNickname(userName);
         bu2.setUsername(userName);
         bu2.setPassword(password);
         bu2.login(context, new SaveListener() {
@@ -107,7 +111,7 @@ public class BmobUserUtil {
 
     }
 
-    public static boolean uploadblockLogo(final Context context, final String nickname,final String id_password, String picPath){
+    public static boolean uploadblockLogo(final Context context, final String nickname, final String id_password, final String picPath, final Button wb_auth_btn){
         Log.i("uploadblockLogo",nickname+ ".....uploadblockLogo.........."+picPath);
 
         final BmobFile bmobFile = new BmobFile(new File(picPath));
@@ -128,12 +132,23 @@ public class BmobUserUtil {
                     public void onSuccess() {
                         loginSuccess = true;
                         Log.i("uploadblockLogo", ".....loginSuccess.........."+loginSuccess);
+
+                        SharedPreferences.Editor editor =  SharedPreferencesUtil.getInstance(context.getApplicationContext(),context.getPackageName()).getEditor();
+                        editor.putString(ConfigConstantUtil.UserName,nickname);
+                        editor.putString(ConfigConstantUtil.UserLogStr,picPath);
+                        editor.putString(ConfigConstantUtil.UserPassword,id_password);
+                        editor.commit();
+
+                        SnackbarUtil.GreenSnackbar(context,wb_auth_btn,"       授权成功，可返回继续！！！");
+                        EventBus.getDefault().post(new EventBusBean("Bmob_WB_Login_Success"));
                     }
 
                     @Override
                     public void onFailure(int i, String s) {
                         loginSuccess = false;
                         Log.i("uploadblockLogo",i+ ".....bmobUser.update.........."+s);
+                        SnackbarUtil.GreenSnackbar(context,wb_auth_btn,"       授权失败，请重新授权登陆！！！");
+
                     }
                 });
 

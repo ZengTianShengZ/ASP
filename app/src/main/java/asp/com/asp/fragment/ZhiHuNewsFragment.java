@@ -118,6 +118,7 @@ public class ZhiHuNewsFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     private void getZhiHuNewsData(){
+        mSwipeRefreshLayout.setRefreshing(false);
         dateToGetUrl.add(Calendar.DAY_OF_YEAR, data_flag-- );
         date = ConfigConstantUtil.Dates.simpleDateFormat.format(dateToGetUrl.getTime());
         mZhihuPresenterImpl.getTheDaily(date)

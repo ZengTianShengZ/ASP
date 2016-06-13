@@ -233,30 +233,11 @@ public class WBAuthActivity extends AppCompatActivity {
                                 Log.i("Bmob_Wb_ID", ".......Bmob_Wb_ID........"+BmobUserUtil.Bmob_Wb_ID);
                                 Bitmap bitmap = mImageLoaderUtil.getNetWorkBitmap(avatarHd);
                                 ImgUrl = mImageLoaderUtil.saveToSdCard(bitmap);
-                                upSuccess = BmobUserUtil.uploadblockLogo(getApplicationContext(),name,idStr,ImgUrl);
+                                upSuccess = BmobUserUtil.uploadblockLogo(getApplicationContext(),name,idStr,ImgUrl,wb_auth_btn);
                                 Log.i("uploadblockLogo",ImgUrl+ "././././/./upSuccess././././"+upSuccess);
 
                             }
 
-                            runOnUiThread(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    if(upSuccess){
-                                        SharedPreferences.Editor editor =  mSharedPreferencesUtil.getEditor();
-                                        editor.putString(ConfigConstantUtil.UserName,name);
-                                        editor.putString(ConfigConstantUtil.UserLogStr,ImgUrl);
-                                        editor.putString(ConfigConstantUtil.UserPassword,idStr);
-                                        editor.commit();
-                                        Log.i("uploadblockLogo",name+ "././././/./4444444444444././././"+ImgUrl);
-                                        SnackbarUtil.GreenSnackbar(getApplicationContext(),wb_auth_btn,"       授权成功，可返回继续！！！");
-
-                                    }else{
-                                        SnackbarUtil.GreenSnackbar(getApplicationContext(),wb_auth_btn,"       授权失败，请重新授权登陆！！！");
-
-                                    }
-                                 }
-                            });
                         };
 
                     }.start();
